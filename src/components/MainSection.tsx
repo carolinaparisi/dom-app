@@ -7,8 +7,8 @@ export default function MainSection() {
         <div>DOM</div>
       </div>
       <div className="text-xl">
-        <div>Meeting Vote Room</div>
-        <div className="mt-[-4px]">created by Café com Letras</div>
+        <div>Meeting Voting Room</div>
+        <div className="mt-[-4px]">created by Lorem Ipsum</div>
       </div>
       <input
         id="name"
