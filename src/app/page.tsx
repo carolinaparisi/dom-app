@@ -1,17 +1,17 @@
 import Image from "next/image";
 import background from "../../public/assets/background.png";
-import MainSection from "./components/MainSection";
-import Button from "./components/Button";
+import MainSection from "@/components/MainSection";
+import Button from "@/components/Button";
 
 export default function Home() {
   return (
     <div className="h-dvh">
       <div className="h-1/2 relative">
-        <Image alt="" src={background} fill objectFit="cover" />
+        <Image alt="" src={background} fill className="object-cover" priority />
       </div>
-      <div className="flex flex-col justify-between p-5 h-1/2 font-normal">
+      <div className="flex flex-col justify-between p-5 h-1/2">
         <MainSection />
-        <Button text={"Get started"} />
+        <Button text="Get started" />
       </div>
     </div>
   );
