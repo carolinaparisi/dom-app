@@ -7,7 +7,7 @@ export default function Home() {
 			<div className="bg-red-200 h-1/2 relative">
 				<Image alt="" src={background} fill />
 			</div>
-			<div className="bg-blue-200 h-1/2">Form Section</div>
+			<div className="bg-blue-200 h-1/2 font-normal">Form Section</div>
 		</div>
 	);
 }
