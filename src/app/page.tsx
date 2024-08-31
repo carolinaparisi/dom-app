@@ -5,7 +5,7 @@ import Button from "./components/Button";
 
 export default function Home() {
 	return (
-		<div className="h-screen">
+		<div className="max-h-screen">
 			<div className="h-1/2 relative">
 				<Image alt="" src={background} fill objectFit="cover" />
 			</div>
