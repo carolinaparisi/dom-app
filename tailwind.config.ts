@@ -15,10 +15,11 @@ const config: Config = {
 			},
 		},
 		colors: {
-			gray: "#323232",
+			black: "#323232",
 			white: "#FFFFFF",
 			olive: "#B3A168",
-			black: "#212529",
+			gray: "#71717A",
+			gray_soft: "#D9D9D9",
 		},
 	},
 	plugins: [],
