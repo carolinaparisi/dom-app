@@ -1,11 +1,13 @@
+import { toPascalCase } from '@/utils/formatter';
+
 interface ButtonProps {
-	text: string;
+  text: string;
 }
 
 export default function Button({ text }: ButtonProps) {
-	return (
-		<button className="flex align-center justify-center bg-primary w-full rounded-s py-4 text-black">
-			{text}
-		</button>
-	);
+  return (
+    <button className="align-center flex w-full justify-center rounded-s bg-primary py-4 text-black">
+      {toPascalCase(text)}
+    </button>
+  );
 }
