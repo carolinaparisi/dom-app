@@ -7,9 +7,9 @@ import { useState } from 'react';
 import VotingPage from '@/components/VotingPage';
 
 export default function Home() {
-  const [isClicked, setClicked] = useState(false);
+  const [isRegistered, setIsRegistered] = useState(false);
 
-  return isClicked ? (
+  return isRegistered ? (
     <VotingPage />
   ) : (
     <div className="h-dvh">
@@ -18,11 +18,7 @@ export default function Home() {
       </div>
       <div className="flex h-1/2 flex-col justify-between p-5">
         <MainSection />
-        <Button
-          isClicked={isClicked}
-          setClicked={setClicked}
-          text="Get started"
-        />
+        <Button setIsRegistered={setIsRegistered} text="Get started" />
       </div>
     </div>
   );
