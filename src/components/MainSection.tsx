@@ -15,7 +15,7 @@ export default function MainSection() {
         name="name"
         type="text"
         placeholder="Your name"
-        className="text-gray-900 block w-full rounded-s border-0 py-4 pl-3 pr-20 ring-1 ring-inset ring-gray_soft placeholder:text-gray focus:outline-none"
+        className="text-gray-900 block w-full rounded-sm border-0 py-4 pl-3 pr-20 ring-1 ring-inset ring-gray_soft placeholder:text-gray focus:outline-none"
       />
     </div>
   );
