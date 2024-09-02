@@ -10,7 +10,7 @@ export default function EligibleBooks() {
   ];
 
   return (
-    <div>
+    <div className="flex flex-col gap-3">
       {bookTitles.map((bookTitle, index) => (
         <Button key={index} text={bookTitle} id={index + 1} />
       ))}

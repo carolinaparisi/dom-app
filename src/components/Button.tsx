@@ -1,3 +1,4 @@
+import { BookOpen } from 'lucide-react';
 interface ButtonProps {
   text: string;
   setIsRegistered?: (isRegistered: boolean) => void;
@@ -11,10 +12,9 @@ export default function Button({ text, setIsRegistered, id }: ButtonProps) {
     console.log(`Book ${id} selected`);
   };
 
-  //TODO: create logic to be green only if it has an id
   return (
     <button
-      className="align-center flex w-full justify-center rounded-sm bg-primary py-4 text-black"
+      className={`${id ? `max-w-fit border border-black px-4` : `align-center flex w-full justify-center bg-primary`} rounded-md py-4 text-black`}
       onClick={() => {
         if (id) {
           handleBookSelected(id);
@@ -23,7 +23,14 @@ export default function Button({ text, setIsRegistered, id }: ButtonProps) {
         setIsRegistered && setIsRegistered(true);
       }}
     >
-      {text}
+      {!id ? (
+        text
+      ) : (
+        <div className="flex gap-3">
+          <BookOpen />
+          {text}
+        </div>
+      )}
     </button>
   );
 }
