@@ -4,8 +4,8 @@ import Header from './Header';
 
 export default function VotingPage() {
   return (
-    <div className="p-3">
-      <div className="bg-primary">
+    <div className="flex flex-col gap-4 p-3">
+      <div className="flex flex-col gap-4">
         <Header />
       </div>
       <div className="bg-gray">

@@ -18,7 +18,7 @@ export default function Home() {
       </div>
       <div className="flex h-1/2 flex-col justify-between p-5">
         <MainSection />
-        <Button setIsRegistered={setIsRegistered} text="Get started" />
+        <Button setIsRegistered={setIsRegistered} text="Get Started" />
       </div>
     </div>
   );
