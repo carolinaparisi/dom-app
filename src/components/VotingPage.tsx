@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import Button from './Button';
 import { Book, initialBooks } from '@/utils/books';
+import BookItem from './BookItem';
 
 export default function VotingPage() {
   const [books, setBooks] = useState<Book[]>(initialBooks);
 
-  const handleBookSelected = (id: number) => {
-    console.log(`Book ${id} selected`);
+  const handleBookSelected = () => {
+    console.log('Hello');
   };
 
   return (
@@ -15,7 +16,7 @@ export default function VotingPage() {
         {/* Header */}
         <div className="text-4xl font-medium leading-none">
           <div>Choose 3 out</div>
-          <div>5 of the books</div>
+          <div>of 5 books</div>
           <div>from the list</div>
         </div>
         <div className="text-lg">
@@ -33,7 +34,7 @@ export default function VotingPage() {
         {/* EligibleBooks */}
         <div className="flex flex-col gap-3">
           {books.map((book) => (
-            <Button
+            <BookItem
               key={book.id}
               text={book.title}
               id={book.id}
