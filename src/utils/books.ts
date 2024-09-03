@@ -1,4 +1,10 @@
-export const books = [
+export interface Book {
+  id: number;
+  title: string;
+  isSelected: boolean;
+}
+
+export const initialBooks: Book[] = [
   { id: 1, title: 'Macunaíma, Mário de Andrade', isSelected: false },
   { id: 2, title: 'Dom Casmurro, Machado de Assis', isSelected: false },
   { id: 3, title: 'Dom quixote, Miguel de Cervantes', isSelected: false },

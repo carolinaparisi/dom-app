@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import Button from './Button';
-import { books } from '@/utils/books';
+import { Book, initialBooks } from '@/utils/books';
 
 export default function VotingPage() {
-  const [isSelected, setIsSelected] = useState(false);
+  const [books, setBooks] = useState<Book[]>(initialBooks);
 
   const handleBookSelected = (id: number) => {
     console.log(`Book ${id} selected`);
@@ -32,11 +32,11 @@ export default function VotingPage() {
       <div>
         {/* EligibleBooks */}
         <div className="flex flex-col gap-3">
-          {books.map((book, index) => (
+          {books.map((book) => (
             <Button
-              key={index}
+              key={book.id}
               text={book.title}
-              id={index + 1}
+              id={book.id}
               handleBookSelected={handleBookSelected}
             />
           ))}
