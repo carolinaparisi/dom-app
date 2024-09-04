@@ -14,11 +14,9 @@ export default function BookItem({
 }: BookItemProps) {
   return (
     <button
-      className={
-        isSelected
-          ? 'max-w-fit rounded-md border border-black bg-black px-3 py-4 text-white'
-          : 'max-w-fit rounded-md border border-black px-3 py-4 text-black'
-      }
+      className={` ${
+        isSelected ? `bg-black text-white` : `border-black text-black`
+      } max-w-fit rounded-md border border-black px-3 py-4`}
       onClick={() => {
         handleBookSelected(id);
       }}

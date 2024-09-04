@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { Book, initialBooks } from '@/utils/books';
 import BookItem from './BookItem';
+import { VoterName, initialNames } from '@/utils/names';
 
 export default function VotingPage() {
   const [books, setBooks] = useState<Book[]>(initialBooks);
+  const [names, setNames] = useState<VoterName[]>(initialNames);
 
   const handleBookSelected = (id: number) => {
     const updatedBooks = books.map((book) => {
@@ -20,7 +22,7 @@ export default function VotingPage() {
   };
 
   return (
-    <div className="flex flex-col gap-4 p-6">
+    <div className="flex flex-col justify-center gap-6 p-6">
       <div className="flex flex-col gap-4">
         {/* Header */}
         <div className="text-4xl font-medium leading-none">
@@ -41,7 +43,7 @@ export default function VotingPage() {
       </div>
       <div>
         {/* EligibleBooks */}
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-3 text-lg">
           {books.map((book) => (
             <BookItem
               key={book.id}
@@ -54,7 +56,18 @@ export default function VotingPage() {
         </div>
       </div>
       {/* NamesPool */}
-      <div className="bg-gray">Names Poll</div>
+      <div className="flex flex-wrap gap-2">
+        {names.map((name) => (
+          <span
+            key={name.id}
+            className={` ${
+              name.isReady ? `bg-primary` : `bg-gray_soft`
+            } inline-flex items-center rounded-md px-2 py-1 text-lg`}
+          >
+            {name.name}
+          </span>
+        ))}
+      </div>
     </div>
   );
 }
