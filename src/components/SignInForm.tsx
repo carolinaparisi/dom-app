@@ -14,7 +14,7 @@ export default function SignInForm() {
   };
 
   return (
-    <div className="flex w-full flex-col justify-center gap-4 rounded-md border border-x-gray_soft bg-white p-5 lg:px-8">
+    <div className="flex w-full flex-col justify-center gap-4 rounded-md border border-gray_soft bg-white p-3 lg:px-8">
       <div className="flex flex-col sm:mx-auto sm:w-full sm:max-w-sm">
         <h2 className="text-center text-2xl font-medium leading-9">Sign In</h2>
       </div>
@@ -51,7 +51,11 @@ export default function SignInForm() {
           </div>
 
           <div>
-            <Button text="Sign Up" handleButton={handleSignInButton} />
+            <Button
+              text="Sign Up"
+              handleButton={handleSignInButton}
+              variant="secondary"
+            />
           </div>
         </form>
       </div>
