@@ -22,6 +22,6 @@ const config: Config = {
       gray_soft: '#D9D9D9',
     },
   },
-  plugins: [],
+  plugins: [require('@tailwindcss/forms')],
 };
 export default config;

@@ -9,6 +9,10 @@ import VotingPage from '@/components/VotingPage';
 export default function Home() {
   const [isRegistered, setIsRegistered] = useState(false);
 
+  const handleButton = () => {
+    setIsRegistered(true);
+  };
+
   return isRegistered ? (
     <VotingPage />
   ) : (
@@ -18,7 +22,7 @@ export default function Home() {
       </div>
       <div className="flex h-1/2 flex-col justify-between p-5">
         <MainSection />
-        <Button setIsRegistered={setIsRegistered} text="Get Started" />
+        <Button handleButton={handleButton} text="Get Started" />
       </div>
     </div>
   );
