@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import loginBackground from '../../../public/assets/login-background.jpeg';
+import loginBackground from '../../../public/assets/images/login-background.jpeg';
 import SignInForm from '@/components/SignInForm';
 
 export default function Login() {

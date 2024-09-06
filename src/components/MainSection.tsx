@@ -1,7 +1,7 @@
 export default function MainSection() {
   return (
     <div className="flex flex-col gap-3 leading-tight text-black">
-      <div className="text-4xl font-medium leading-none">
+      <div className="font-silk text-4xl font-medium leading-none">
         <div>WELCOME</div>
         <div>TO</div>
         <div>DOM</div>

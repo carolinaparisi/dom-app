@@ -13,6 +13,9 @@ const config: Config = {
         'gradient-conic':
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
+      fontFamily: {
+        silk: ['var(--font-silk)'],
+      },
     },
     colors: {
       black: '#2F2C2B',

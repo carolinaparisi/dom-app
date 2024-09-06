@@ -1,6 +1,6 @@
 'use client';
 import Image from 'next/image';
-import background from '../../public/assets/background.png';
+import background from '../../public/assets/images/background.png';
 import MainSection from '@/components/MainSection';
 import Button from '@/components/Button';
 import { useState } from 'react';
