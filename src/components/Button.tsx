@@ -16,7 +16,7 @@ export default function Button({
 
   return (
     <button
-      className={`${custom} align-center flex w-full justify-center rounded-md py-4`}
+      className={`${custom} align-center flex w-full justify-center rounded-2xl py-4`}
       onClick={(event) => {
         handleButton(event);
       }}
