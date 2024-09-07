@@ -23,9 +23,9 @@ export default function Home() {
           name="name"
           type="text"
           placeholder="Your name"
-          className="bg-transparent block w-full rounded-2xl py-4 pl-3 pr-20"
+          className="bg-transparent block w-full rounded-2xl border-gray_soft py-4 pl-3 pr-20 placeholder:text-white"
         />
-        <Button handleButton={handleButton} text="Get Started" />
+        <Button handleButton={handleButton} text="STEP FOWARD" />
       </div>
     </div>
   );

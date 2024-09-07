@@ -12,11 +12,11 @@ export default function Button({
   variant = 'primary',
 }: ButtonProps) {
   const custom =
-    variant === 'primary' ? `bg-primary text-black` : `bg-black text-white`;
+    variant === 'primary' ? `bg-white text-primary` : `bg-black text-white`;
 
   return (
     <button
-      className={`${custom} align-center flex w-full justify-center rounded-2xl py-4`}
+      className={`${custom} align-center flex w-full justify-center rounded-2xl py-4 font-bold`}
       onClick={(event) => {
         handleButton(event);
       }}
