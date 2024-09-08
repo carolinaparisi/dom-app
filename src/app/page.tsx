@@ -22,6 +22,7 @@ export default function Home() {
         className="w-full object-cover"
         priority
         quality={100}
+        fill
       />
       <div className="absolute inset-x-0 bottom-0 flex w-full flex-col gap-3 p-6">
         <input
