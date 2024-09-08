@@ -16,7 +16,13 @@ export default function Home() {
     <VotingPage />
   ) : (
     <div className="relative flex flex-col">
-      <Image alt="" src={welcome} className="w-full object-cover" priority />
+      <Image
+        alt=""
+        src={welcome}
+        className="w-full object-cover"
+        priority
+        quality={100}
+      />
       <div className="absolute inset-x-0 bottom-0 flex w-full flex-col gap-3 p-6">
         <input
           id="name"
