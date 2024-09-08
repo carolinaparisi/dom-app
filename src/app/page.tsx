@@ -15,7 +15,7 @@ export default function Home() {
   return isRegistered ? (
     <VotingPage />
   ) : (
-    <div className="relative flex flex-col">
+    <div className="relative flex h-dvh flex-col">
       <Image
         alt=""
         src={welcome}
