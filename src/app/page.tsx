@@ -24,7 +24,7 @@ export default function Home() {
         quality={100}
         fill
       />
-      <div className="absolute bottom-1/2 w-full font-silk text-8xl text-white">
+      <div className="absolute bottom-1/2 w-full overflow-hidden font-silk text-8xl text-white">
         <div className="-translate-x-7">Welcome</div>
         <div className="flex translate-x-3 justify-end">to Dom</div>
       </div>
