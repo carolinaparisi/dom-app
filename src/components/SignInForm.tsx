@@ -47,15 +47,13 @@ export default function SignInForm() {
           </div>
 
           <div>
-            <Button text="Sign In" handleButton={handleSignInButton} />
+            <Button handleButton={handleSignInButton}>Sign In</Button>
           </div>
 
           <div>
-            <Button
-              text="Sign Up"
-              handleButton={handleSignInButton}
-              variant="secondary"
-            />
+            <Button handleButton={handleSignInButton} variant="secondary">
+              Sign Up
+            </Button>
           </div>
         </form>
       </div>

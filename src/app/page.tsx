@@ -36,7 +36,7 @@ export default function Home() {
           placeholder="Your name"
           className="block w-full rounded-2xl border-gray_soft bg-transparent py-4 pl-3 pr-20 placeholder:text-white"
         />
-        <Button handleButton={handleButton} text="STEP FOWARD" />
+        <Button handleButton={handleButton}>STEP FOWARD</Button>
       </div>
     </div>
   );

@@ -38,7 +38,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={` ${helvetica.className} ${silkSerif.variable}`}>
+      <body className={`${helvetica.className} ${silkSerif.variable}`}>
         {children}
       </body>
     </html>

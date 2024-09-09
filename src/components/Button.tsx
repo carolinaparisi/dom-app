@@ -1,5 +1,5 @@
 interface ButtonProps {
-  text: string;
+  children: React.ReactNode;
   variant?: 'primary' | 'secondary';
   handleButton: (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
@@ -7,7 +7,7 @@ interface ButtonProps {
 }
 
 export default function Button({
-  text,
+  children,
   handleButton,
   variant = 'primary',
 }: ButtonProps) {
@@ -21,7 +21,7 @@ export default function Button({
         handleButton(event);
       }}
     >
-      {text}
+      {children}
     </button>
   );
 }

@@ -1,4 +1,5 @@
 import { BookOpen } from 'lucide-react';
+
 interface BookItemProps {
   text: string;
   id: number;
@@ -14,7 +15,7 @@ export default function BookItem({
 }: BookItemProps) {
   return (
     <button
-      className={` ${
+      className={`${
         isSelected ? `bg-black text-white` : `border-black text-black`
       } max-w-fit rounded-md border border-black px-3 py-4`}
       onClick={() => {
