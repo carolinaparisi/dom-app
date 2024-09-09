@@ -24,13 +24,17 @@ export default function Home() {
         quality={100}
         fill
       />
+      <div className="absolute bottom-1/2 w-full font-silk text-8xl text-white">
+        <div className="-translate-x-7">Welcome</div>
+        <div className="flex translate-x-3 justify-end">to Dom</div>
+      </div>
       <div className="absolute inset-x-0 bottom-0 flex w-full flex-col gap-3 p-6">
         <input
           id="name"
           name="name"
           type="text"
           placeholder="Your name"
-          className="bg-transparent block w-full rounded-2xl border-gray_soft py-4 pl-3 pr-20 placeholder:text-white"
+          className="block w-full rounded-2xl border-gray_soft bg-transparent py-4 pl-3 pr-20 placeholder:text-white"
         />
         <Button handleButton={handleButton} text="STEP FOWARD" />
       </div>
