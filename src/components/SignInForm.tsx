@@ -14,11 +14,8 @@ export default function SignInForm() {
   };
 
   return (
-    <div className="flex w-full flex-col justify-center gap-4 rounded-md border border-gray_soft bg-white p-3 lg:px-8">
-      <div className="flex flex-col sm:mx-auto sm:w-full sm:max-w-sm">
-        <h2 className="text-center text-2xl font-medium leading-9">Sign In</h2>
-      </div>
-
+    <div className="flex w-full flex-col justify-center gap-8 rounded-md lg:px-8">
+      <div className="font-silk text-6xl text-white">Enter Thy Credentials</div>
       <div className="flex flex-col gap-4 sm:mx-auto sm:w-full sm:max-w-sm">
         <form action="#" method="POST" className="flex flex-col gap-4">
           <div>
@@ -27,7 +24,7 @@ export default function SignInForm() {
                 id="email"
                 name="email"
                 placeholder="Your email"
-                className="block w-full rounded-md border-0 py-4 pl-3 pr-20 ring-1 ring-inset ring-gray_soft placeholder:text-gray focus:outline-none"
+                className="block w-full rounded-2xl border-gray_soft bg-transparent py-4 pl-3 pr-20 placeholder:text-white"
               />
             </div>
           </div>
@@ -41,7 +38,7 @@ export default function SignInForm() {
                 id="password"
                 name="password"
                 placeholder="Your password"
-                className="block w-full rounded-md border-0 py-4 pl-3 pr-20 ring-1 ring-inset ring-gray_soft placeholder:text-gray focus:outline-none"
+                className="block w-full rounded-2xl border-gray_soft bg-transparent py-4 pl-3 pr-20 placeholder:text-white"
               />
             </div>
           </div>
@@ -55,6 +52,9 @@ export default function SignInForm() {
               Sign Up
             </Button>
           </div>
+          <a href="#" className="text-center text-white">
+            Forgotten your password?
+          </a>
         </form>
       </div>
     </div>

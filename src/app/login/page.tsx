@@ -1,14 +1,15 @@
 import Image from 'next/image';
 import login from '../../../public/assets/images/login.png';
 import SignInForm from '@/components/SignInForm';
+import { Menu as MenuIcon } from 'lucide-react';
 
 export default function Login() {
   return (
     <div className="h-dvh">
-      <div className="flex h-1/6 items-center px-6 text-4xl font-medium text-black">
-        DOM
+      <div className="flex h-[13%] items-center px-6 text-4xl font-medium text-primary">
+        <MenuIcon />
       </div>
-      <div className="relative h-5/6 bg-gray">
+      <div className="relative h-[87%] bg-gray">
         <Image
           alt=""
           src={login}
