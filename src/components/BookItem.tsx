@@ -16,13 +16,13 @@ export default function BookItem({
   return (
     <button
       className={`${
-        isSelected ? `bg-black text-white` : `border-black text-black`
-      } max-w-fit rounded-md border border-black px-3 py-4`}
+        isSelected ? `bg-primary text-white` : `bg-gray text-white`
+      } w-full rounded-2xl border-gray px-6 py-4`}
       onClick={() => {
         handleBookSelected(id);
       }}
     >
-      <div className="flex gap-2">
+      <div className="flex items-center gap-2">
         <BookOpen />
         {text}
       </div>

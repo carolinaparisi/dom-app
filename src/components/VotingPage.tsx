@@ -39,7 +39,7 @@ export default function VotingPage() {
         </div>
       </div>
 
-      <div className="flex flex-col justify-center gap-9 bg-gray_soft p-6 font-light">
+      <div className="flex flex-col justify-center gap-9 bg-gray_soft px-6 py-9 font-light">
         <div className="flex flex-col gap-5">
           <div className="flex flex-col gap-1">
             {/* Header */}
@@ -55,7 +55,7 @@ export default function VotingPage() {
           <div>
             {/* EligibleBooks */}
 
-            <div className="flex flex-col gap-3 text-lg">
+            <div className="flex flex-col gap-3">
               {books.map((book) => (
                 <BookItem
                   key={book.id}
@@ -83,13 +83,13 @@ export default function VotingPage() {
             </div>
           </div>
           {/* NamesPool */}
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2 text-white">
             {names.map((name) => (
               <span
                 key={name.id}
                 className={` ${
-                  name.isReady ? `bg-primary` : `bg-gray_soft`
-                } inline-flex items-center rounded-md px-2 py-1 text-lg`}
+                  name.isReady ? `bg-primary` : `bg-gray`
+                } inline-flex items-center rounded-2xl px-3 py-1 text-sm`}
               >
                 {name.name}
               </span>
