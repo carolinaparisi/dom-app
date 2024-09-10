@@ -23,6 +23,11 @@ const helvetica = localFont({
       weight: '700',
       style: 'bold',
     },
+    {
+      path: '../../public/assets/fonts/helvetica-light-587ebe5a59211.ttf',
+      weight: '300',
+      style: 'light',
+    },
   ],
 });
 
