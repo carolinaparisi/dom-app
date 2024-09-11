@@ -1,16 +1,46 @@
 'use client';
-import React, { useState } from 'react';
+
+import { useState } from 'react';
 import Button from './Button';
+import { useRouter } from 'next/navigation';
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from 'firebase/auth';
+import { auth } from '@/services/firebase';
+import { FirebaseError } from 'firebase/app';
 
 export default function SignInForm() {
-  const [isLoggedIn, setLoggedIn] = useState(false);
+  const router = useRouter();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-  const handleSignInButton = (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-  ) => {
-    event.preventDefault();
-    console.log('LOGIN');
-    setLoggedIn(true);
+  const handleSignUp = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      await createUserWithEmailAndPassword(auth, email, password);
+      router.push('/');
+    } catch (error: unknown) {
+      if (error instanceof FirebaseError) {
+        alert(error.message);
+      } else {
+        console.error('Unknown error:', error);
+      }
+    }
+  };
+
+  const handleSignIn = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      router.push('/');
+    } catch (error: unknown) {
+      if (error instanceof FirebaseError) {
+        alert(error.message);
+      } else {
+        console.error('Unknown error:', error);
+      }
+    }
   };
 
   return (
@@ -23,6 +53,8 @@ export default function SignInForm() {
               <input
                 id="email"
                 name="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 placeholder="Your email"
                 className="block w-full rounded-2xl border-gray_soft bg-transparent py-4 pl-3 pr-20 placeholder:text-white"
               />
@@ -37,6 +69,9 @@ export default function SignInForm() {
               <input
                 id="password"
                 name="password"
+                value={password}
+                type="password"
+                onChange={(e) => setPassword(e.target.value)}
                 placeholder="Your password"
                 className="block w-full rounded-2xl border-gray_soft bg-transparent py-4 pl-3 pr-20 placeholder:text-white"
               />
@@ -44,11 +79,11 @@ export default function SignInForm() {
           </div>
 
           <div>
-            <Button handleButton={handleSignInButton}>Sign In</Button>
+            <Button handleButton={handleSignIn}>Sign In</Button>
           </div>
 
           <div>
-            <Button handleButton={handleSignInButton} variant="secondary">
+            <Button handleButton={handleSignUp} variant="secondary">
               Sign Up
             </Button>
           </div>

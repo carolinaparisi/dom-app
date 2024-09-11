@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import login from '../../../public/assets/images/login.png';
+import login from '../../../public/images/login.png';
 import SignInForm from '@/components/SignInForm';
 import { Menu as MenuIcon } from 'lucide-react';
 

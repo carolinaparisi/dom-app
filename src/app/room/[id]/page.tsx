@@ -1,17 +1,29 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
-import welcome from '../../../../public/assets/images/welcome.png';
+import welcome from '../../../../public/images/welcome.png';
 import Button from '@/components/Button';
 import VotingPage from '@/components/VotingPage';
+import { useRouter } from 'next/navigation';
+import { useAuthContext } from '@/contexts/AuthContext';
 
 export default function Room() {
+  const router = useRouter();
+  const { user } = useAuthContext();
   const [isRegistered, setIsRegistered] = useState(false);
 
   const handleButton = () => {
     setIsRegistered(true);
   };
+
+  useEffect(() => {
+    if (!user) {
+      router.push('/login');
+    }
+  }, [router, user]);
+
+  if (!user) return null;
 
   return isRegistered ? (
     <VotingPage />
