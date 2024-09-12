@@ -5,7 +5,6 @@ node_modules/
 .editorconfig
 .eslintrc.json
 .lintstagedrc.js
-.prettierignore
 .prettierrc
 next-env.d.ts
 next.config.js

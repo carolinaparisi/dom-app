@@ -47,7 +47,7 @@ export default function SignInForm() {
     <div className="flex w-full flex-col justify-center gap-8 rounded-md lg:px-8">
       <div className="font-silk text-6xl text-white">Enter Thy Credentials</div>
       <div className="flex flex-col gap-4 sm:mx-auto sm:w-full sm:max-w-sm">
-        <form action="#" method="POST" className="flex flex-col gap-4">
+        <form className="flex flex-col gap-4">
           <div>
             <div className="text-white">
               <input
