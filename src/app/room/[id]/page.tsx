@@ -10,7 +10,7 @@ import { useAuthContext } from '@/contexts/AuthContext';
 
 export default function Room() {
   const router = useRouter();
-  const { user } = useAuthContext();
+  const { user, isLoading } = useAuthContext();
   const [isRegistered, setIsRegistered] = useState(false);
 
   const handleButton = () => {
@@ -18,11 +18,12 @@ export default function Room() {
   };
 
   useEffect(() => {
-    if (!user) {
+    if (!user && !isLoading) {
       router.push('/login');
     }
-  }, [router, user]);
+  }, [user, isLoading, router]);
 
+  if (isLoading) return <p>Loading...</p>;
   if (!user) return null;
 
   return isRegistered ? (
@@ -41,7 +42,7 @@ export default function Room() {
         <div className="-translate-x-7">Welcome</div>
         <div className="flex translate-x-3 justify-end">to Dom</div>
       </div>
-      <div className="absolute inset-x-0 bottom-0 flex w-full flex-col gap-3 p-6">
+      <div className="absolute inset-x-0 bottom-0 flex w-full flex-col gap-3 p-6 text-white">
         <input
           id="name"
           name="name"
@@ -49,7 +50,7 @@ export default function Room() {
           placeholder="Your name"
           className="block w-full rounded-2xl border-gray_soft bg-transparent py-4 pl-3 pr-20 placeholder:text-white"
         />
-        <Button handleButton={handleButton}>STEP FOWARD</Button>
+        <Button handleButton={handleButton}>STEP FORWARD</Button>
       </div>
     </div>
   );

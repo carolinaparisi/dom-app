@@ -5,15 +5,16 @@ import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
 export default function Lobby() {
-  const { user, signOut } = useAuthContext();
+  const { user, signOut, isLoading } = useAuthContext();
   const router = useRouter();
 
   useEffect(() => {
-    if (!user) {
+    if (!user && !isLoading) {
       router.push('/login');
     }
-  }, [router, user]);
+  }, [user, isLoading, router]);
 
+  if (isLoading) return <p>Loading...</p>;
   if (!user) return null;
 
   const handleLogout = async () => {

@@ -49,23 +49,21 @@ export default function SignInForm() {
       <div className="flex flex-col gap-4 sm:mx-auto sm:w-full sm:max-w-sm">
         <form action="#" method="POST" className="flex flex-col gap-4">
           <div>
-            <div className="">
+            <div className="text-white">
               <input
                 id="email"
                 name="email"
+                type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Your email"
-                className="block w-full rounded-2xl border-gray_soft bg-transparent py-4 pl-3 pr-20 placeholder:text-white"
+                className="block w-full rounded-2xl border-gray_soft bg-transparent px-3 py-4 placeholder:text-white"
               />
             </div>
           </div>
 
           <div>
-            <div className="flex items-center justify-between">
-              <div className="text-sm"></div>
-            </div>
-            <div className="">
+            <div className="text-white">
               <input
                 id="password"
                 name="password"
@@ -73,7 +71,7 @@ export default function SignInForm() {
                 type="password"
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Your password"
-                className="block w-full rounded-2xl border-gray_soft bg-transparent py-4 pl-3 pr-20 placeholder:text-white"
+                className="block w-full rounded-2xl border-gray_soft bg-transparent px-3 py-4 placeholder:text-white"
               />
             </div>
           </div>

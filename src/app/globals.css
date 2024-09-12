@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+  input:-webkit-autofill,
+  input:-webkit-autofill:focus {
+    transition: background-color 600000s 0s,
+    color 600000s 0s;
+  }
+}
+
 @font-face {
   font-family: 'HelveticaNeue';
   src: url('../../public/fonts/helvetica-bold.ttf') format('truetype');
