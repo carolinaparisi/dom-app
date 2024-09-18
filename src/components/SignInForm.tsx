@@ -26,6 +26,7 @@ export default function SignInForm() {
     register,
     handleSubmit,
     formState: { errors },
+    setError,
   } = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
   });
@@ -36,7 +37,9 @@ export default function SignInForm() {
       router.push('/');
     } catch (error: unknown) {
       if (error instanceof FirebaseError) {
-        alert(error.message);
+        setError('root', {
+          message: 'Email is already in use',
+        });
       } else {
         console.error('Unknown error:', error);
       }
@@ -49,7 +52,9 @@ export default function SignInForm() {
       router.push('/');
     } catch (error: unknown) {
       if (error instanceof FirebaseError) {
-        alert(error.message);
+        setError('root', {
+          message: 'Email or password is incorrect',
+        });
       } else {
         console.error('Unknown error:', error);
       }
@@ -61,6 +66,9 @@ export default function SignInForm() {
       <div className="font-silk text-6xl text-white">Enter Thy Credentials</div>
       <div className="flex flex-col gap-4 sm:mx-auto sm:w-full sm:max-w-sm">
         <form className="flex flex-col gap-4">
+          {errors.root && (
+            <div className="text-white">{errors.root.message}</div>
+          )}
           <div>
             <div className="text-white">
               <input
