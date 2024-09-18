@@ -24,8 +24,10 @@ const config: Config = {
       primary: '#6E604A',
       gray: '#989185',
       gray_soft: '#ECE7DE',
+      red: '#bb191b',
     },
   },
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   plugins: [require('@tailwindcss/forms')],
 };
 export default config;
