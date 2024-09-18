@@ -1,6 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 import Button from './Button';
 import { useRouter } from 'next/navigation';
 import {
@@ -10,15 +12,27 @@ import {
 import { auth } from '@/services/firebase';
 import { FirebaseError } from 'firebase/app';
 
+const loginSchema = z.object({
+  email: z.string().email({ message: 'Invalid email address' }),
+  password: z.string().min(6, { message: 'Must be 6 or more characters long' }),
+});
+
+type LoginSchema = z.infer<typeof loginSchema>;
+
 export default function SignInForm() {
   const router = useRouter();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
 
-  const handleSignUp = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginSchema>({
+    resolver: zodResolver(loginSchema),
+  });
+
+  const handleSignUp = async (data: LoginSchema) => {
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
+      await createUserWithEmailAndPassword(auth, data.email, data.password);
       router.push('/');
     } catch (error: unknown) {
       if (error instanceof FirebaseError) {
@@ -29,10 +43,9 @@ export default function SignInForm() {
     }
   };
 
-  const handleSignIn = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSignIn = async (data: LoginSchema) => {
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      await signInWithEmailAndPassword(auth, data.email, data.password);
       router.push('/');
     } catch (error: unknown) {
       if (error instanceof FirebaseError) {
@@ -51,40 +64,40 @@ export default function SignInForm() {
           <div>
             <div className="text-white">
               <input
-                id="email"
-                name="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
                 placeholder="Your email"
-                className="block w-full rounded-2xl border-gray_soft bg-transparent px-3 py-4 placeholder:text-white"
+                className={`${errors.email ? 'border-red' : 'border-gray_soft'} block w-full rounded-2xl bg-transparent px-3 py-4 placeholder:text-white`}
+                {...register('email')}
               />
+              {errors.email && (
+                <div className="mt-1">{errors.email.message}</div>
+              )}
             </div>
           </div>
 
           <div>
             <div className="text-white">
               <input
-                id="password"
-                name="password"
-                value={password}
                 type="password"
-                onChange={(e) => setPassword(e.target.value)}
                 placeholder="Your password"
-                className="block w-full rounded-2xl border-gray_soft bg-transparent px-3 py-4 placeholder:text-white"
+                className={`${errors.password ? 'border-red' : 'border-gray_soft'} block w-full rounded-2xl bg-transparent px-3 py-4 placeholder:text-white`}
+                {...register('password')}
               />
+              {errors.password && (
+                <div className="mt-1">{errors.password.message}</div>
+              )}
             </div>
           </div>
 
           <div>
-            <Button handleButton={handleSignIn}>Sign In</Button>
+            <Button onClick={handleSubmit(handleSignIn)}>Sign In</Button>
           </div>
 
           <div>
-            <Button handleButton={handleSignUp} variant="secondary">
+            <Button onClick={handleSubmit(handleSignUp)} variant="secondary">
               Sign Up
             </Button>
           </div>
+
           <a href="#" className="text-center text-white">
             Forgotten your password?
           </a>
