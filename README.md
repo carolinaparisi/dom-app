@@ -4,6 +4,12 @@ This project was thought for me with the intention of helping and making easier 
 
 Once I'm a participant of a book club and I loving reading, there's nothing more fun and excited than creating an application that solves a need of mine, based on a hobby!
 
+### Layout
+
+Here we have the Figma prototype created by [Cássio](https://github.com/cassiorsfreitas)! Even thought this layout was not created by me, as you can see in other projects here, on my GitHub, I've been using this strong tool to create my prototypes!
+
+![Figma](https://github.com/user-attachments/assets/4205a831-0899-4f57-a9ab-0f40c9cb50f9)
+
 ## Technologies:
 
 - React;
