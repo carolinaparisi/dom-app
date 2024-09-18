@@ -37,7 +37,7 @@ export default function Room() {
           placeholder="Your name"
           className="block w-full rounded-2xl border-gray_soft bg-transparent py-4 pl-3 pr-20 placeholder:text-white"
         />
-        <Button handleButton={handleButton}>STEP FORWARD</Button>
+        <Button onClick={handleButton}>STEP FORWARD</Button>
       </div>
     </div>
   );
