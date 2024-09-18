@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { Book, initialBooks } from '@/utils/books';
 import BookItem from './BookItem';
-import { VoterName, initialNames } from '@/utils/names';
+import { VoterGuest, initialGuests } from '@/utils/guests';
 import Image from 'next/image';
 import votingBanner from '../../public/images/voting-banner.png';
 
 export default function VotingPage() {
   const [books, setBooks] = useState<Book[]>(initialBooks);
-  const [names] = useState<VoterName[]>(initialNames);
+  const [guests] = useState<VoterGuest[]>(initialGuests);
 
   const handleBookSelected = (id: number) => {
     const updatedBooks = books.map((book) => {
@@ -84,7 +84,7 @@ export default function VotingPage() {
           </div>
           {/* NamesPool */}
           <div className="flex flex-wrap gap-2 text-white">
-            {names.map((name) => (
+            {guests.map((name) => (
               <span
                 key={name.id}
                 className={` ${
