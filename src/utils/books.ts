@@ -1,8 +1,12 @@
-export interface Book {
-  id: number;
-  title: string;
-  isSelected: boolean;
-}
+import { z } from "zod";
+
+export const bookSchema = z.object({
+  id: z.number(),
+  title: z.string(),
+  isSelected: z.boolean(),
+});
+
+export type Book = z.infer<typeof bookSchema>;
 
 export const initialBooks: Book[] = [
   { id: 1, title: 'Macunaíma, Mário de Andrade', isSelected: false },

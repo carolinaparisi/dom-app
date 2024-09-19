@@ -1,10 +1,14 @@
-export interface VoterName {
-  id: number;
-  name: string;
-  isReady: boolean;
-}
+import { z } from "zod";
 
-export const initialNames = [
+export const voterGuestSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  isReady: z.boolean(),
+});
+
+export type VoterGuest = z.infer<typeof voterGuestSchema>;
+
+export const initialGuests = [
   { id: 1, name: 'Carol', isReady: true },
   { id: 2, name: 'Cássio', isReady: false },
   { id: 3, name: 'Dante', isReady: false },
