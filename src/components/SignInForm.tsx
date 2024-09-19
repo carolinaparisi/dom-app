@@ -106,7 +106,7 @@ export default function SignInForm() {
           </div>
 
           <a href="#" className="text-center text-white">
-            Forgotten your password?
+            Have you forgotten your password?
           </a>
         </form>
       </div>
