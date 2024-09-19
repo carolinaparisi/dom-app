@@ -66,14 +66,11 @@ export default function SignInForm() {
       <div className="font-silk text-6xl text-white">Enter Thy Credentials</div>
       <div className="flex flex-col gap-4 sm:mx-auto sm:w-full sm:max-w-sm">
         <form className="flex flex-col gap-4">
-          {errors.root && (
-            <div className="text-white">{errors.root.message}</div>
-          )}
           <div>
             <div className="text-white">
               <input
                 placeholder="Your email"
-                className={`${errors.email ? 'border-red' : 'border-gray_soft'} block w-full rounded-2xl bg-transparent px-3 py-4 placeholder:text-white`}
+                className={`${errors.email || errors.root ? 'border-2 border-red focus:border-red' : 'border-gray_soft'} block w-full rounded-2xl bg-transparent px-3 py-4 outline-none placeholder:text-white focus:outline-none focus:ring-0`}
                 {...register('email')}
               />
               {errors.email && (
@@ -87,7 +84,7 @@ export default function SignInForm() {
               <input
                 type="password"
                 placeholder="Your password"
-                className={`${errors.password ? 'border-red' : 'border-gray_soft'} block w-full rounded-2xl bg-transparent px-3 py-4 placeholder:text-white`}
+                className={`${errors.password || errors.root ? 'border-2 border-red focus:border-red' : 'border-gray_soft'} block w-full rounded-2xl bg-transparent px-3 py-4 outline-none placeholder:text-white focus:outline-none focus:ring-0`}
                 {...register('password')}
               />
               {errors.password && (
@@ -95,7 +92,9 @@ export default function SignInForm() {
               )}
             </div>
           </div>
-
+          {errors.root && (
+            <div className="text-white">{errors.root.message}</div>
+          )}
           <div>
             <Button onClick={handleSubmit(handleSignIn)}>Sign In</Button>
           </div>
