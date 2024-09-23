@@ -31,7 +31,7 @@ export default function Lobby() {
   };
 
   return (
-    <>
+    <div className="h-screen bg-gray_soft">
       <div className="relative">
         <Image
           alt=""
@@ -46,7 +46,7 @@ export default function Lobby() {
         </div>
       </div>
 
-      <div className="flex h-dvh flex-col justify-start bg-gray_soft px-6 py-9 font-light">
+      <div className="flex flex-col justify-start px-6 py-9 font-light">
         <div className="flex flex-col gap-5">
           <div className="flex flex-col gap-5">
             {/* Header */}
@@ -63,31 +63,22 @@ export default function Lobby() {
             </div>
             <div className="flex flex-col gap-3">
               {initialRooms.map((room) => {
-                return <RoomCard key={room.id} />;
+                return (
+                  <RoomCard
+                    key={room.id}
+                    name={room.name}
+                    books={room.books}
+                    winner={room.books[1].title}
+                  />
+                );
               })}
             </div>
-          </div>
-          <div>
-            {/* EligibleBooks */}
-
-            <div className="flex flex-col gap-3">
-              {/*               {books.map((book) => (
-                <BookItem
-                  key={book.id}
-                  text={book.title}
-                  id={book.id}
-                  handleBookSelected={handleBookSelected}
-                  isSelected={book.isSelected}
-                />
-              ))} */}
-            </div>
+            <Button variant="secondary" onClick={handleCreateRoom}>
+              CREATE A NEW ONE
+            </Button>
           </div>
         </div>
-
-        <Button variant="secondary" onClick={handleCreateRoom}>
-          CREATE A NEW ONE
-        </Button>
       </div>
-    </>
+    </div>
   );
 }
