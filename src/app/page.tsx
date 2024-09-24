@@ -31,7 +31,7 @@ export default function Lobby() {
   };
 
   return (
-    <div className="h-screen bg-gray_soft">
+    <div className="min-h-screen bg-gray_soft">
       <div className="relative">
         <Image
           alt=""
