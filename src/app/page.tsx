@@ -8,6 +8,7 @@ import Image from 'next/image';
 import Button from '@/components/Button';
 import RoomCard from '@/components/RoomCard';
 import { initialRooms } from '@/utils/rooms';
+import Link from 'next/link';
 
 export default function Lobby() {
   const { user, isLoading } = useAuthContext();
@@ -25,10 +26,6 @@ export default function Lobby() {
   /*   const handleLogout = async () => {
     await signOut();
   }; */
-
-  const handleCreateRoom = () => {
-    console.log('Create room clicked!');
-  };
 
   return (
     <div className="min-h-screen bg-gray_soft">
@@ -73,9 +70,9 @@ export default function Lobby() {
                 );
               })}
             </div>
-            <Button variant="secondary" onClick={handleCreateRoom}>
-              CREATE A NEW ONE
-            </Button>
+            <Link href={'/room'}>
+              <Button variant="secondary">CREATE A NEW ONE</Button>
+            </Link>
           </div>
         </div>
       </div>
