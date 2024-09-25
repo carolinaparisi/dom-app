@@ -17,7 +17,7 @@ const loginSchema = z.object({
   password: z.string().min(6, { message: 'Must be 6 or more characters long' }),
 });
 
-type LoginSchema = z.infer<typeof loginSchema>;
+type LoginProps = z.infer<typeof loginSchema>;
 
 export default function SignInForm() {
   const router = useRouter();
@@ -27,11 +27,11 @@ export default function SignInForm() {
     handleSubmit,
     formState: { errors },
     setError,
-  } = useForm<LoginSchema>({
+  } = useForm<LoginProps>({
     resolver: zodResolver(loginSchema),
   });
 
-  const handleSignUp = async (data: LoginSchema) => {
+  const handleSignUp = async (data: LoginProps) => {
     try {
       await createUserWithEmailAndPassword(auth, data.email, data.password);
       router.push('/');
@@ -46,7 +46,7 @@ export default function SignInForm() {
     }
   };
 
-  const handleSignIn = async (data: LoginSchema) => {
+  const handleSignIn = async (data: LoginProps) => {
     try {
       await signInWithEmailAndPassword(auth, data.email, data.password);
       router.push('/');
