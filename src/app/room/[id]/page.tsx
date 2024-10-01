@@ -113,7 +113,9 @@ export default function EditRoom() {
                 <div>{`${initialRooms[Number(roomId)].name}'s Room`}</div>
               </div>
               <div className="text-lg">
-                <div>Amend room's details and copy the sharing link below:</div>
+                <div>
+                  Amend room&apos;s details and copy the sharing link below:
+                </div>
               </div>
             </div>
             <div className="flex flex-col">
