@@ -9,13 +9,13 @@ import { z } from 'zod';
 import { Trash } from 'lucide-react';
 
 const newRoomSchema = z.object({
-  name: z.string().min(3, { message: ' Must be 3 or more characters long' }),
+  name: z.string().min(3, { message: 'Must be 3 or more characters long' }),
   maxBooks: z.coerce.number().lte(3).positive(),
   titles: z.array(
     z.object({
       title: z
         .string()
-        .min(3, { message: ' Must be 3 or more characters long' }),
+        .min(3, { message: 'Must be 3 or more characters long' }),
     }),
   ),
 });
@@ -32,7 +32,7 @@ export default function CreateRoom() {
     resolver: zodResolver(newRoomSchema),
     defaultValues: {
       name: '',
-      titles: [],
+      titles: [{ title: '' }, { title: '' }],
     },
   });
 
@@ -123,15 +123,15 @@ export default function CreateRoom() {
 
                   <div className="flex flex-col gap-2">
                     <div>
-                      Add the books to be voted on. If necessary, add additional
-                      fields.
+                      Add the books to be voted on, at least 2. If necessary,
+                      add additional fields.
                     </div>
 
-                    <div>
+                    <div className="flex flex-col gap-2">
                       {fields.map((field, index) => {
                         return (
                           <div key={field.id}>
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-1">
                               <input
                                 key={field.id}
                                 type="text"
@@ -139,7 +139,15 @@ export default function CreateRoom() {
                                 className={`${errors.titles && errors.titles[index] ? 'border-2 border-red focus:border-red' : 'border-gray'} block w-full rounded-2xl bg-transparent px-3 py-4 outline-none placeholder:text-gray focus:outline-none focus:ring-0`}
                                 {...register(`titles.${index}.title`)}
                               />
-                              <Trash onClick={() => remove(index)} />
+                              <Trash
+                                className={`${index < 2 ? 'text-gray' : 'text-black'}`}
+                                onClick={() => {
+                                  if (index < 2) {
+                                    return;
+                                  }
+                                  remove(index);
+                                }}
+                              />
                             </div>
 
                             {errors.titles?.[index]?.title && (
@@ -150,7 +158,13 @@ export default function CreateRoom() {
                           </div>
                         );
                       })}
-                      <Button onClick={handleAddTitle}>ADD</Button>
+
+                      {errors.titles && (
+                        <div className="mt-1">{errors.titles.message}</div>
+                      )}
+                      <Button onClick={handleAddTitle} dashed={true}>
+                        ADD
+                      </Button>
                     </div>
                   </div>
                 </div>
