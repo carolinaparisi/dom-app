@@ -5,6 +5,7 @@ import { bookSchema, initialBooks } from '@/utils/books';
 export const roomSchema = z.object({
   id: z.number(),
   name: z.string(),
+  maxBooks: z.number(),
   books: z.array(bookSchema),
   isReady: z.boolean(),
 });
@@ -12,7 +13,25 @@ export const roomSchema = z.object({
 export type Room = z.infer<typeof roomSchema>;
 
 export const initialRooms: Room[] = [
-  { id: 1, name: 'Café com Letras', books: initialBooks, isReady: false },
-  { id: 2, name: 'Café com Letras', books: initialBooks, isReady: false },
-  { id: 3, name: 'Café com Letras', books: initialBooks, isReady: false },
+  {
+    id: 1,
+    name: 'Café com Letras',
+    maxBooks: 3,
+    books: initialBooks,
+    isReady: false,
+  },
+  {
+    id: 2,
+    name: 'Café com Pêto',
+    maxBooks: 3,
+    books: initialBooks,
+    isReady: false,
+  },
+  {
+    id: 3,
+    name: 'Café com Letras',
+    maxBooks: 3,
+    books: initialBooks,
+    isReady: false,
+  },
 ];

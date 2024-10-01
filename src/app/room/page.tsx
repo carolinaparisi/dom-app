@@ -7,6 +7,7 @@ import { useFieldArray, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Trash } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 const newRoomSchema = z
   .object({
@@ -44,6 +45,8 @@ const newRoomSchema = z
 type NewRoomProps = z.infer<typeof newRoomSchema>;
 
 export default function CreateRoom() {
+  const router = useRouter();
+
   const {
     control,
     register,
@@ -64,6 +67,7 @@ export default function CreateRoom() {
 
   const handleCreateRoom = (data: NewRoomProps) => {
     console.log('Room created!', data);
+    router.push('/room/2');
   };
 
   const handleAddTitle = (
