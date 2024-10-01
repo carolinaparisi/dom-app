@@ -8,17 +8,38 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Trash } from 'lucide-react';
 
-const newRoomSchema = z.object({
-  name: z.string().min(3, { message: 'Must be 3 or more characters long' }),
-  maxBooks: z.coerce.number().lte(3).positive(),
-  titles: z.array(
-    z.object({
-      title: z
-        .string()
-        .min(3, { message: 'Must be 3 or more characters long' }),
-    }),
-  ),
-});
+const newRoomSchema = z
+  .object({
+    name: z.string().min(3, { message: 'Must be 3 or more characters long' }),
+    maxBooks: z.coerce.number().lte(3).positive(),
+    titles: z
+      .array(
+        z.object({
+          title: z
+            .string()
+            .min(3, { message: 'Must be 3 or more characters long' }),
+        }),
+      )
+      .min(2, { message: 'Must have at least 2 books to be voted on' }),
+  })
+  .refine(
+    (value) => {
+      if (value.titles.length === 2 && value.maxBooks !== 1) {
+        return false;
+      }
+      if (
+        value.titles.length === 3 &&
+        !(value.maxBooks === 1 || value.maxBooks === 2)
+      ) {
+        return false;
+      }
+      return true;
+    },
+    {
+      message: 'For 2 books, choose 1. For 3 books, choose 1 or 2, please.',
+      path: ['maxBooks'],
+    },
+  );
 
 type NewRoomProps = z.infer<typeof newRoomSchema>;
 
@@ -126,7 +147,6 @@ export default function CreateRoom() {
                       Add the books to be voted on, at least 2. If necessary,
                       add additional fields.
                     </div>
-
                     <div className="flex flex-col gap-2">
                       {fields.map((field, index) => {
                         return (
@@ -140,11 +160,7 @@ export default function CreateRoom() {
                                 {...register(`titles.${index}.title`)}
                               />
                               <Trash
-                                className={`${index < 2 ? 'text-gray' : 'text-black'}`}
                                 onClick={() => {
-                                  if (index < 2) {
-                                    return;
-                                  }
                                   remove(index);
                                 }}
                               />
@@ -159,13 +175,15 @@ export default function CreateRoom() {
                         );
                       })}
 
-                      {errors.titles && (
-                        <div className="mt-1">{errors.titles.message}</div>
-                      )}
                       <Button onClick={handleAddTitle} dashed={true}>
                         ADD
                       </Button>
                     </div>
+                    {errors.titles && (
+                      <div className="mt-1 text-red">
+                        {errors.titles.root?.message}
+                      </div>
+                    )}
                   </div>
                 </div>
 
