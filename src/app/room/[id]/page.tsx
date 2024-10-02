@@ -76,16 +76,19 @@ export default function EditRoom() {
     name: 'titles',
   });
 
-  const handleCreateRoom = (data: NewRoomProps) => {
-    console.log('Room created!', data);
-    console.log(booksArray);
-  };
-
   const handleAddTitle = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
     event.preventDefault();
     append({ title: '' });
+  };
+
+  const handleEditRoom = (data: NewRoomProps) => {
+    console.log('Room edited!', data);
+  };
+
+  const handleRevealBook = () => {
+    console.log('Book revealed!');
   };
 
   return (
@@ -112,9 +115,18 @@ export default function EditRoom() {
               <div className="font-silk text-3xl leading-none text-primary">
                 <div>{`${initialRooms[Number(roomId)].name}'s Room`}</div>
               </div>
-              <div className="text-lg">
+              <div className="flex flex-col gap-5 text-lg">
                 <div>
                   Amend room&apos;s details and copy the sharing link below:
+                </div>
+                <div className="flex">
+                  <input
+                    className="bg-blue_super_light w-3/4 border-primary py-4"
+                    type="text"
+                  />
+                  <button className="w-1/4 bg-primary py-4 text-xs font-bold text-white">
+                    COPY URL
+                  </button>
                 </div>
               </div>
             </div>
@@ -192,8 +204,8 @@ export default function EditRoom() {
                         );
                       })}
 
-                      <Button onClick={handleAddTitle} dashed={true}>
-                        ADD
+                      <Button variant="dashed" onClick={handleAddTitle}>
+                        ADD BOOK FIELD
                       </Button>
                     </div>
                     {errors.titles && (
@@ -206,9 +218,16 @@ export default function EditRoom() {
 
                 <Button
                   variant="secondary"
-                  onClick={handleSubmit(handleCreateRoom)}
+                  onClick={handleSubmit(handleEditRoom)}
                 >
-                  CREATE ROOM
+                  UPDATE ROOM
+                </Button>
+
+                <Button
+                  variant="tertiary"
+                  onClick={handleSubmit(handleRevealBook)}
+                >
+                  REVEAL THE WINNING BOOK
                 </Button>
               </form>
             </div>

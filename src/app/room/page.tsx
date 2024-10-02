@@ -179,8 +179,8 @@ export default function CreateRoom() {
                         );
                       })}
 
-                      <Button onClick={handleAddTitle} dashed={true}>
-                        ADD
+                      <Button variant="dashed" onClick={handleAddTitle}>
+                        ADD BOOK FIELD
                       </Button>
                     </div>
                     {errors.titles && (
