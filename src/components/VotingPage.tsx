@@ -9,12 +9,13 @@ export default function VotingPage() {
   const [books, setBooks] = useState<Book[]>(initialBooks);
   const [guests] = useState<VoterGuest[]>(initialGuests);
 
+  // TODO: Create isSelected state locally
   const handleBookSelected = (id: number) => {
     const updatedBooks = books.map((book) => {
       if (book.id === id) {
         return {
           ...book,
-          isSelected: !book.isSelected,
+          isSelected: false,
         };
       }
       return book;
@@ -62,7 +63,8 @@ export default function VotingPage() {
                   text={book.title}
                   id={book.id}
                   handleBookSelected={handleBookSelected}
-                  isSelected={book.isSelected}
+                  // TODO: Pass isSelected state created locally
+                  isSelected={false}
                 />
               ))}
             </div>

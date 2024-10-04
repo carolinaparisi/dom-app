@@ -8,8 +8,13 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Trash } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { useDataContext } from '@/contexts/DataContext';
+import { useAuthContext } from '@/contexts/AuthContext';
+import { useEffect } from 'react';
+import { roomSchema } from '@/utils/rooms';
+import { v4 as uuidv4 } from 'uuid';
 
-const newRoomSchema = z
+const newRoomFormSchema = z
   .object({
     name: z.string().min(3, { message: 'Must be 3 or more characters long' }),
     maxBooks: z.coerce.number().lte(3).positive(),
@@ -42,18 +47,20 @@ const newRoomSchema = z
     },
   );
 
-type NewRoomProps = z.infer<typeof newRoomSchema>;
+type NewRoomFormProps = z.infer<typeof newRoomFormSchema>;
 
 export default function CreateRoom() {
   const router = useRouter();
+  const { setData } = useDataContext();
+  const { user, isLoading } = useAuthContext();
 
   const {
     control,
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<NewRoomProps>({
-    resolver: zodResolver(newRoomSchema),
+  } = useForm<NewRoomFormProps>({
+    resolver: zodResolver(newRoomFormSchema),
     defaultValues: {
       name: '',
       titles: [{ title: '' }, { title: '' }],
@@ -65,9 +72,34 @@ export default function CreateRoom() {
     name: 'titles',
   });
 
-  const handleCreateRoom = (data: NewRoomProps) => {
-    console.log('Room created!', data);
-    router.push('/room/2');
+  const handleCreateRoom = async (data: NewRoomFormProps) => {
+    try {
+      const roomId = uuidv4();
+
+      const books = data.titles.map((book, index) => ({
+        id: index + 1,
+        title: book.title,
+        votes: 0,
+      }));
+
+      const roomData = roomSchema.parse({
+        name: data.name,
+        maxBooks: data.maxBooks,
+        books,
+        winningBooks: null,
+        owner: user?.uid,
+        guests: [],
+        createdBy: user?.uid || '',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      });
+
+      await setData(`rooms/${roomId}`, roomData);
+
+      // router.push(`/room/${roomId}`);
+    } catch (error) {
+      console.error('Error creating room:', error);
+    }
   };
 
   const handleAddTitle = (
@@ -76,6 +108,16 @@ export default function CreateRoom() {
     event.preventDefault();
     append({ title: '' });
   };
+
+  useEffect(() => {
+    if (!user && !isLoading) {
+      router.push('/login');
+    }
+    console.log({ user });
+  }, [user, isLoading, router]);
+
+  if (isLoading) return <p>Loading...</p>;
+  if (!user) return null;
 
   return (
     <div className="min-h-screen bg-gray_soft">

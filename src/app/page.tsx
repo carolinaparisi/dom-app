@@ -6,8 +6,6 @@ import { useEffect } from 'react';
 import lobbyBanner from '../../public/images/lobby-background.png';
 import Image from 'next/image';
 import Button from '@/components/Button';
-import RoomCard from '@/components/RoomCard';
-import { initialRooms } from '@/utils/rooms';
 import Link from 'next/link';
 
 export default function Lobby() {
@@ -23,6 +21,7 @@ export default function Lobby() {
   if (isLoading) return <p>Loading...</p>;
   if (!user) return null;
 
+  // TODO: Implement the signOut function
   /*   const handleLogout = async () => {
     await signOut();
   }; */
@@ -59,7 +58,8 @@ export default function Lobby() {
               </div>
             </div>
             <div className="flex flex-col gap-4">
-              {initialRooms.map((room) => {
+              {/* TODO: Get all rooms from firebase */}
+              {/* {initialRooms.map((room) => {
                 return (
                   <RoomCard
                     key={room.id}
@@ -68,7 +68,7 @@ export default function Lobby() {
                     winner={room.books[1].title}
                   />
                 );
-              })}
+              })} */}
             </div>
             <Link href={'/room'}>
               <Button variant="secondary">CREATE A NEW ONE</Button>

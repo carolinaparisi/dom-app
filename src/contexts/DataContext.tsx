@@ -3,33 +3,36 @@
 import { createContext, useContext, ReactNode } from 'react';
 import { ref, get, set } from 'firebase/database';
 import { database } from '../services/firebase';
+import { Room } from '@/utils/rooms';
 
 interface DataContext {
-  getData: (path: string) => Promise<any>;
-  setData: (path: string, value: any) => Promise<void>;
+  getData: (path: string) => Promise<Room | null>;
+  setData: (path: string, value: Room) => Promise<void>;
 }
 
 const DataContext = createContext<DataContext | undefined>(undefined);
 
 export const DataProvider = ({ children }: { children: ReactNode }) => {
   // TODO 2: Implement the getRoom and setRoom functions
-  const getData = async (path: string) => {
+  const getData = async (path: string): Promise<Room | null> => {
     const dataRef = ref(database, path);
     try {
       const snapshot = await get(dataRef);
-      return snapshot.exists() ? snapshot.val() : null;
+      return snapshot.exists() ? (snapshot.val() as Room) : null;
     } catch (error) {
-      console.error('Erro ao obter dados:', error);
+      console.error(error);
       throw error;
     }
   };
 
-  const setData = async (path: string, value: any) => {
+  const setData = async (path: string, value: Room) => {
     const dataRef = ref(database, path);
     try {
+      console.log('Setting data at path:', path, 'with value:', value); // Log the data
       await set(dataRef, value);
+      console.log('Data set successfully'); // Confirm success
     } catch (error) {
-      console.error('Erro ao definir dados:', error);
+      console.error('Error setting data:', error);
       throw error;
     }
   };
