@@ -8,7 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Trash } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useDataContext } from '@/contexts/DataContext';
+import { useRoomContext } from '@/contexts/RoomContext';
 import { useAuthContext } from '@/contexts/AuthContext';
 import { useEffect } from 'react';
 import { roomSchema } from '@/utils/rooms';
@@ -51,7 +51,7 @@ type NewRoomFormProps = z.infer<typeof newRoomFormSchema>;
 
 export default function CreateRoom() {
   const router = useRouter();
-  const { setData } = useDataContext();
+  const { setRoom } = useRoomContext();
   const { user, isLoading } = useAuthContext();
 
   const {
@@ -94,7 +94,7 @@ export default function CreateRoom() {
         updatedAt: new Date().toISOString(),
       });
 
-      await setData(`rooms/${roomId}`, roomData);
+      await setRoom(`rooms/${roomId}`, roomData);
 
       // router.push(`/room/${roomId}`);
     } catch (error) {
@@ -113,7 +113,6 @@ export default function CreateRoom() {
     if (!user && !isLoading) {
       router.push('/login');
     }
-    console.log({ user });
   }, [user, isLoading, router]);
 
   if (isLoading) return <p>Loading...</p>;

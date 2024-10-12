@@ -2,29 +2,41 @@
 
 import { useAuthContext } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import lobbyBanner from '../../public/images/lobby-background.png';
 import Image from 'next/image';
 import Button from '@/components/Button';
 import Link from 'next/link';
+import { useRoomContext } from '@/contexts/RoomContext';
+import { signOut } from 'firebase/auth';
+import { auth } from '@/services/firebase';
+import { Room } from '@/utils/rooms';
+import RoomCard from '@/components/RoomCard';
 
 export default function Lobby() {
   const { user, isLoading } = useAuthContext();
+  const { getAllRooms } = useRoomContext();
+  const [rooms, setRooms] = useState<Room[] | null>(null);
   const router = useRouter();
 
   useEffect(() => {
     if (!user && !isLoading) {
       router.push('/login');
     }
-  }, [user, isLoading, router]);
+
+    if (user && rooms === null) {
+      getAllRooms(user.uid).then((rooms) => {
+        setRooms(Object.values(rooms));
+      });
+    }
+  }, [user, isLoading, router, getAllRooms, rooms]);
 
   if (isLoading) return <p>Loading...</p>;
   if (!user) return null;
 
-  // TODO: Implement the signOut function
-  /*   const handleLogout = async () => {
-    await signOut();
-  }; */
+  const handleLogout = async () => {
+    await signOut(auth);
+  };
 
   return (
     <div className="min-h-screen bg-gray_soft">
@@ -58,21 +70,23 @@ export default function Lobby() {
               </div>
             </div>
             <div className="flex flex-col gap-4">
-              {/* TODO: Get all rooms from firebase */}
-              {/* {initialRooms.map((room) => {
+              {rooms?.map((room, index) => {
                 return (
                   <RoomCard
-                    key={room.id}
+                    key={index}
                     name={room.name}
                     books={room.books}
-                    winner={room.books[1].title}
+                    winner={room.winningBooks}
                   />
                 );
-              })} */}
+              })}
             </div>
             <Link href={'/room'}>
               <Button variant="secondary">CREATE A NEW ONE</Button>
             </Link>
+            <Button onClick={handleLogout} variant="secondary">
+              LOGOUT
+            </Button>
           </div>
         </div>
       </div>

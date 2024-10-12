@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 import localFont from 'next/font/local';
 import { AuthProvider } from '@/contexts/AuthContext';
-import { DataProvider } from '@/contexts/DataContext';
+import { DataProvider } from '@/contexts/RoomContext';
 
 const silkSerif = localFont({
   src: '../../public/fonts/silk-serif.otf',

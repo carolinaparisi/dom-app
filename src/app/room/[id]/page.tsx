@@ -7,8 +7,7 @@ import { useFieldArray, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Trash } from 'lucide-react';
-import { useParams } from 'next/navigation';
-import { initialRooms } from '@/utils/rooms';
+// import { useParams } from 'next/navigation';
 
 const newRoomSchema = z
   .object({
@@ -46,12 +45,12 @@ const newRoomSchema = z
 type NewRoomProps = z.infer<typeof newRoomSchema>;
 
 export default function EditRoom() {
-  const params = useParams();
-  const roomId = params.id;
+  // const params = useParams();
+  // const roomId = params.id;
 
-  const booksArray = initialRooms[Number(roomId) - 1].books.map((book) => {
-    return book.title;
-  });
+  // const booksArray = initialRooms[Number(roomId) - 1].books.map((book) => {
+  //   return book.title;
+  // });
 
   const {
     control,
@@ -60,15 +59,15 @@ export default function EditRoom() {
     formState: { errors },
   } = useForm<NewRoomProps>({
     resolver: zodResolver(newRoomSchema),
-    defaultValues: {
-      name: initialRooms[Number(roomId) - 1].name,
-      maxBooks: initialRooms[Number(roomId) - 1].maxBooks,
-      titles: booksArray.map((book) => {
-        return {
-          title: `${book}`,
-        };
-      }),
-    },
+    // defaultValues: {
+    //   name: initialRooms[Number(roomId) - 1].name,
+    //   maxBooks: initialRooms[Number(roomId) - 1].maxBooks,
+    //   titles: booksArray.map((book) => {
+    //     return {
+    //       title: `${book}`,
+    //     };
+    //   }),
+    // },
   });
 
   const { fields, append, remove } = useFieldArray({
@@ -113,7 +112,7 @@ export default function EditRoom() {
             {/* Header */}
             <div className="flex flex-col gap-1">
               <div className="font-silk text-3xl leading-none text-primary">
-                <div>{`${initialRooms[Number(roomId)].name}'s Room`}</div>
+                {/* <div>{`${initialRooms[Number(roomId)].name}'s Room`}</div> */}
               </div>
               <div className="flex flex-col gap-5 text-lg">
                 <div>
@@ -121,7 +120,7 @@ export default function EditRoom() {
                 </div>
                 <div className="flex">
                   <input
-                    className="bg-blue_super_light w-3/4 border-primary py-4"
+                    className="w-3/4 border-primary bg-blue_super_light py-4"
                     type="text"
                   />
                   <button className="w-1/4 bg-primary py-4 text-xs font-bold text-white">

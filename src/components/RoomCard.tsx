@@ -5,7 +5,7 @@ import roomBanner from '../../public/images/welcome.png';
 interface RoomCardProps {
   name: string;
   books: Book[];
-  winner: string;
+  winner: Book[] | null;
 }
 
 export default function RoomCard({ name, books, winner }: RoomCardProps) {
@@ -22,10 +22,14 @@ export default function RoomCard({ name, books, winner }: RoomCardProps) {
         />
         <div className="flex flex-col justify-center gap-1">
           <div className="font-silk text-xl">{name}</div>
-          <div className="line-clamp-2">
+          <div className="line-clamp-1">
             {`Books: ` + books.map((book) => book.title).join('; ')}
           </div>
-          <div className="line-clamp-1">{`Winner: ${winner}`}</div>
+          <div className="line-clamp-1">{`Winner: ${
+            winner
+              ? winner?.map((book) => book.title).join(', ')
+              : 'Not revealed yet'
+          }`}</div>
           <div className="text-gray">Created at Thu 12 Sep 2024</div>
         </div>
       </div>
