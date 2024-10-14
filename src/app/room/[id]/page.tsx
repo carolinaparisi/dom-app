@@ -8,6 +8,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Trash } from 'lucide-react';
 import { useRoomContext } from '@/contexts/RoomContext';
+import { useEffect, useState } from 'react';
+import { Room } from '@/utils/rooms';
 // import { useParams } from 'next/navigation';
 
 const newRoomSchema = z
@@ -47,7 +49,15 @@ type NewRoomProps = z.infer<typeof newRoomSchema>;
 
 export default function EditRoom({ params }: { params: { id: string } }) {
   const { getRoom } = useRoomContext();
-  getRoom(params.id).then((room) => console.log(room));
+  const [initialRoom, setInitialRoom] = useState<Room | null>(null);
+
+  useEffect(() => {
+    (async function fetchRoom() {
+      const room = await getRoom(params.id);
+      setInitialRoom(room);
+      console.log(room);
+    })();
+  }, [getRoom, params.id]);
 
   const {
     control,
@@ -56,15 +66,16 @@ export default function EditRoom({ params }: { params: { id: string } }) {
     formState: { errors },
   } = useForm<NewRoomProps>({
     resolver: zodResolver(newRoomSchema),
-    // defaultValues: {
-    //   name: initialRooms[Number(roomId) - 1].name,
-    //   maxBooks: initialRooms[Number(roomId) - 1].maxBooks,
-    //   titles: booksArray.map((book) => {
-    //     return {
-    //       title: `${book}`,
-    //     };
-    //   }),
-    // },
+    values: {
+      name: initialRoom?.name || '',
+      maxBooks: initialRoom?.maxBooks || 0,
+      titles:
+        initialRoom?.books.map((book) => {
+          return {
+            title: `${book.title}`,
+          };
+        }) || [],
+    },
   });
 
   const { fields, append, remove } = useFieldArray({
