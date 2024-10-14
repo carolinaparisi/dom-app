@@ -84,6 +84,7 @@ export default function CreateRoom() {
 
       const roomData = roomSchema.parse({
         name: data.name,
+        id: roomId,
         maxBooks: data.maxBooks,
         books,
         winningBooks: null,
@@ -94,7 +95,7 @@ export default function CreateRoom() {
         updatedAt: new Date().toISOString(),
       });
 
-      await setRoom(`rooms/${roomId}`, roomData);
+      await setRoom(roomId, roomData);
 
       router.push(`/room/${roomId}`);
     } catch (error) {

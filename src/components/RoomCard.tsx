@@ -1,16 +1,19 @@
 import { Book } from '@/utils/books';
 import Image from 'next/image';
 import roomBanner from '../../public/images/welcome.png';
+import Link from 'next/link';
 
 interface RoomCardProps {
   name: string;
+  id: string;
   books: Book[];
   winner: Book[] | null;
 }
 
-export default function RoomCard({ name, books, winner }: RoomCardProps) {
+export default function RoomCard({ name, id, books, winner }: RoomCardProps) {
+  console.log('RoomCard:', id);
   return (
-    <>
+    <Link href={`/room/${id}`}>
       <div className="align-center flex w-full gap-3 rounded-2xl bg-primary p-3 text-white">
         <Image
           className="rounded-full"
@@ -33,6 +36,6 @@ export default function RoomCard({ name, books, winner }: RoomCardProps) {
           <div className="text-gray">Created at Thu 12 Sep 2024</div>
         </div>
       </div>
-    </>
+    </Link>
   );
 }

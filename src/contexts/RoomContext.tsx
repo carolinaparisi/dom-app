@@ -25,6 +25,7 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
 
     try {
       const snapshot = await get(roomsQuery);
+      console.log(snapshot.val());
       return snapshot.exists() ? (snapshot.val() as Record<string, Room>) : {};
     } catch (error) {
       console.error(error);
@@ -33,7 +34,7 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const getRoom = async (roomId: string): Promise<Room | null> => {
-    const dataRef = ref(database, roomId);
+    const dataRef = ref(database, `rooms/${roomId}`);
     try {
       const snapshot = await get(dataRef);
       return snapshot.exists() ? (snapshot.val() as Room) : null;
@@ -44,7 +45,7 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const setRoom = async (roomId: string, value: Room) => {
-    const dataRef = ref(database, roomId);
+    const dataRef = ref(database, `rooms/${roomId}`);
     try {
       console.log('Setting data at roomId:', roomId, 'with value:', value);
       await set(dataRef, value);
@@ -56,7 +57,7 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const deleteRoom = async (roomId: string) => {
-    const dataRef = ref(database, roomId);
+    const dataRef = ref(database, `rooms/${roomId}`);
     try {
       await set(dataRef, null);
     } catch (error) {

@@ -7,6 +7,7 @@ import { useFieldArray, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Trash } from 'lucide-react';
+import { useRoomContext } from '@/contexts/RoomContext';
 // import { useParams } from 'next/navigation';
 
 const newRoomSchema = z
@@ -44,13 +45,9 @@ const newRoomSchema = z
 
 type NewRoomProps = z.infer<typeof newRoomSchema>;
 
-export default function EditRoom() {
-  // const params = useParams();
-  // const roomId = params.id;
-
-  // const booksArray = initialRooms[Number(roomId) - 1].books.map((book) => {
-  //   return book.title;
-  // });
+export default function EditRoom({ params }: { params: { id: string } }) {
+  const { getRoom } = useRoomContext();
+  getRoom(params.id).then((room) => console.log(room));
 
   const {
     control,

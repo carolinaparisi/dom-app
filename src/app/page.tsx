@@ -75,6 +75,7 @@ export default function Lobby() {
                   <RoomCard
                     key={index}
                     name={room.name}
+                    id={room.id}
                     books={room.books}
                     winner={room.winningBooks}
                   />
