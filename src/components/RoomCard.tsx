@@ -23,7 +23,7 @@ export default function RoomCard({ name, books, winner }: RoomCardProps) {
         <div className="flex flex-col justify-center gap-1">
           <div className="font-silk text-xl">{name}</div>
           <div className="line-clamp-1">
-            {`Books: ` + books.map((book) => book.title).join('; ')}
+            {`Books: ` + books.map((book) => book.title).join(', ')}
           </div>
           <div className="line-clamp-1">{`Winner: ${
             winner

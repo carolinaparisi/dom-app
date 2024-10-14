@@ -8,6 +8,7 @@ import { Room } from '@/utils/rooms';
 interface RoomContext {
   getRoom: (roomId: string) => Promise<Room | null>;
   setRoom: (roomId: string, value: Room) => Promise<void>;
+  deleteRoom: (roomId: string) => Promise<void>;
   getAllRooms: (userId: string) => Promise<Record<string, Room>>;
 }
 
@@ -54,8 +55,18 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  const deleteRoom = async (roomId: string) => {
+    const dataRef = ref(database, roomId);
+    try {
+      await set(dataRef, null);
+    } catch (error) {
+      console.error('Error deleting data:', error);
+      throw error;
+    }
+  };
+
   return (
-    <RoomContext.Provider value={{ getRoom, setRoom, getAllRooms }}>
+    <RoomContext.Provider value={{ getRoom, setRoom, deleteRoom, getAllRooms }}>
       {children}
     </RoomContext.Provider>
   );

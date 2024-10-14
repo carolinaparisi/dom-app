@@ -96,7 +96,7 @@ export default function CreateRoom() {
 
       await setRoom(`rooms/${roomId}`, roomData);
 
-      // router.push(`/room/${roomId}`);
+      router.push(`/room/${roomId}`);
     } catch (error) {
       console.error('Error creating room:', error);
     }

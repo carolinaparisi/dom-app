@@ -96,7 +96,9 @@ export default function SignInForm() {
             <div className="text-white">{errors.root.message}</div>
           )}
           <div>
-            <Button onClick={handleSubmit(handleSignIn)}>Sign In</Button>
+            <Button onClick={handleSubmit(handleSignIn)} variant="primary">
+              Sign In
+            </Button>
           </div>
 
           <div>
