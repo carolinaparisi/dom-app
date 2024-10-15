@@ -9,7 +9,8 @@ import { z } from 'zod';
 import { Trash } from 'lucide-react';
 import { useRoomContext } from '@/contexts/RoomContext';
 import { useEffect, useState } from 'react';
-import { Room } from '@/utils/rooms';
+import { Room, roomSchema } from '@/utils/rooms';
+import { useRouter } from 'next/navigation';
 // import { useParams } from 'next/navigation';
 
 const newRoomSchema = z
@@ -48,14 +49,14 @@ const newRoomSchema = z
 type NewRoomProps = z.infer<typeof newRoomSchema>;
 
 export default function EditRoom({ params }: { params: { id: string } }) {
-  const { getRoom } = useRoomContext();
+  const router = useRouter();
+  const { getRoom, setRoom } = useRoomContext();
   const [initialRoom, setInitialRoom] = useState<Room | null>(null);
 
   useEffect(() => {
     (async function fetchRoom() {
       const room = await getRoom(params.id);
       setInitialRoom(room);
-      console.log(room);
     })();
   }, [getRoom, params.id]);
 
@@ -90,8 +91,29 @@ export default function EditRoom({ params }: { params: { id: string } }) {
     append({ title: '' });
   };
 
-  const handleEditRoom = (data: NewRoomProps) => {
-    console.log('Room edited!', data);
+  const handleEditRoom = async (data: NewRoomProps) => {
+    const updatedBooks = data.titles.map((book, index) => {
+      return {
+        id: index + 1,
+        title: book.title,
+        votes: 0,
+      };
+    });
+
+    const updatedData = roomSchema.parse({
+      name: data.name,
+      id: params.id,
+      maxBooks: data.maxBooks,
+      books: updatedBooks,
+      winningBooks: null,
+      guests: [],
+      createdBy: initialRoom?.createdBy,
+      createdAt: initialRoom?.createdAt,
+      updatedAt: new Date().toISOString(),
+    });
+
+    await setRoom(params.id, updatedData);
+    router.push('/');
   };
 
   const handleRevealBook = () => {

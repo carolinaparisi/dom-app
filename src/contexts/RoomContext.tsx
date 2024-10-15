@@ -25,7 +25,6 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
 
     try {
       const snapshot = await get(roomsQuery);
-      console.log(snapshot.val());
       return snapshot.exists() ? (snapshot.val() as Record<string, Room>) : {};
     } catch (error) {
       console.error(error);
