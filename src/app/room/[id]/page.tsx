@@ -52,6 +52,11 @@ export default function EditRoom({ params }: { params: { id: string } }) {
   const router = useRouter();
   const { getRoom, setRoom, deleteRoom } = useRoomContext();
   const [initialRoom, setInitialRoom] = useState<Room | null>(null);
+  const [copySuccess, setCopySuccess] = useState('');
+  const baseVotingUrl =
+    process.env.NODE_ENV === 'production'
+      ? process.env.NEXT_PUBLIC_BASE_VOTING_URL
+      : 'http://localhost:3000';
 
   useEffect(() => {
     (async function fetchRoom() {
@@ -126,6 +131,14 @@ export default function EditRoom({ params }: { params: { id: string } }) {
     console.log('Book revealed!');
   };
 
+  const handleCopyUrl = () => {
+    const url = `${baseVotingUrl}/voting/${params.id}`;
+
+    navigator.clipboard.writeText(url).then(() => {
+      setCopySuccess('URL copied to clipboard!');
+    });
+  };
+
   return (
     <div className="min-h-screen bg-gray_soft">
       <div className="relative">
@@ -156,13 +169,20 @@ export default function EditRoom({ params }: { params: { id: string } }) {
                 </div>
                 <div className="flex">
                   <input
+                    disabled
+                    value={`${baseVotingUrl}/voting/${params.id}`}
                     className="w-3/4 border-primary bg-blue_super_light py-4"
                     type="text"
                   />
-                  <button className="w-1/4 bg-primary py-4 text-xs font-bold text-white">
+                  <button
+                    onClick={handleCopyUrl}
+                    className="w-1/4 bg-primary py-4 text-xs font-bold text-white"
+                  >
                     COPY URL
                   </button>
                 </div>
+
+                {copySuccess && <div className="text-green">{copySuccess}</div>}
               </div>
             </div>
             <div className="flex flex-col">
