@@ -11,7 +11,6 @@ interface RoomCardProps {
 }
 
 export default function RoomCard({ name, id, books, winner }: RoomCardProps) {
-  console.log('RoomCard:', id);
   return (
     <Link href={`/room/${id}`}>
       <div className="align-center flex w-full gap-3 rounded-2xl bg-primary p-3 text-white">

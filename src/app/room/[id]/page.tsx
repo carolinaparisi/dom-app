@@ -50,7 +50,7 @@ type NewRoomProps = z.infer<typeof newRoomSchema>;
 
 export default function EditRoom({ params }: { params: { id: string } }) {
   const router = useRouter();
-  const { getRoom, setRoom } = useRoomContext();
+  const { getRoom, setRoom, deleteRoom } = useRoomContext();
   const [initialRoom, setInitialRoom] = useState<Room | null>(null);
 
   useEffect(() => {
@@ -113,6 +113,12 @@ export default function EditRoom({ params }: { params: { id: string } }) {
     });
 
     await setRoom(params.id, updatedData);
+    router.push('/');
+  };
+
+  const handleDeleteRoom = async () => {
+    await deleteRoom(params.id);
+
     router.push('/');
   };
 
@@ -250,6 +256,13 @@ export default function EditRoom({ params }: { params: { id: string } }) {
                   onClick={handleSubmit(handleEditRoom)}
                 >
                   UPDATE ROOM
+                </Button>
+
+                <Button
+                  variant="primary"
+                  onClick={handleSubmit(handleDeleteRoom)}
+                >
+                  DELETE ROOM
                 </Button>
 
                 <Button

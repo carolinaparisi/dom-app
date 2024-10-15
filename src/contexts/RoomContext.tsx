@@ -46,7 +46,6 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
   const setRoom = async (roomId: string, value: Room) => {
     const dataRef = ref(database, `rooms/${roomId}`);
     try {
-      console.log('Setting data at roomId:', roomId, 'with value:', value);
       await set(dataRef, value);
       console.log('Data set successfully');
     } catch (error) {
@@ -59,6 +58,7 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
     const dataRef = ref(database, `rooms/${roomId}`);
     try {
       await set(dataRef, null);
+      console.log('Data deleted successfully');
     } catch (error) {
       console.error('Error deleting data:', error);
       throw error;
