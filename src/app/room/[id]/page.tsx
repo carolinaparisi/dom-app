@@ -11,7 +11,7 @@ import { useRoomContext } from '@/contexts/RoomContext';
 import { useEffect, useState } from 'react';
 import { Room, roomSchema } from '@/utils/rooms';
 import { useRouter } from 'next/navigation';
-// import { useParams } from 'next/navigation';
+import { Toaster, toast } from 'sonner';
 
 const newRoomSchema = z
   .object({
@@ -52,7 +52,6 @@ export default function EditRoom({ params }: { params: { id: string } }) {
   const router = useRouter();
   const { getRoom, setRoom, deleteRoom } = useRoomContext();
   const [initialRoom, setInitialRoom] = useState<Room | null>(null);
-  const [copySuccess, setCopySuccess] = useState('');
   const baseVotingUrl =
     process.env.NODE_ENV === 'production'
       ? process.env.NEXT_PUBLIC_BASE_VOTING_URL
@@ -135,7 +134,7 @@ export default function EditRoom({ params }: { params: { id: string } }) {
     const url = `${baseVotingUrl}/voting/${params.id}`;
 
     navigator.clipboard.writeText(url).then(() => {
-      setCopySuccess('URL copied to clipboard!');
+      toast.success('URL copied to clipboard!');
     });
   };
 
@@ -150,14 +149,14 @@ export default function EditRoom({ params }: { params: { id: string } }) {
           priority
         />
         <div className="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center text-gray_soft">
-          <div className="font-silk text-4xl">Lobby</div>
-          <div className="text-base">administer your rooms</div>
+          <div className="font-silk text-4xl">{initialRoom?.name}</div>
+          <div className="text-base">administer your room</div>
         </div>
       </div>
 
       <div className="flex flex-col justify-start px-6 py-9 font-light">
-        <div className="flex flex-col gap-5">
-          <div className="flex flex-col gap-5">
+        <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-6">
             {/* Header */}
             <div className="flex flex-col gap-1">
               <div className="font-silk text-3xl leading-none text-primary">
@@ -174,6 +173,7 @@ export default function EditRoom({ params }: { params: { id: string } }) {
                     className="w-3/4 border-primary bg-blue_super_light py-4"
                     type="text"
                   />
+                  <Toaster position="top-center" richColors />
                   <button
                     onClick={handleCopyUrl}
                     className="w-1/4 bg-primary py-4 text-xs font-bold text-white"
@@ -181,8 +181,6 @@ export default function EditRoom({ params }: { params: { id: string } }) {
                     COPY URL
                   </button>
                 </div>
-
-                {copySuccess && <div className="text-green">{copySuccess}</div>}
               </div>
             </div>
             <div className="flex flex-col">
@@ -235,7 +233,7 @@ export default function EditRoom({ params }: { params: { id: string } }) {
                       {fields.map((field, index) => {
                         return (
                           <div key={field.id}>
-                            <div className="flex items-center gap-1">
+                            <div className="flex items-center gap-2">
                               <input
                                 key={field.id}
                                 type="text"
@@ -271,26 +269,30 @@ export default function EditRoom({ params }: { params: { id: string } }) {
                   </div>
                 </div>
 
-                <Button
-                  variant="secondary"
-                  onClick={handleSubmit(handleEditRoom)}
-                >
-                  UPDATE ROOM
-                </Button>
+                <div className="flex flex-col gap-6">
+                  <div className="flex gap-4">
+                    <Button
+                      variant="secondary"
+                      onClick={handleSubmit(handleEditRoom)}
+                    >
+                      UPDATE ROOM
+                    </Button>
 
-                <Button
-                  variant="primary"
-                  onClick={handleSubmit(handleDeleteRoom)}
-                >
-                  DELETE ROOM
-                </Button>
+                    <Button
+                      variant="primary"
+                      onClick={handleSubmit(handleDeleteRoom)}
+                    >
+                      DELETE ROOM
+                    </Button>
+                  </div>
 
-                <Button
-                  variant="tertiary"
-                  onClick={handleSubmit(handleRevealBook)}
-                >
-                  REVEAL THE WINNING BOOK
-                </Button>
+                  <Button
+                    variant="tertiary"
+                    onClick={handleSubmit(handleRevealBook)}
+                  >
+                    REVEAL THE WINNING BOOK
+                  </Button>
+                </div>
               </form>
             </div>
           </div>
