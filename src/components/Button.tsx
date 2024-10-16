@@ -4,7 +4,12 @@ interface ButtonProps {
   onClick?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 }
 
-export default function Button({ children, onClick, variant }: ButtonProps) {
+export default function Button({
+  children,
+  onClick,
+  variant,
+  ...props
+}: ButtonProps) {
   const customButton = () => {
     switch (variant) {
       case 'primary':
@@ -22,6 +27,7 @@ export default function Button({ children, onClick, variant }: ButtonProps) {
     <button
       className={`${customButton()} align-center flex w-full justify-center rounded-2xl py-4 font-bold`}
       onClick={(event) => onClick && onClick(event)}
+      {...props}
     >
       {children}
     </button>
