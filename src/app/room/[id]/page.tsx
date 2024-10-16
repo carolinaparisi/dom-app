@@ -51,7 +51,7 @@ type NewRoomProps = z.infer<typeof newRoomSchema>;
 
 export default function EditRoom({ params }: { params: { id: string } }) {
   const router = useRouter();
-  const { getRoom, setRoom, deleteRoom } = useRoomContext();
+  const { getRoom, setRoom } = useRoomContext();
   const [initialRoom, setInitialRoom] = useState<Room | null>(null);
   const baseVotingUrl =
     process.env.NODE_ENV === 'production'
@@ -121,13 +121,13 @@ export default function EditRoom({ params }: { params: { id: string } }) {
     router.push('/');
   };
 
-  const handleDeleteRoom = async () => {
+  /*   const handleDeleteRoom = async () => {
     console.log('handleDeleteRoom clicked!');
 
-    /*     await deleteRoom(params.id);
+         await deleteRoom(params.id);
 
-    router.push('/'); */
-  };
+    router.push('/'); 
+  }; */
 
   const handleRevealBook = () => {
     console.log('Book revealed!');
