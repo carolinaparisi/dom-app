@@ -302,16 +302,16 @@ export default function EditRoom({ params }: { params: { id: string } }) {
                           </AlertDialog.Description>
                           <div className="flex justify-end gap-[25px]">
                             <AlertDialog.Cancel asChild>
-                              <button className="hover:bg-mauve5 focus:shadow-mauve7 inline-flex h-[35px] items-center justify-center rounded bg-white px-[15px] font-medium leading-none text-black outline-none focus:shadow-[0_0_0_2px]">
+                              <button className="inline-flex h-[35px] items-center justify-center rounded-xl border border-black bg-white px-4 py-6 font-medium leading-none text-black outline-none">
                                 Cancel
                               </button>
                             </AlertDialog.Cancel>
                             <AlertDialog.Action asChild>
                               <button
                                 onClick={handleDeleteRoom}
-                                className="hover:bg-red5 focus:shadow-red7 inline-flex h-[35px] items-center justify-center rounded border-2 border-black bg-black px-[15px] font-medium leading-none text-white outline-none focus:shadow-[0_0_0_2px]"
+                                className="inline-flex h-[35px] items-center justify-center rounded-xl border border-black bg-black px-4 py-6 font-medium leading-none text-white outline-none"
                               >
-                                Yes, delete account
+                                Yes, delete room
                               </button>
                             </AlertDialog.Action>
                           </div>
