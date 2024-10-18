@@ -149,8 +149,8 @@ export default function EditRoom({ params }: { params: { id: string } }) {
           quality={100}
           priority
         />
-        <div className="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center text-gray_soft">
-          <div className="whitespace-nowrap font-silk text-4xl">
+        <div className="absolute left-1/2 top-1/2 flex w-full -translate-x-1/2 -translate-y-1/2 flex-col items-center px-8 text-gray_soft">
+          <div className="line-clamp-1 break-all text-center font-silk text-4xl">
             {initialRoom?.name}
           </div>
           <div className="text-base">administer your room</div>
