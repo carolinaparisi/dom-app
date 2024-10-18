@@ -297,12 +297,12 @@ export default function EditRoom({ params }: { params: { id: string } }) {
                           </AlertDialog.Title>
                           <AlertDialog.Description className="mb-5 mt-[15px] text-[15px] leading-normal text-black">
                             This action cannot be undone. This will permanently
-                            delete your account and remove your data from our
+                            delete this room and remove its data from our
                             servers.
                           </AlertDialog.Description>
                           <div className="flex justify-end gap-[25px]">
                             <AlertDialog.Cancel asChild>
-                              <button className="hover:bg-mauve5 focus:shadow-mauve7 inline-flex h-[35px] items-center justify-center rounded border-2 border-black bg-white px-[15px] font-medium leading-none text-black outline-none focus:shadow-[0_0_0_2px]">
+                              <button className="hover:bg-mauve5 focus:shadow-mauve7 inline-flex h-[35px] items-center justify-center rounded bg-white px-[15px] font-medium leading-none text-black outline-none focus:shadow-[0_0_0_2px]">
                                 Cancel
                               </button>
                             </AlertDialog.Cancel>
