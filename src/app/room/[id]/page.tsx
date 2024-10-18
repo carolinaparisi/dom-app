@@ -51,7 +51,7 @@ type NewRoomProps = z.infer<typeof newRoomSchema>;
 
 export default function EditRoom({ params }: { params: { id: string } }) {
   const router = useRouter();
-  const { getRoom, setRoom } = useRoomContext();
+  const { getRoom, setRoom, deleteRoom } = useRoomContext();
   const [initialRoom, setInitialRoom] = useState<Room | null>(null);
   const baseVotingUrl =
     process.env.NODE_ENV === 'production'
@@ -121,13 +121,11 @@ export default function EditRoom({ params }: { params: { id: string } }) {
     router.push('/');
   };
 
-  /*   const handleDeleteRoom = async () => {
-    console.log('handleDeleteRoom clicked!');
+  const handleDeleteRoom = async () => {
+    await deleteRoom(params.id);
 
-         await deleteRoom(params.id);
-
-    router.push('/'); 
-  }; */
+    router.push('/');
+  };
 
   const handleRevealBook = () => {
     console.log('Book revealed!');
@@ -294,22 +292,25 @@ export default function EditRoom({ params }: { params: { id: string } }) {
                       <AlertDialog.Portal>
                         <AlertDialog.Overlay className="bg-blackA6 data-[state=open]:animate-overlayShow fixed inset-0" />
                         <AlertDialog.Content className="data-[state=open]:animate-contentShow fixed left-1/2 top-1/2 max-h-[85vh] w-[90vw] max-w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-md bg-white p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none">
-                          <AlertDialog.Title className="text-mauve12 m-0 text-[17px] font-medium">
+                          <AlertDialog.Title className="m-0 text-[17px] font-medium text-black">
                             Are you absolutely sure?
                           </AlertDialog.Title>
-                          <AlertDialog.Description className="text-mauve11 mb-5 mt-[15px] text-[15px] leading-normal">
+                          <AlertDialog.Description className="mb-5 mt-[15px] text-[15px] leading-normal text-black">
                             This action cannot be undone. This will permanently
                             delete your account and remove your data from our
                             servers.
                           </AlertDialog.Description>
                           <div className="flex justify-end gap-[25px]">
                             <AlertDialog.Cancel asChild>
-                              <button className="bg-mauve4 text-mauve11 hover:bg-mauve5 focus:shadow-mauve7 inline-flex h-[35px] items-center justify-center rounded px-[15px] font-medium leading-none outline-none focus:shadow-[0_0_0_2px]">
+                              <button className="hover:bg-mauve5 focus:shadow-mauve7 inline-flex h-[35px] items-center justify-center rounded border-2 border-black bg-white px-[15px] font-medium leading-none text-black outline-none focus:shadow-[0_0_0_2px]">
                                 Cancel
                               </button>
                             </AlertDialog.Cancel>
                             <AlertDialog.Action asChild>
-                              <button className="bg-red4 text-red11 hover:bg-red5 focus:shadow-red7 inline-flex h-[35px] items-center justify-center rounded px-[15px] font-medium leading-none outline-none focus:shadow-[0_0_0_2px]">
+                              <button
+                                onClick={handleDeleteRoom}
+                                className="hover:bg-red5 focus:shadow-red7 inline-flex h-[35px] items-center justify-center rounded border-2 border-black bg-black px-[15px] font-medium leading-none text-white outline-none focus:shadow-[0_0_0_2px]"
+                              >
                                 Yes, delete account
                               </button>
                             </AlertDialog.Action>
