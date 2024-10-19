@@ -1,9 +1,10 @@
 import { z } from 'zod';
 import { bookSchema } from '@/utils/books';
+import { voterGuestSchema } from './guests';
 
 export const roomSchema = z.object({
   id: z.string(),
-  guests: z.string().array(),
+  guests: z.array(voterGuestSchema).nullable(),
   name: z.string(),
   maxBooks: z.number(),
   books: z.array(bookSchema),

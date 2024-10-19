@@ -88,7 +88,7 @@ export default function CreateRoom() {
         maxBooks: data.maxBooks,
         books,
         winningBooks: null,
-        guests: [],
+        guests: null,
         createdBy: user?.uid || '',
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
