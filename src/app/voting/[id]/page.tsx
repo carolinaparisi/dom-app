@@ -73,7 +73,7 @@ export default function WelcomeRoom({ params }: { params: { id: string } }) {
   };
 
   return isRegistered ? (
-    <VotingPage />
+    <VotingPage roomId={params.id} />
   ) : (
     <div className="relative h-dvh">
       <Image

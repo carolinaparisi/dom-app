@@ -1,13 +1,29 @@
-import { useState } from 'react';
-import { Book, initialBooks } from '@/utils/books';
+import { useEffect, useState } from 'react';
+import { Book } from '@/utils/books';
 import BookItem from './BookItem';
-import { VoterGuest, initialGuests } from '@/utils/guests';
+import { VoterGuest } from '@/utils/guests';
 import Image from 'next/image';
 import votingBanner from '../../public/images/voting-banner.png';
+import { useRoomContext } from '@/contexts/RoomContext';
 
-export default function VotingPage() {
-  const [books, setBooks] = useState<Book[]>(initialBooks);
-  const [guests] = useState<VoterGuest[]>(initialGuests);
+interface VotingPageProps {
+  roomId: string;
+}
+
+export default function VotingPage({ roomId }: VotingPageProps) {
+  const { getRoom } = useRoomContext();
+  const [books, setBooks] = useState<Book[]>([]);
+  const [guests, setGuests] = useState<VoterGuest[]>([]);
+
+  useEffect(() => {
+    (async () => {
+      const room = await getRoom(roomId);
+      const currentBooks = room?.books || [];
+      const currentGuests = room?.guests || [];
+      setBooks(currentBooks);
+      setGuests(currentGuests);
+    })();
+  }, [getRoom, roomId]);
 
   // TODO: Create isSelected state locally
   const handleBookSelected = (id: number) => {
