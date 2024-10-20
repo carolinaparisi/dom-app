@@ -22,7 +22,6 @@ export default function WelcomeRoom({ params }: { params: { id: string } }) {
   const { getRoom, setRoom } = useRoomContext();
   const router = useRouter();
   const [isRegistered, setIsRegistered] = useState(false);
-  const [currentId, setCurrentId] = useState(0);
 
   useEffect(() => {
     (async () => {
@@ -32,12 +31,6 @@ export default function WelcomeRoom({ params }: { params: { id: string } }) {
       }
     })();
   }, [router, getRoom, params.id]);
-
-  const createId = () => {
-    const nextId = currentId + 1;
-    setCurrentId(nextId);
-    return nextId;
-  };
 
   const {
     register,
@@ -56,6 +49,7 @@ export default function WelcomeRoom({ params }: { params: { id: string } }) {
 
       const currentGuests = room?.guests || [];
       const winningBooks = room?.winningBooks || [];
+      const nextId = (room?.guests?.length || 0) + 1;
 
       const roomData = roomSchema.parse({
         ...room,
@@ -63,7 +57,7 @@ export default function WelcomeRoom({ params }: { params: { id: string } }) {
         guests: [
           ...currentGuests,
           {
-            id: createId(),
+            id: nextId,
             name: data.name,
             isReady: false,
           },

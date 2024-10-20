@@ -12,12 +12,8 @@ export default function PageNotFound() {
         quality={100}
         fill
       />
-      <div className="absolute bottom-1/2 w-full translate-y-60 overflow-hidden font-silk text-8xl font-bold text-black">
-        <div className="-translate-x-4">Page</div>
-        <div className="-translate-x-3 text-center">not</div>
-        <div className="mt-4 flex translate-x-3 items-end justify-end">
-          Found
-        </div>
+      <div className="translate-y-35 absolute bottom-1/2 w-full overflow-hidden font-silk text-6xl font-bold text-black">
+        <div className="text-center">Page not found </div>
       </div>
     </div>
   );
