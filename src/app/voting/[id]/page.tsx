@@ -1,16 +1,21 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import welcome from '../../../../public/images/welcome.png';
 import Button from '@/components/Button';
-import VotingPage from '@/components/VotingPage';
 import { useRoomContext } from '@/contexts/RoomContext';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { roomSchema } from '@/utils/rooms';
+import { Room, roomSchema } from '@/utils/rooms';
+import { useCookies } from 'react-cookie';
+
+const VotingPage = dynamic(() => import('../../../components/VotingPage'), {
+  ssr: false,
+});
 
 const newGuestFormSchema = z.object({
   name: z.string().min(2, { message: 'Must be 2 or more characters long' }),
@@ -19,9 +24,11 @@ const newGuestFormSchema = z.object({
 type NewGuestFormProps = z.infer<typeof newGuestFormSchema>;
 
 export default function WelcomeRoom({ params }: { params: { id: string } }) {
+  const cookiesKey = `dom-guest-${params.id}`;
   const { getRoom, setRoom } = useRoomContext();
   const router = useRouter();
-  const [isRegistered, setIsRegistered] = useState(false);
+  const [cookies, setCookie, removeCookie] = useCookies([cookiesKey]);
+  const [currentRoom, setCurrentRoom] = useState<Room | null>(null);
 
   useEffect(() => {
     (async () => {
@@ -29,8 +36,17 @@ export default function WelcomeRoom({ params }: { params: { id: string } }) {
       if (room === null) {
         router.push('/pageNotFound');
       }
+      setCurrentRoom(room);
+
+      const isGuestRegistered = room?.guests
+        ?.map((guest) => guest.name)
+        .includes(cookies[cookiesKey]);
+
+      if (!isGuestRegistered) {
+        removeCookie(cookiesKey);
+      }
     })();
-  }, [router, getRoom, params.id]);
+  }, [router, getRoom, params.id, cookies, cookiesKey, removeCookie]);
 
   const {
     register,
@@ -45,35 +61,39 @@ export default function WelcomeRoom({ params }: { params: { id: string } }) {
 
   const handleCreateGuest = async (data: NewGuestFormProps) => {
     try {
-      const room = await getRoom(params.id);
+      const updatedBooks = currentRoom?.books.map((book) => {
+        return {
+          ...book,
+          votes: book.votes || [],
+        };
+      });
 
-      const currentGuests = room?.guests || [];
-      const winningBooks = room?.winningBooks || [];
-      const nextId = (room?.guests?.length || 0) + 1;
+      const currentGuests = currentRoom?.guests || [];
+      const nextId = (currentRoom?.guests?.length || 0) + 1;
+      const newGuest = {
+        id: nextId,
+        name: data.name,
+        isReady: false,
+      };
 
       const roomData = roomSchema.parse({
-        ...room,
-        winningBooks,
-        guests: [
-          ...currentGuests,
-          {
-            id: nextId,
-            name: data.name,
-            isReady: false,
-          },
-        ],
+        ...currentRoom,
+        books: updatedBooks,
+        winningBooks: currentRoom?.winningBooks || [],
+        guests: [...currentGuests, newGuest],
       });
 
       await setRoom(params.id, roomData);
+      setCurrentRoom(roomData);
 
-      setIsRegistered(true);
+      setCookie(cookiesKey, newGuest.name);
     } catch (error) {
       console.error('Error creating guest:', error);
     }
   };
 
-  return isRegistered ? (
-    <VotingPage roomId={params.id} />
+  return cookies[cookiesKey] ? (
+    <VotingPage roomId={params.id} guestName={cookies[cookiesKey]} />
   ) : (
     <div className="relative h-dvh">
       <Image

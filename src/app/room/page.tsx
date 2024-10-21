@@ -79,7 +79,7 @@ export default function CreateRoom() {
       const books = data.titles.map((book, index) => ({
         id: index + 1,
         title: book.title,
-        votes: 0,
+        votes: [],
       }));
 
       const roomData = roomSchema.parse({

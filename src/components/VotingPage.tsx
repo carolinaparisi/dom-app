@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect, useState } from 'react';
 import { Book } from '@/utils/books';
 import BookItem from './BookItem';
@@ -8,12 +10,14 @@ import { useRoomContext } from '@/contexts/RoomContext';
 
 interface VotingPageProps {
   roomId: string;
+  guestName: string;
 }
 
-export default function VotingPage({ roomId }: VotingPageProps) {
+export default function VotingPage({ roomId, guestName }: VotingPageProps) {
   const { getRoom } = useRoomContext();
   const [books, setBooks] = useState<Book[]>([]);
   const [guests, setGuests] = useState<VoterGuest[]>([]);
+  //const [isSelected, setIsSelected] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -26,18 +30,24 @@ export default function VotingPage({ roomId }: VotingPageProps) {
   }, [getRoom, roomId]);
 
   // TODO: Create isSelected state locally
-  const handleBookSelected = (id: number) => {
+  /*   const handleBookSelected = (id: number) => {
+        setIsSelected(!isSelected);
     const updatedBooks = books.map((book) => {
       if (book.id === id) {
         return {
           ...book,
-          isSelected: false,
+          votes: isSelected ? 1 : 0,
         };
       }
+      console.log(book.votes);
       return book;
     });
 
-    setBooks(updatedBooks);
+    setBooks(updatedBooks); 
+  }; */
+
+  const handleBookSelected = () => {
+    console.log(guestName);
   };
 
   return (

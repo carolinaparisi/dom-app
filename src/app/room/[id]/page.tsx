@@ -101,7 +101,7 @@ export default function EditRoom({ params }: { params: { id: string } }) {
       return {
         id: index + 1,
         title: book.title,
-        votes: 0,
+        votes: [],
       };
     });
 
