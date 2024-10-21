@@ -7,6 +7,7 @@ import { VoterGuest } from '@/utils/guests';
 import Image from 'next/image';
 import votingBanner from '../../public/images/voting-banner.png';
 import { useRoomContext } from '@/contexts/RoomContext';
+import { Room } from '@/utils/rooms';
 
 interface VotingPageProps {
   roomId: string;
@@ -14,20 +15,26 @@ interface VotingPageProps {
 }
 
 export default function VotingPage({ roomId, guestName }: VotingPageProps) {
-  const { getRoom } = useRoomContext();
+  const { subscribeToRoomUpdates, unsubscribeFromRoomUpdates } =
+    useRoomContext();
   const [books, setBooks] = useState<Book[]>([]);
   const [guests, setGuests] = useState<VoterGuest[]>([]);
   //const [isSelected, setIsSelected] = useState(false);
 
   useEffect(() => {
-    (async () => {
-      const room = await getRoom(roomId);
+    const handleRoomUpdate = (room: Room | null) => {
       const currentBooks = room?.books || [];
       const currentGuests = room?.guests || [];
       setBooks(currentBooks);
       setGuests(currentGuests);
-    })();
-  }, [getRoom, roomId]);
+    };
+
+    subscribeToRoomUpdates(roomId, handleRoomUpdate);
+
+    return () => {
+      unsubscribeFromRoomUpdates(roomId);
+    };
+  }, [roomId, subscribeToRoomUpdates, unsubscribeFromRoomUpdates]);
 
   // TODO: Create isSelected state locally
   /*   const handleBookSelected = (id: number) => {

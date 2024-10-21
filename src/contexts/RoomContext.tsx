@@ -1,7 +1,16 @@
 'use client';
 
 import { createContext, useContext, ReactNode } from 'react';
-import { ref, get, set, query, orderByChild, equalTo } from 'firebase/database';
+import {
+  ref,
+  get,
+  set,
+  query,
+  orderByChild,
+  equalTo,
+  onValue,
+  off,
+} from 'firebase/database';
 import { database } from '../services/firebase';
 import { Room } from '@/utils/rooms';
 
@@ -10,6 +19,11 @@ interface RoomContext {
   setRoom: (roomId: string, value: Room) => Promise<void>;
   deleteRoom: (roomId: string) => Promise<void>;
   getAllRooms: (userId: string) => Promise<Record<string, Room>>;
+  subscribeToRoomUpdates: (
+    roomId: string,
+    callback: (room: Room | null) => void,
+  ) => void;
+  unsubscribeFromRoomUpdates: (roomId: string) => void;
 }
 
 const RoomContext = createContext<RoomContext | undefined>(undefined);
@@ -65,8 +79,32 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  const subscribeToRoomUpdates = (
+    roomId: string,
+    callback: (room: Room | null) => void,
+  ) => {
+    const dataRef = ref(database, `rooms/${roomId}`);
+    onValue(dataRef, (snapshot) => {
+      callback(snapshot.exists() ? (snapshot.val() as Room) : null);
+    });
+  };
+
+  const unsubscribeFromRoomUpdates = (roomId: string) => {
+    const dataRef = ref(database, `rooms/${roomId}`);
+    off(dataRef);
+  };
+
   return (
-    <RoomContext.Provider value={{ getRoom, setRoom, deleteRoom, getAllRooms }}>
+    <RoomContext.Provider
+      value={{
+        getRoom,
+        setRoom,
+        deleteRoom,
+        getAllRooms,
+        subscribeToRoomUpdates,
+        unsubscribeFromRoomUpdates,
+      }}
+    >
       {children}
     </RoomContext.Provider>
   );

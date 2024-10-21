@@ -29,6 +29,7 @@ export default function WelcomeRoom({ params }: { params: { id: string } }) {
   const router = useRouter();
   const [cookies, setCookie, removeCookie] = useCookies([cookiesKey]);
   const [currentRoom, setCurrentRoom] = useState<Room | null>(null);
+  const [isGuestRegistered, setIsGuestRegistered] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -38,13 +39,16 @@ export default function WelcomeRoom({ params }: { params: { id: string } }) {
       }
       setCurrentRoom(room);
 
-      const isGuestRegistered = room?.guests
+      const guestExist = room?.guests
         ?.map((guest) => guest.name)
         .includes(cookies[cookiesKey]);
 
-      if (!isGuestRegistered) {
-        removeCookie(cookiesKey);
+      if (guestExist) {
+        setIsGuestRegistered(guestExist);
+        return;
       }
+
+      removeCookie(cookiesKey);
     })();
   }, [router, getRoom, params.id, cookies, cookiesKey, removeCookie]);
 
@@ -92,7 +96,7 @@ export default function WelcomeRoom({ params }: { params: { id: string } }) {
     }
   };
 
-  return cookies[cookiesKey] ? (
+  return isGuestRegistered ? (
     <VotingPage roomId={params.id} guestName={cookies[cookiesKey]} />
   ) : (
     <div className="relative h-dvh">

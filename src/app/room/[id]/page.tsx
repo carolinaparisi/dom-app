@@ -283,10 +283,6 @@ export default function EditRoom({ params }: { params: { id: string } }) {
 
                     <AlertDialog.Root>
                       <AlertDialog.Trigger asChild>
-                        {/*                         <button className="text-violet11 shadow-blackA4 hover:bg-mauve3 inline-flex h-[35px] items-center justify-center rounded bg-white px-[15px] font-medium leading-none shadow-[0_2px_10px] outline-none focus:shadow-[0_0_0_2px] focus:shadow-black">
-                          Delete account
-                        </button> */}
-
                         <Button variant="primary">DELETE ROOM</Button>
                       </AlertDialog.Trigger>
                       <AlertDialog.Portal>

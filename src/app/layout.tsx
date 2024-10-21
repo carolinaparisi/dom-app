@@ -22,7 +22,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body suppressHydrationWarning className={`${silkSerif.variable}`}>
+      <body className={`${silkSerif.variable}`}>
         <AuthProvider>
           <DataProvider>{children}</DataProvider>
         </AuthProvider>
