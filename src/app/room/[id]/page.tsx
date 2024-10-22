@@ -110,7 +110,7 @@ export default function EditRoom({ params }: { params: { id: string } }) {
       id: params.id,
       maxBooks: data.maxBooks,
       books: updatedBooks,
-      winningBooks: null,
+      winningBooks: [],
       guests: [],
       createdBy: initialRoom?.createdBy,
       createdAt: initialRoom?.createdAt,

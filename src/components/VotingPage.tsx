@@ -7,7 +7,7 @@ import { VoterGuest } from '@/utils/guests';
 import Image from 'next/image';
 import votingBanner from '../../public/images/voting-banner.png';
 import { useRoomContext } from '@/contexts/RoomContext';
-import { Room } from '@/utils/rooms';
+import { Room, roomSchema } from '@/utils/rooms';
 
 interface VotingPageProps {
   roomId: string;
@@ -15,11 +15,14 @@ interface VotingPageProps {
 }
 
 export default function VotingPage({ roomId, guestName }: VotingPageProps) {
-  const { subscribeToRoomUpdates, unsubscribeFromRoomUpdates } =
-    useRoomContext();
+  const {
+    getRoom,
+    setRoom,
+    subscribeToRoomUpdates,
+    unsubscribeFromRoomUpdates,
+  } = useRoomContext();
   const [books, setBooks] = useState<Book[]>([]);
   const [guests, setGuests] = useState<VoterGuest[]>([]);
-  //const [isSelected, setIsSelected] = useState(false);
 
   useEffect(() => {
     const handleRoomUpdate = (room: Room | null) => {
@@ -27,6 +30,7 @@ export default function VotingPage({ roomId, guestName }: VotingPageProps) {
       const currentGuests = room?.guests || [];
       setBooks(currentBooks);
       setGuests(currentGuests);
+      console.log(room);
     };
 
     subscribeToRoomUpdates(roomId, handleRoomUpdate);
@@ -36,25 +40,42 @@ export default function VotingPage({ roomId, guestName }: VotingPageProps) {
     };
   }, [roomId, subscribeToRoomUpdates, unsubscribeFromRoomUpdates]);
 
-  // TODO: Create isSelected state locally
-  /*   const handleBookSelected = (id: number) => {
-        setIsSelected(!isSelected);
-    const updatedBooks = books.map((book) => {
+  const getUpdatedVotes = (book: Book) => {
+    let updatedVotes: string[] = [];
+    if (book.votes?.includes(guestName)) {
+      updatedVotes = book.votes.filter((name) => name !== guestName);
+      return updatedVotes || [];
+    }
+    const currentVotes = book.votes || [];
+
+    return [...currentVotes, guestName];
+  };
+
+  const getUpdatedBooks = (id: number, books: Book[]) => {
+    return books.map((book) => {
       if (book.id === id) {
         return {
           ...book,
-          votes: isSelected ? 1 : 0,
+          votes: getUpdatedVotes(book),
         };
       }
-      console.log(book.votes);
-      return book;
+      return {
+        ...book,
+        votes: book.votes || [],
+      };
+    });
+  };
+
+  const handleBookSelected = async (id: number) => {
+    const room = await getRoom(roomId);
+
+    const updatedBooks = getUpdatedBooks(id, books);
+    const updatedData = roomSchema.parse({
+      ...room,
+      books: updatedBooks,
     });
 
-    setBooks(updatedBooks); 
-  }; */
-
-  const handleBookSelected = () => {
-    console.log(guestName);
+    await setRoom(roomId, updatedData);
   };
 
   return (
