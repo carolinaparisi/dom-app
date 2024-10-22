@@ -117,8 +117,8 @@ export default function VotingPage({ roomId, guestName }: VotingPageProps) {
                   text={book.title}
                   id={book.id}
                   handleBookSelected={handleBookSelected}
-                  // TODO: Pass isSelected state created locally
-                  isSelected={false}
+                  votes={book.votes}
+                  guestName={guestName}
                 />
               ))}
             </div>

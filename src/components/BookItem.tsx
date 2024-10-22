@@ -4,19 +4,23 @@ interface BookItemProps {
   text: string;
   id: number;
   handleBookSelected: (id: number) => void;
-  isSelected: boolean;
+  votes: string[] | null;
+  guestName: string;
 }
 
 export default function BookItem({
   text,
   id,
   handleBookSelected,
-  isSelected,
+  votes,
+  guestName,
 }: BookItemProps) {
   return (
     <button
       className={`${
-        isSelected ? `bg-primary text-white` : `bg-gray text-white`
+        votes?.includes(guestName)
+          ? `bg-primary text-white`
+          : `bg-gray text-white`
       } w-full rounded-2xl border-gray px-6 py-4`}
       onClick={() => {
         handleBookSelected(id);
