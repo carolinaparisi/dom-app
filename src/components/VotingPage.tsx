@@ -1,6 +1,5 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { Book } from '@/utils/books';
 import BookItem from './BookItem';
 import { VoterGuest } from '@/utils/guests';
@@ -10,40 +9,13 @@ import { useRoomContext } from '@/contexts/RoomContext';
 import { Room, roomSchema } from '@/utils/rooms';
 
 interface VotingPageProps {
-  roomId: string;
   guestName: string;
+  room: Room;
 }
 
-export default function VotingPage({ roomId, guestName }: VotingPageProps) {
-  const {
-    getRoom,
-    setRoom,
-    subscribeToRoomUpdates,
-    unsubscribeFromRoomUpdates,
-  } = useRoomContext();
-  const [books, setBooks] = useState<Book[]>([]);
-  const [guests, setGuests] = useState<VoterGuest[]>([]);
-  const [roomName, setRoomName] = useState<string>('');
-  const [maxBooks, setMaxBooks] = useState<number>(0);
-
-  useEffect(() => {
-    const handleRoomUpdate = (room: Room | null) => {
-      const currentBooks = room?.books || [];
-      const currentGuests = room?.guests || [];
-      const currentMaxBooks = room?.maxBooks || 0;
-      setMaxBooks(currentMaxBooks);
-      setBooks(currentBooks);
-      setGuests(currentGuests);
-      setRoomName(room?.name || '');
-      console.log(room);
-    };
-
-    subscribeToRoomUpdates(roomId, handleRoomUpdate);
-
-    return () => {
-      unsubscribeFromRoomUpdates(roomId);
-    };
-  }, [roomId, subscribeToRoomUpdates, unsubscribeFromRoomUpdates]);
+export default function VotingPage({ guestName, room }: VotingPageProps) {
+  const { books, guests, name, maxBooks } = room;
+  const { setRoom } = useRoomContext();
 
   const getUpdatedVotes = (book: Book) => {
     let updatedVotes: string[] = [];
@@ -103,19 +75,15 @@ export default function VotingPage({ roomId, guestName }: VotingPageProps) {
   };
 
   const handleBookSelected = async (id: number) => {
-    const room = await getRoom(roomId);
-
     const updatedBooks = getUpdatedBooks(id, books);
     const updatedGuests = getUpdatedGuests(updatedBooks);
-    console.log('Finally guests updated', updatedGuests);
-
     const updatedData = roomSchema.parse({
       ...room,
       books: updatedBooks,
       guests: updatedGuests,
     });
 
-    await setRoom(roomId, updatedData);
+    await setRoom(room.id, updatedData);
   };
 
   return (
@@ -130,7 +98,7 @@ export default function VotingPage({ roomId, guestName }: VotingPageProps) {
         />
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-gray_soft">
           <div className="font-silk text-4xl">Voting Room</div>
-          <div className="text-base">created by {roomName}</div>
+          <div className="text-base">created by {name}</div>
         </div>
       </div>
 
@@ -180,14 +148,14 @@ export default function VotingPage({ roomId, guestName }: VotingPageProps) {
           </div>
           {/* NamesPool */}
           <div className="flex flex-wrap gap-2 text-white">
-            {guests.map((name) => (
+            {guests.map((guest) => (
               <span
-                key={name.id}
+                key={guest.id}
                 className={` ${
-                  name.isReady ? `bg-primary` : `bg-gray`
+                  guest.isReady ? `bg-primary` : `bg-gray`
                 } inline-flex items-center rounded-2xl px-3 py-1 text-sm`}
               >
-                {name.name}
+                {guest.name}
               </span>
             ))}
           </div>

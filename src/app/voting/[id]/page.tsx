@@ -25,19 +25,19 @@ type NewGuestFormProps = z.infer<typeof newGuestFormSchema>;
 
 export default function WelcomeRoom({ params }: { params: { id: string } }) {
   const cookiesKey = `${process.env.NODE_ENV === 'production' ? `dom-guest-prod-${params.id}` : `dom-guest-local-${params.id}`}`;
-  const { getRoom, setRoom } = useRoomContext();
+  const { setRoom, subscribeToRoomUpdates, unsubscribeFromRoomUpdates } =
+    useRoomContext();
   const router = useRouter();
   const [cookies, setCookie, removeCookie] = useCookies([cookiesKey]);
   const [currentRoom, setCurrentRoom] = useState<Room | null>(null);
   const [isGuestRegistered, setIsGuestRegistered] = useState(false);
 
   useEffect(() => {
-    (async () => {
-      const room = await getRoom(params.id);
+    const handleRoomUpdate = (room: Room | null) => {
+      setCurrentRoom(room);
       if (room === null) {
         router.push('/pageNotFound');
       }
-      setCurrentRoom(room);
 
       const guestExist = room?.guests
         ?.map((guest) => guest.name)
@@ -49,13 +49,28 @@ export default function WelcomeRoom({ params }: { params: { id: string } }) {
       }
 
       removeCookie(cookiesKey);
-    })();
-  }, [router, getRoom, params.id, cookies, cookiesKey, removeCookie]);
+    };
+
+    subscribeToRoomUpdates(params.id, handleRoomUpdate);
+
+    return () => {
+      unsubscribeFromRoomUpdates(params.id);
+    };
+  }, [
+    cookies,
+    cookiesKey,
+    params.id,
+    removeCookie,
+    router,
+    subscribeToRoomUpdates,
+    unsubscribeFromRoomUpdates,
+  ]);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setError,
   } = useForm<NewGuestFormProps>({
     resolver: zodResolver(newGuestFormSchema),
     defaultValues: {
@@ -64,6 +79,17 @@ export default function WelcomeRoom({ params }: { params: { id: string } }) {
   });
 
   const handleCreateGuest = async (data: NewGuestFormProps) => {
+    const nameIsAvailable = currentRoom?.guests
+      ?.map((guest) => guest.name)
+      .every((name) => name !== data.name);
+
+    if (!nameIsAvailable) {
+      setError('name', {
+        message: 'Alas! This guest is already in the room.',
+      });
+      return;
+    }
+
     try {
       const updatedBooks = currentRoom?.books.map((book) => {
         return {
@@ -96,8 +122,8 @@ export default function WelcomeRoom({ params }: { params: { id: string } }) {
     }
   };
 
-  return isGuestRegistered ? (
-    <VotingPage roomId={params.id} guestName={cookies[cookiesKey]} />
+  return isGuestRegistered && currentRoom ? (
+    <VotingPage room={currentRoom} guestName={cookies[cookiesKey]} />
   ) : (
     <div className="relative h-dvh">
       <Image
@@ -113,14 +139,13 @@ export default function WelcomeRoom({ params }: { params: { id: string } }) {
         <div className="flex translate-x-3 justify-end">to Dom</div>
       </div>
       <div className="absolute inset-x-0 bottom-0 flex w-full flex-col gap-3 p-6 text-white">
+        {errors.name && <div className="mt-1">{errors.name.message}</div>}
         <input
           type="text"
           placeholder="Your name"
           className={` ${errors.name ? 'border-2 border-red focus:border-red' : 'border-gray_soft'} block w-full rounded-2xl bg-transparent py-4 pl-3 pr-20 outline-none placeholder:text-white focus:outline-none focus:ring-0`}
           {...register('name')}
         />
-        {errors.name && <div className="mt-1">{errors.name.message}</div>}
-
         <Button variant="primary" onClick={handleSubmit(handleCreateGuest)}>
           STEP FORWARD
         </Button>
