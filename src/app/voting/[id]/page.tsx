@@ -24,7 +24,7 @@ const newGuestFormSchema = z.object({
 type NewGuestFormProps = z.infer<typeof newGuestFormSchema>;
 
 export default function WelcomeRoom({ params }: { params: { id: string } }) {
-  const cookiesKey = `dom-guest-${params.id}`;
+  const cookiesKey = `${process.env.NODE_ENV === 'production' ? `dom-guest-prod-${params.id}` : `dom-guest-local-${params.id}`}`;
   const { getRoom, setRoom } = useRoomContext();
   const router = useRouter();
   const [cookies, setCookie, removeCookie] = useCookies([cookiesKey]);

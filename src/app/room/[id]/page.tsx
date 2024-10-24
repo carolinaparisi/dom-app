@@ -51,7 +51,12 @@ type NewRoomProps = z.infer<typeof newRoomSchema>;
 
 export default function EditRoom({ params }: { params: { id: string } }) {
   const router = useRouter();
-  const { getRoom, setRoom, deleteRoom } = useRoomContext();
+  const {
+    setRoom,
+    deleteRoom,
+    subscribeToRoomUpdates,
+    unsubscribeFromRoomUpdates,
+  } = useRoomContext();
   const [initialRoom, setInitialRoom] = useState<Room | null>(null);
   const baseVotingUrl =
     process.env.NODE_ENV === 'production'
@@ -59,11 +64,14 @@ export default function EditRoom({ params }: { params: { id: string } }) {
       : 'http://localhost:3000';
 
   useEffect(() => {
-    (async function fetchRoom() {
-      const room = await getRoom(params.id);
+    const handleRoomUpdate = (room: Room | null) => {
       setInitialRoom(room);
-    })();
-  }, [getRoom, params.id]);
+    };
+    subscribeToRoomUpdates(params.id, handleRoomUpdate);
+    return () => {
+      unsubscribeFromRoomUpdates(params.id);
+    };
+  }, [params.id, subscribeToRoomUpdates, unsubscribeFromRoomUpdates]);
 
   const {
     control,
@@ -101,7 +109,7 @@ export default function EditRoom({ params }: { params: { id: string } }) {
       return {
         id: index + 1,
         title: book.title,
-        votes: [],
+        votes: initialRoom?.books[index].votes || [],
       };
     });
 
@@ -110,8 +118,8 @@ export default function EditRoom({ params }: { params: { id: string } }) {
       id: params.id,
       maxBooks: data.maxBooks,
       books: updatedBooks,
-      winningBooks: [],
-      guests: [],
+      winningBooks: initialRoom?.winningBooks,
+      guests: initialRoom?.guests,
       createdBy: initialRoom?.createdBy,
       createdAt: initialRoom?.createdAt,
       updatedAt: new Date().toISOString(),

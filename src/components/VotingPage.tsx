@@ -23,6 +23,7 @@ export default function VotingPage({ roomId, guestName }: VotingPageProps) {
   } = useRoomContext();
   const [books, setBooks] = useState<Book[]>([]);
   const [guests, setGuests] = useState<VoterGuest[]>([]);
+  const [roomName, setRoomName] = useState<string>('');
   const [maxBooks, setMaxBooks] = useState<number>(0);
 
   useEffect(() => {
@@ -33,6 +34,7 @@ export default function VotingPage({ roomId, guestName }: VotingPageProps) {
       setMaxBooks(currentMaxBooks);
       setBooks(currentBooks);
       setGuests(currentGuests);
+      setRoomName(room?.name || '');
       console.log(room);
     };
 
@@ -128,7 +130,7 @@ export default function VotingPage({ roomId, guestName }: VotingPageProps) {
         />
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-gray_soft">
           <div className="font-silk text-4xl">Voting Room</div>
-          <div className="text-base">created by Café com Letras</div>
+          <div className="text-base">created by {roomName}</div>
         </div>
       </div>
 
