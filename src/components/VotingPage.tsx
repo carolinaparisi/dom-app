@@ -90,6 +90,8 @@ export default function VotingPage({ roomId, guestName }: VotingPageProps) {
           ...guest,
           isReady: true,
         };
+      } else if (guest.name !== guestName) {
+        return guest;
       }
       return {
         ...guest,
