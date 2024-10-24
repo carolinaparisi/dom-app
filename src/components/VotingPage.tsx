@@ -23,11 +23,14 @@ export default function VotingPage({ roomId, guestName }: VotingPageProps) {
   } = useRoomContext();
   const [books, setBooks] = useState<Book[]>([]);
   const [guests, setGuests] = useState<VoterGuest[]>([]);
+  const [maxBooks, setMaxBooks] = useState<number>(0);
 
   useEffect(() => {
     const handleRoomUpdate = (room: Room | null) => {
       const currentBooks = room?.books || [];
       const currentGuests = room?.guests || [];
+      const currentMaxBooks = room?.maxBooks || 0;
+      setMaxBooks(currentMaxBooks);
       setBooks(currentBooks);
       setGuests(currentGuests);
       console.log(room);
@@ -48,6 +51,15 @@ export default function VotingPage({ roomId, guestName }: VotingPageProps) {
     }
     const currentVotes = book.votes || [];
 
+    const quantityVotes = books
+      .map((book) => book.votes)
+      .flat(1)
+      .filter((name) => name === guestName).length;
+
+    if (quantityVotes >= maxBooks) {
+      return currentVotes;
+    }
+
     return [...currentVotes, guestName];
   };
 
@@ -66,13 +78,37 @@ export default function VotingPage({ roomId, guestName }: VotingPageProps) {
     });
   };
 
+  const getUpdatedGuests = (books: Book[]): VoterGuest[] => {
+    const guestNameVoted = books
+      .map((book) => book.votes)
+      .flat(1)
+      .includes(guestName);
+
+    return guests.map((guest) => {
+      if (guest.name === guestName && guestNameVoted) {
+        return {
+          ...guest,
+          isReady: true,
+        };
+      }
+      return {
+        ...guest,
+        isReady: false,
+      };
+    });
+  };
+
   const handleBookSelected = async (id: number) => {
     const room = await getRoom(roomId);
 
     const updatedBooks = getUpdatedBooks(id, books);
+    const updatedGuests = getUpdatedGuests(updatedBooks);
+    console.log('Finally guests updated', updatedGuests);
+
     const updatedData = roomSchema.parse({
       ...room,
       books: updatedBooks,
+      guests: updatedGuests,
     });
 
     await setRoom(roomId, updatedData);
@@ -103,7 +139,7 @@ export default function VotingPage({ roomId, guestName }: VotingPageProps) {
             </div>
             <div className="text-lg">
               <div>
-                Dear guest, select 3 volumes from the 5 listed henceforth:
+                {`Dear guest, select ${maxBooks} ${maxBooks === 1 ? `volume` : `volumes`} from the books listed henceforth:`}
               </div>
             </div>
           </div>
