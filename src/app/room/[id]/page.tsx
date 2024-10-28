@@ -109,7 +109,7 @@ export default function EditRoom({ params }: { params: { id: string } }) {
       return {
         id: index + 1,
         title: book.title,
-        votes: initialRoom?.books[index].votes || [],
+        votes: initialRoom?.books[index]?.votes || [],
       };
     });
 
