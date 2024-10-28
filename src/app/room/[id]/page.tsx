@@ -109,7 +109,14 @@ export default function EditRoom({ params }: { params: { id: string } }) {
       return {
         id: index + 1,
         title: book.title,
-        votes: initialRoom?.books[index]?.votes || [],
+        votes: [],
+      };
+    });
+
+    const updatedGuests = initialRoom?.guests.map((guest) => {
+      return {
+        ...guest,
+        isReady: false,
       };
     });
 
@@ -119,7 +126,7 @@ export default function EditRoom({ params }: { params: { id: string } }) {
       maxBooks: data.maxBooks,
       books: updatedBooks,
       winningBooks: initialRoom?.winningBooks,
-      guests: initialRoom?.guests,
+      guests: updatedGuests,
       createdBy: initialRoom?.createdBy,
       createdAt: initialRoom?.createdAt,
       updatedAt: new Date().toISOString(),
