@@ -49,6 +49,7 @@ export default function WelcomeRoom({ params }: { params: { id: string } }) {
       }
 
       removeCookie(cookiesKey);
+      setIsGuestRegistered(false);
     };
 
     subscribeToRoomUpdates(params.id, handleRoomUpdate);

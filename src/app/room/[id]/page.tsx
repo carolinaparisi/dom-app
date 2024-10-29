@@ -113,7 +113,7 @@ export default function EditRoom({ params }: { params: { id: string } }) {
       };
     });
 
-    const updatedGuests = initialRoom?.guests.map((guest) => {
+    const updatedGuests = initialRoom?.guests?.map((guest) => {
       return {
         ...guest,
         isReady: false,
