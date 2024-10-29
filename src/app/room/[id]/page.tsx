@@ -177,10 +177,7 @@ export default function EditRoom({ params }: { params: { id: string } }) {
           <div className="flex flex-col gap-6">
             {/* Header */}
             <div className="flex flex-col gap-1">
-              <div className="font-silk text-3xl leading-none text-primary">
-                {/* <div>{`${initialRooms[Number(roomId)].name}'s Room`}</div> */}
-              </div>
-              <div className="flex flex-col gap-5 text-lg">
+              <div className="flex flex-col gap-6 text-lg">
                 <div>
                   Amend room&apos;s details and copy the sharing link below:
                 </div>
@@ -223,7 +220,7 @@ export default function EditRoom({ params }: { params: { id: string } }) {
                     </div>
                   </div>
 
-                  <div className="flex flex-col gap-1">
+                  <div className="flex flex-col gap-2">
                     <div>
                       Specify the maximum number of books that guests are
                       allowed to select:
@@ -329,6 +326,34 @@ export default function EditRoom({ params }: { params: { id: string } }) {
                         </AlertDialog.Content>
                       </AlertDialog.Portal>
                     </AlertDialog.Root>
+                  </div>
+
+                  <div>
+                    <div className="flex flex-col gap-2">
+                      {/* Header */}
+                      <div className="font-silk text-2xl leading-none text-primary">
+                        <div>Guests present in this room</div>
+                      </div>
+                      <div className="text-lg">
+                        <div>
+                          Dear host, if needed, please click on the guest you
+                          would like to remove from this voting session
+                        </div>
+                      </div>
+                      {/* NamesPool */}
+                      <div className="flex flex-wrap gap-2 text-white">
+                        {initialRoom?.guests?.map((guest) => (
+                          <span
+                            key={guest.id}
+                            className={` ${
+                              guest.isReady ? `bg-primary` : `bg-gray`
+                            } inline-flex items-center rounded-2xl px-3 py-1 text-sm`}
+                          >
+                            {guest.name}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
                   </div>
 
                   <Button
