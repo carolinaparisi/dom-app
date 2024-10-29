@@ -142,8 +142,17 @@ export default function EditRoom({ params }: { params: { id: string } }) {
     router.push('/');
   };
 
-  const handleDeleteGuest = (id: number) => {
-    console.log(`Guest ${id} clicked!`);
+  const handleDeleteGuest = async (id: number) => {
+    const updatedGuests = initialRoom?.guests.filter(
+      (currentGuest) => currentGuest.id !== id,
+    );
+
+    const updatedData = roomSchema.parse({
+      ...initialRoom,
+      guests: updatedGuests,
+    });
+
+    await setRoom(params.id, updatedData);
   };
 
   const handleRevealBook = () => {
