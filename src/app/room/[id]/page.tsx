@@ -142,6 +142,10 @@ export default function EditRoom({ params }: { params: { id: string } }) {
     router.push('/');
   };
 
+  const handleDeleteGuest = (id: number) => {
+    console.log(`Guest ${id} clicked!`);
+  };
+
   const handleRevealBook = () => {
     console.log('Book revealed!');
   };
@@ -343,14 +347,21 @@ export default function EditRoom({ params }: { params: { id: string } }) {
                       {/* NamesPool */}
                       <div className="flex flex-wrap gap-2 text-white">
                         {initialRoom?.guests?.map((guest) => (
-                          <span
+                          <button
+                            onClick={(e) => {
+                              e.preventDefault();
+                              handleDeleteGuest(guest.id);
+                            }}
                             key={guest.id}
-                            className={` ${
-                              guest.isReady ? `bg-primary` : `bg-gray`
-                            } inline-flex items-center rounded-2xl px-3 py-1 text-sm`}
                           >
-                            {guest.name}
-                          </span>
+                            <span
+                              className={` ${
+                                guest.isReady ? `bg-primary` : `bg-gray`
+                              } inline-flex items-center rounded-2xl px-3 py-1 text-lg`}
+                            >
+                              {guest.name}
+                            </span>
+                          </button>
                         ))}
                       </div>
                     </div>
