@@ -6,7 +6,7 @@ import Button from '@/components/Button';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Trash } from 'lucide-react';
+import { Trash, X } from 'lucide-react';
 import { useRoomContext } from '@/contexts/RoomContext';
 import { useEffect, useState } from 'react';
 import { Room, roomSchema } from '@/utils/rooms';
@@ -366,9 +366,10 @@ export default function EditRoom({ params }: { params: { id: string } }) {
                             <span
                               className={` ${
                                 guest.isReady ? `bg-primary` : `bg-gray`
-                              } inline-flex items-center rounded-2xl px-3 py-1 text-lg`}
+                              } flex items-center justify-center gap-1 rounded-2xl px-3 py-1 text-lg`}
                             >
                               {guest.name}
+                              <X size={12} />
                             </span>
                           </button>
                         ))}
