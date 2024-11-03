@@ -142,13 +142,27 @@ export default function EditRoom({ params }: { params: { id: string } }) {
     router.push('/');
   };
 
-  const handleDeleteGuest = async (id: number) => {
+  const handleDeleteGuest = async (id: number, guestName: string) => {
+    const updatedBooks = initialRoom?.books.map((book) => {
+      if (book.votes?.includes(guestName)) {
+        return {
+          ...book,
+          votes: book.votes.filter((name) => name !== guestName),
+        };
+      }
+
+      return {
+        ...book,
+      };
+    });
+
     const updatedGuests = initialRoom?.guests.filter(
       (currentGuest) => currentGuest.id !== id,
     );
 
     const updatedData = roomSchema.parse({
       ...initialRoom,
+      books: updatedBooks,
       guests: updatedGuests,
     });
 
@@ -157,6 +171,12 @@ export default function EditRoom({ params }: { params: { id: string } }) {
 
   const handleRevealBook = () => {
     console.log('Book revealed!');
+
+    const countingVotes = initialRoom?.books
+      .map((book) => book?.votes?.length)
+      .flat(1);
+
+    console.log(countingVotes);
   };
 
   const handleCopyUrl = () => {
@@ -359,7 +379,7 @@ export default function EditRoom({ params }: { params: { id: string } }) {
                           <button
                             onClick={(e) => {
                               e.preventDefault();
-                              handleDeleteGuest(guest.id);
+                              handleDeleteGuest(guest.id, guest.name);
                             }}
                             key={guest.id}
                           >
