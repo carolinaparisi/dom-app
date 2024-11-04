@@ -13,6 +13,7 @@ import { Room, roomSchema } from '@/utils/rooms';
 import { useRouter } from 'next/navigation';
 import { Toaster, toast } from 'sonner';
 import * as AlertDialog from '@radix-ui/react-alert-dialog';
+import { Book } from '@/utils/books';
 
 const newRoomSchema = z
   .object({
@@ -169,14 +170,58 @@ export default function EditRoom({ params }: { params: { id: string } }) {
     await setRoom(params.id, updatedData);
   };
 
-  const handleRevealBook = () => {
-    console.log('Book revealed!');
-
+  const handleRevealBook = async () => {
     const countingVotes = initialRoom?.books
       .map((book) => book?.votes?.length)
-      .flat(1);
+      .flat(1)
+      ?.map((vote) => {
+        if (vote === undefined) {
+          return 0;
+        }
+        return vote;
+      });
 
-    console.log(countingVotes);
+    const winningBooksVotes =
+      countingVotes?.sort((a, b) => b - a).slice(0, 2) || [];
+
+    const winningBooks = getWinningBooksNames(winningBooksVotes);
+    console.log('WINNING BOOKS', winningBooks);
+
+    if (winningBooks.length === 0) {
+      console.log('Theres no winning book yet');
+      return;
+    }
+
+    const updatedData = roomSchema.parse({
+      ...initialRoom,
+      winningBooks: winningBooks,
+    });
+
+    await setRoom(params.id, updatedData);
+  };
+
+  const getWinningBooksNames = (winningBooksVotes: number[]) => {
+    console.log('inside getWinningBooksNames', winningBooksVotes);
+
+    const uniqueVotes = Array.from(new Set(winningBooksVotes));
+
+    const winnerBooksNames: Book[] = [];
+
+    uniqueVotes.forEach((vote) => {
+      console.log('inside foreach vote');
+      initialRoom?.books?.forEach((book) => {
+        if (book.votes?.length === vote) {
+          console.log('inside if');
+          winnerBooksNames.push({
+            id: book.id,
+            title: book.title,
+            votes: book.votes,
+          });
+        }
+      });
+    });
+
+    return winnerBooksNames;
   };
 
   const handleCopyUrl = () => {
