@@ -94,7 +94,10 @@ export default function WelcomeRoom({ params }: { params: { id: string } }) {
         });
 
         const currentGuests = currentRoom?.guests || [];
-        const nextId = (currentRoom?.guests?.length || 0) + 1;
+        const guestIds = currentRoom?.guests?.map((guest) => guest.id) ?? [];
+        const lastId = guestIds.pop() ?? 0;
+        const nextId = lastId + 1;
+
         const newGuest = {
           id: nextId,
           name: data.name,
