@@ -406,11 +406,11 @@ export default function EditRoom({ params }: { params: { id: string } }) {
                     </AlertDialog.Root>
                   </div>
 
-                  <div>
+                  <div className="my-6">
                     <div className="flex flex-col gap-2">
                       {/* Header */}
                       <div className="font-silk text-2xl leading-none text-primary">
-                        <div>Guests present in this room</div>
+                        Guests present in this room
                       </div>
                       <div className="text-lg">
                         <div>

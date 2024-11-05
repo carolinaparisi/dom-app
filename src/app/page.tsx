@@ -86,9 +86,11 @@ export default function Lobby() {
             <Link href={'/room'}>
               <Button variant="secondary">CREATE A NEW ONE</Button>
             </Link>
-            <Button onClick={handleLogout} variant="secondary">
-              LOGOUT
-            </Button>
+            <div className="mt-6">
+              <Button onClick={handleLogout} variant="dashed">
+                LOGOUT
+              </Button>
+            </div>
           </div>
         </div>
       </div>

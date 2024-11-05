@@ -170,7 +170,7 @@ export default function VotingPage({ guestName, room }: VotingPageProps) {
                 key={guest.id}
                 className={` ${
                   guest.isReady ? `bg-primary` : `bg-gray`
-                } inline-flex items-center rounded-2xl px-3 py-1 text-sm`}
+                } inline-flex items-center rounded-2xl px-3 py-1 text-lg`}
               >
                 {guest.name}
               </span>
