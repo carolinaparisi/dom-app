@@ -111,7 +111,7 @@ export default function VotingPage({ guestName, room }: VotingPageProps) {
             </div>
             <div className="text-lg">
               <div>
-                {`Dear guest, select ${maxBooks} ${maxBooks === 1 ? `volume` : `volumes`} from the books listed henceforth:`}
+                {`Dear guest, select at least ${maxBooks} ${maxBooks === 1 ? `volume` : `volumes`} from the books listed henceforth:`}
               </div>
             </div>
           </div>
