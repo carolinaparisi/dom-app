@@ -201,10 +201,11 @@ export default function CreateRoom() {
                                 key={field.id}
                                 type="text"
                                 placeholder={`Book ${index + 1}`}
-                                className={`${errors.titles && errors.titles[index] ? 'border-2 border-red focus:border-red' : 'border-gray'} block w-full rounded-2xl bg-transparent px-3 py-4 outline-none placeholder:text-gray focus:outline-none focus:ring-0`}
+                                className={`${errors.titles && errors.titles[index] ? 'border-2 border-red focus:border-red' : 'border-gray'} relative block w-full rounded-2xl bg-transparent px-3 py-4 outline-none placeholder:text-gray focus:outline-none focus:ring-0`}
                                 {...register(`titles.${index}.title`)}
                               />
                               <Trash
+                                className="absolute right-10"
                                 onClick={() => {
                                   remove(index);
                                 }}
