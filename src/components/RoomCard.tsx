@@ -1,6 +1,6 @@
 import { Book } from '@/utils/books';
 import Image from 'next/image';
-import roomBanner from '../../public/images/welcome.png';
+import roomBanner from '../../public/images/room-image1.png';
 import Link from 'next/link';
 
 interface RoomCardProps {
@@ -28,7 +28,7 @@ export default function RoomCard({
     <Link href={`/room/${id}`}>
       <div className="align-center flex w-full gap-3 rounded-2xl bg-primary p-3 text-white">
         <Image
-          className="rounded-full"
+          className="rounded-full object-cover"
           alt=""
           src={roomBanner}
           priority

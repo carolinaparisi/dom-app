@@ -98,7 +98,7 @@ export default function VotingPage({ guestName, room }: VotingPageProps) {
         />
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-gray_soft">
           <div className="font-silk text-4xl">Voting Room</div>
-          <div className="text-base">created by {name}</div>
+          <div className="text-center text-base">created by {name}</div>
         </div>
       </div>
 
