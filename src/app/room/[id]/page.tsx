@@ -170,8 +170,8 @@ export default function EditRoom({ params }: { params: { id: string } }) {
     await setRoom(params.id, updatedData);
   };
 
-  const handleRevealBook = async () => {
-    const countingVotes = initialRoom?.books
+  const getCountingVotes = () => {
+    return initialRoom?.books
       .map((book) => book?.votes?.length)
       .flat(1)
       ?.map((vote) => {
@@ -180,12 +180,15 @@ export default function EditRoom({ params }: { params: { id: string } }) {
         }
         return vote;
       });
+  };
 
+  const handleRevealBook = async () => {
+    const countingVotes = getCountingVotes();
+    console.log('counting votes', countingVotes);
     const winningBooksVotes =
       countingVotes?.sort((a, b) => b - a).slice(0, 2) || [];
 
     const winningBooks = getWinningBooksNames(winningBooksVotes);
-    console.log('WINNING BOOKS', winningBooks);
 
     if (winningBooks.length === 0) {
       console.log('Theres no winning book yet');
@@ -331,7 +334,7 @@ export default function EditRoom({ params }: { params: { id: string } }) {
                                 key={field.id}
                                 type="text"
                                 placeholder={`Book ${index + 1}`}
-                                className={`${errors.titles && errors.titles[index] ? 'border-2 border-red focus:border-red' : 'border-gray'} relative block w-full rounded-2xl bg-transparent px-3 py-4 outline-none placeholder:text-gray focus:outline-none focus:ring-0`}
+                                className={`${errors.titles && errors.titles[index] ? 'border-2 border-red focus:border-red' : 'border-gray'} relative block w-full rounded-2xl bg-transparent px-3 py-4 pr-12 outline-none placeholder:text-gray focus:outline-none focus:ring-0`}
                                 {...register(`titles.${index}.title`)}
                               />
                               <Trash
@@ -443,7 +446,21 @@ export default function EditRoom({ params }: { params: { id: string } }) {
                     </div>
                   </div>
 
+                  {initialRoom?.winningBooks && (
+                    <div className="flex flex-col rounded-lg bg-gray p-2 text-white">
+                      <div className="font-silk text-2xl">
+                        The winners are/is:
+                      </div>
+                      {initialRoom.winningBooks.map((winningBook) => (
+                        <div key={winningBook.id} className="text-lg font-bold">
+                          {winningBook.title}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
                   <Button
+                    isAvailable={getCountingVotes()?.some((vote) => vote > 0)}
                     variant="tertiary"
                     onClick={handleSubmit(handleRevealBook)}
                   >
