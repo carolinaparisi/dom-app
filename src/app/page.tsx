@@ -78,6 +78,7 @@ export default function Lobby() {
                     id={room.id}
                     books={room.books}
                     winner={room.winningBooks}
+                    createdAt={room.createdAt}
                   />
                 );
               })}

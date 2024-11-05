@@ -8,9 +8,22 @@ interface RoomCardProps {
   id: string;
   books: Book[];
   winner: Book[] | null;
+  createdAt: string | Date;
 }
 
-export default function RoomCard({ name, id, books, winner }: RoomCardProps) {
+export default function RoomCard({
+  name,
+  id,
+  books,
+  winner,
+  createdAt,
+}: RoomCardProps) {
+  const updateCreatedAt = () => {
+    const createdDate = String(createdAt).split('T')[0];
+    const [year, month, day] = createdDate.split('-');
+    return `${day}-${month}-${year}`;
+  };
+
   return (
     <Link href={`/room/${id}`}>
       <div className="align-center flex w-full gap-3 rounded-2xl bg-primary p-3 text-white">
@@ -32,7 +45,7 @@ export default function RoomCard({ name, id, books, winner }: RoomCardProps) {
               ? winner?.map((book) => book.title).join(', ')
               : 'Not revealed yet'
           }`}</div>
-          <div className="text-gray">Created at Thu 12 Sep 2024</div>
+          <div className="text-gray">{`Created at ${updateCreatedAt()}`}</div>
         </div>
       </div>
     </Link>

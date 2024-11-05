@@ -14,7 +14,7 @@ interface VotingPageProps {
 }
 
 export default function VotingPage({ guestName, room }: VotingPageProps) {
-  const { books, guests, name, maxBooks } = room;
+  const { books, guests, name, maxBooks, winningBooks } = room;
   const { setRoom } = useRoomContext();
 
   const getUpdatedVotes = (book: Book) => {
@@ -119,16 +119,33 @@ export default function VotingPage({ guestName, room }: VotingPageProps) {
             {/* EligibleBooks */}
 
             <div className="flex flex-col gap-3">
-              {books.map((book) => (
-                <BookItem
-                  key={book.id}
-                  text={book.title}
-                  id={book.id}
-                  handleBookSelected={handleBookSelected}
-                  votes={book.votes}
-                  guestName={guestName}
-                />
-              ))}
+              {!winningBooks || winningBooks.length === 0
+                ? books.map((book) => (
+                    <BookItem
+                      key={book.id}
+                      text={book.title}
+                      id={book.id}
+                      handleBookSelected={handleBookSelected}
+                      votes={book.votes}
+                      guestName={guestName}
+                    />
+                  ))
+                : books
+                    .filter((book) =>
+                      winningBooks?.some(
+                        (winningBook) => winningBook.title === book.title,
+                      ),
+                    )
+                    .map((book) => (
+                      <BookItem
+                        key={book.id}
+                        text={book.title}
+                        id={book.id}
+                        handleBookSelected={handleBookSelected}
+                        votes={book.votes}
+                        guestName={guestName}
+                      />
+                    ))}
             </div>
           </div>
         </div>
