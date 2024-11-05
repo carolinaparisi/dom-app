@@ -141,7 +141,7 @@ export default function VotingPage({ guestName, room }: VotingPageProps) {
                         key={book.id}
                         text={book.title}
                         id={book.id}
-                        handleBookSelected={handleBookSelected}
+                        handleBookSelected={() => null}
                         votes={book.votes}
                         guestName={guestName}
                       />
