@@ -460,7 +460,9 @@ export default function EditRoom({ params }: { params: { id: string } }) {
                   )}
 
                   <Button
-                    isAvailable={getCountingVotes()?.some((vote) => vote > 0)}
+                    isAvailable={initialRoom?.guests?.every(
+                      (guest) => guest.isReady,
+                    )}
                     variant="tertiary"
                     onClick={handleSubmit(handleRevealBook)}
                   >
