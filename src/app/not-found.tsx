@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import pageNotFound from '../../../public/images/page-not-found.jpg';
+import pageNotFound from '../../public/images/page-not-found.jpg';
 
 export default function PageNotFound() {
   return (
