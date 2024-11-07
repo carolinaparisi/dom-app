@@ -142,8 +142,9 @@ export default function VotingPage({ guestName, room }: VotingPageProps) {
                     <div>
                       <Confetti
                         mode="boom"
+                        y={0.6}
                         particleCount={100}
-                        colors={['#ff577f, #ff884b, #ffd384, #fff9b0']}
+                        colors={['#ff577f', '#ff884b', '#ffd384', '#fff9b0']}
                         shapeSize={14}
                       />
                     </div>
