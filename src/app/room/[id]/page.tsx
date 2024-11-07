@@ -51,6 +51,7 @@ const newRoomSchema = z
 type NewRoomProps = z.infer<typeof newRoomSchema>;
 
 export default function EditRoom({ params }: { params: { id: string } }) {
+  const [isOpenWinningAlert, setIsOpenWinningAlert] = useState(false);
   const router = useRouter();
   const {
     setRoom,
@@ -201,6 +202,7 @@ export default function EditRoom({ params }: { params: { id: string } }) {
     });
 
     await setRoom(params.id, updatedData);
+    setIsOpenWinningAlert(true);
   };
 
   const getWinningBooksNames = (winningBooksVotes: number[]) => {
@@ -368,19 +370,12 @@ export default function EditRoom({ params }: { params: { id: string } }) {
 
                 <div className="flex flex-col gap-6">
                   <div className="flex gap-4">
-                    <Button
-                      variant="secondary"
-                      onClick={handleSubmit(handleEditRoom)}
-                    >
-                      UPDATE ROOM
-                    </Button>
-
                     <AlertDialog.Root>
                       <AlertDialog.Trigger asChild>
                         <Button variant="primary">DELETE ROOM</Button>
                       </AlertDialog.Trigger>
                       <AlertDialog.Portal>
-                        <AlertDialog.Overlay className="bg-blackA6 data-[state=open]:animate-overlayShow fixed inset-0" />
+                        <AlertDialog.Overlay className="data-[state=open]:animate-overlayShow fixed inset-0 bg-black/50" />
                         <AlertDialog.Content className="data-[state=open]:animate-contentShow fixed left-1/2 top-1/2 max-h-[85vh] w-[90vw] max-w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-md bg-white p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none">
                           <AlertDialog.Title className="m-0 text-[17px] font-medium text-black">
                             Are you absolutely sure?
@@ -408,6 +403,13 @@ export default function EditRoom({ params }: { params: { id: string } }) {
                         </AlertDialog.Content>
                       </AlertDialog.Portal>
                     </AlertDialog.Root>
+
+                    <Button
+                      variant="secondary"
+                      onClick={handleSubmit(handleEditRoom)}
+                    >
+                      UPDATE ROOM
+                    </Button>
                   </div>
 
                   <div className="my-6">
@@ -439,7 +441,7 @@ export default function EditRoom({ params }: { params: { id: string } }) {
                               </button>
                             </AlertDialog.Trigger>
                             <AlertDialog.Portal>
-                              <AlertDialog.Overlay className="bg-blackA6 data-[state=open]:animate-overlayShow fixed inset-0" />
+                              <AlertDialog.Overlay className="data-[state=open]:animate-overlayShow fixed inset-0 bg-black/50" />
                               <AlertDialog.Content className="data-[state=open]:animate-contentShow fixed left-1/2 top-1/2 max-h-[85vh] w-[90vw] max-w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-md bg-white p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none">
                                 <AlertDialog.Title className="m-0 text-[17px] font-medium text-black">
                                   {`Are you absolutely sure your desire is to delete the guest ${guest.name}?`}
@@ -473,16 +475,32 @@ export default function EditRoom({ params }: { params: { id: string } }) {
                     </div>
                   </div>
 
-                  {initialRoom?.winningBooks && (
-                    <div className="flex flex-col rounded-lg bg-gray p-2 text-white">
-                      <div className="font-silk text-2xl">
-                        The winners are/is:
-                      </div>
-                      {initialRoom.winningBooks.map((winningBook) => (
-                        <div key={winningBook.id} className="text-lg font-bold">
-                          {winningBook.title}
+                  {isOpenWinningAlert && (
+                    <div className="data-[state=open]:animate-overlayShow fixed inset-0 bg-black/50">
+                      <div className="data-[state=open]:animate-contentShow fixed left-1/2 top-1/2 max-h-[85vh] w-[90vw] max-w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-md bg-white p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none">
+                        <div className="m-0 pb-2 text-[20px] font-bold text-black">
+                          {`${initialRoom?.winningBooks && initialRoom?.winningBooks?.length > 1 ? 'We have a tie:' : 'The winner is:'}`}
                         </div>
-                      ))}
+                        <div className="pb-4 font-medium">
+                          {initialRoom?.winningBooks?.map((winningBook) => {
+                            return (
+                              <div key={winningBook.id}>
+                                {winningBook.title}
+                              </div>
+                            );
+                          })}
+                        </div>
+                        <div className="flex justify-end gap-[25px]">
+                          <div>
+                            <button
+                              onClick={() => setIsOpenWinningAlert(false)}
+                              className="inline-flex h-[35px] items-center justify-center rounded-xl border border-black bg-white px-4 py-6 font-medium leading-none text-black outline-none"
+                            >
+                              Ok
+                            </button>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   )}
 
