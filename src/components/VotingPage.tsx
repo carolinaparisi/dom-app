@@ -143,7 +143,8 @@ export default function VotingPage({ guestName, room }: VotingPageProps) {
                       <Confetti
                         mode="boom"
                         y={0.6}
-                        particleCount={100}
+                        particleCount={150}
+                        spreadDeg={40}
                         colors={['#ff577f', '#ff884b', '#ffd384', '#fff9b0']}
                         shapeSize={14}
                       />
