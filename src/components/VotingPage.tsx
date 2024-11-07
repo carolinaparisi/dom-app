@@ -7,6 +7,7 @@ import Image from 'next/image';
 import votingBanner from '../../public/images/voting-banner.png';
 import { useRoomContext } from '@/contexts/RoomContext';
 import { Room, roomSchema } from '@/utils/rooms';
+import Confetti from 'react-confetti-boom';
 
 interface VotingPageProps {
   guestName: string;
@@ -137,6 +138,15 @@ export default function VotingPage({ guestName, room }: VotingPageProps) {
                       ? 'We have a tie:'
                       : 'The winner is:'}
                   </div>
+                  {winningBooks?.length === 1 && (
+                    <div>
+                      <Confetti
+                        mode="boom"
+                        particleCount={100}
+                        colors={['#ff577f, #ff884b, #ffd384, #fff9b0']}
+                      />
+                    </div>
+                  )}
                   {books
                     .filter((book) =>
                       winningBooks?.some(
