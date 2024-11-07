@@ -441,9 +441,12 @@ export default function EditRoom({ params }: { params: { id: string } }) {
                             <AlertDialog.Portal>
                               <AlertDialog.Overlay className="bg-blackA6 data-[state=open]:animate-overlayShow fixed inset-0" />
                               <AlertDialog.Content className="data-[state=open]:animate-contentShow fixed left-1/2 top-1/2 max-h-[85vh] w-[90vw] max-w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-md bg-white p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none">
-                                <AlertDialog.Title className="m-0 mb-4 text-[17px] font-medium text-black">
-                                  {`Are you absolutely sure your desire is delete the guest ${guest.name}?`}
+                                <AlertDialog.Title className="m-0 text-[17px] font-medium text-black">
+                                  {`Are you absolutely sure your desire is to delete the guest ${guest.name}?`}
                                 </AlertDialog.Title>
+                                <AlertDialog.Description className="mb-5 mt-[15px] text-[15px] leading-normal text-black">
+                                  Remember this action cannot be undone.
+                                </AlertDialog.Description>
                                 <div className="flex justify-end gap-[25px]">
                                   <AlertDialog.Cancel asChild>
                                     <button className="inline-flex h-[35px] items-center justify-center rounded-xl border border-black bg-white px-4 py-6 font-medium leading-none text-black outline-none">
