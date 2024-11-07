@@ -144,6 +144,7 @@ export default function VotingPage({ guestName, room }: VotingPageProps) {
                         mode="boom"
                         particleCount={100}
                         colors={['#ff577f, #ff884b, #ffd384, #fff9b0']}
+                        shapeSize={14}
                       />
                     </div>
                   )}
