@@ -119,18 +119,25 @@ export default function VotingPage({ guestName, room }: VotingPageProps) {
             {/* EligibleBooks */}
 
             <div className="flex flex-col gap-3">
-              {!winningBooks || winningBooks.length === 0
-                ? books.map((book) => (
-                    <BookItem
-                      key={book.id}
-                      text={book.title}
-                      id={book.id}
-                      handleBookSelected={handleBookSelected}
-                      votes={book.votes}
-                      guestName={guestName}
-                    />
-                  ))
-                : books
+              {!winningBooks || winningBooks.length === 0 ? (
+                books.map((book) => (
+                  <BookItem
+                    key={book.id}
+                    text={book.title}
+                    id={book.id}
+                    handleBookSelected={handleBookSelected}
+                    votes={book.votes}
+                    guestName={guestName}
+                  />
+                ))
+              ) : (
+                <>
+                  <div className="text-lg">
+                    {winningBooks?.length > 1
+                      ? 'We have a tie:'
+                      : 'The winner is:'}
+                  </div>
+                  {books
                     .filter((book) =>
                       winningBooks?.some(
                         (winningBook) => winningBook.title === book.title,
@@ -146,6 +153,8 @@ export default function VotingPage({ guestName, room }: VotingPageProps) {
                         guestName={guestName}
                       />
                     ))}
+                </>
+              )}
             </div>
           </div>
         </div>
