@@ -11,7 +11,7 @@ export default function Login() {
       </div>
       <div className="relative h-[87%] bg-gray">
         <Image
-          alt=""
+          alt="Background image with an oil painting of a child"
           src={login}
           fill
           className="object-cover"
