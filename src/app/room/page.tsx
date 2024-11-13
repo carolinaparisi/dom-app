@@ -13,6 +13,7 @@ import { useAuthContext } from '@/contexts/AuthContext';
 import { useEffect } from 'react';
 import { roomSchema } from '@/utils/rooms';
 import { v4 as uuidv4 } from 'uuid';
+import Loading from '@/components/Loading';
 
 const newRoomFormSchema = z
   .object({
@@ -115,7 +116,7 @@ export default function CreateRoom() {
     }
   }, [user, isLoading, router]);
 
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading) return <Loading />;
   if (!user) return null;
 
   return (
