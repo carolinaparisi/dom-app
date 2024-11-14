@@ -12,6 +12,7 @@ import { signOut } from 'firebase/auth';
 import { auth } from '@/services/firebase';
 import { Room } from '@/utils/rooms';
 import RoomCard from '@/components/RoomCard';
+import Loading from '@/components/Loading';
 
 export default function Lobby() {
   const { user, isLoading } = useAuthContext();
@@ -31,7 +32,7 @@ export default function Lobby() {
     }
   }, [user, isLoading, router, getAllRooms, rooms]);
 
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading) return <Loading />;
   if (!user) return null;
 
   const handleLogout = async () => {

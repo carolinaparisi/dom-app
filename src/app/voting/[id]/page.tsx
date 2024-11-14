@@ -84,48 +84,46 @@ export default function WelcomeRoom({ params }: { params: { id: string } }) {
       ?.map((guest) => guest.name.toLowerCase())
       .every((name) => name !== data.name.toLowerCase());
 
-    if (nameIsAvailable || nameIsAvailable === undefined) {
-      try {
-        const updatedBooks = currentRoom?.books.map((book) => {
-          return {
-            ...book,
-            votes: book.votes || [],
-          };
-        });
-
-        const currentGuests = currentRoom?.guests || [];
-        const guestIds = currentRoom?.guests?.map((guest) => guest.id) ?? [];
-        const lastId = guestIds.pop() ?? 0;
-        const nextId = lastId + 1;
-
-        const newGuest = {
-          id: nextId,
-          name: data.name,
-          isReady: false,
-        };
-
-        const roomData = roomSchema.parse({
-          ...currentRoom,
-          books: updatedBooks,
-          winningBooks: currentRoom?.winningBooks || [],
-          guests: [...currentGuests, newGuest],
-        });
-
-        await setRoom(params.id, roomData);
-        setCurrentRoom(roomData);
-
-        setCookie(cookiesKey, newGuest.name);
-      } catch (error) {
-        console.error('Error creating guest:', error);
-      }
-    }
-
-    if (!nameIsAvailable) {
+    if (nameIsAvailable === false) {
       setError('name', {
         message:
           'Alas! This guest is already in the room, choose another name, please.',
       });
       return;
+    }
+
+    try {
+      const updatedBooks = currentRoom?.books.map((book) => {
+        return {
+          ...book,
+          votes: book.votes || [],
+        };
+      });
+
+      const currentGuests = currentRoom?.guests || [];
+      const guestIds = currentRoom?.guests?.map((guest) => guest.id) ?? [];
+      const lastId = guestIds.pop() ?? 0;
+      const nextId = lastId + 1;
+
+      const newGuest = {
+        id: nextId,
+        name: data.name,
+        isReady: false,
+      };
+
+      const roomData = roomSchema.parse({
+        ...currentRoom,
+        books: updatedBooks,
+        winningBooks: currentRoom?.winningBooks || [],
+        guests: [...currentGuests, newGuest],
+      });
+
+      await setRoom(params.id, roomData);
+      setCurrentRoom(roomData);
+
+      setCookie(cookiesKey, newGuest.name);
+    } catch (error) {
+      console.error('Error creating guest:', error);
     }
   };
 
