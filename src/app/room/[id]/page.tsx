@@ -172,62 +172,34 @@ export default function EditRoom({ params }: { params: { id: string } }) {
     await setRoom(params.id, updatedData);
   };
 
-  const getCountingVotes = () => {
-    return initialRoom?.books
-      .map((book) => book?.votes?.length)
-      .flat(1)
-      ?.map((vote) => {
-        if (vote === undefined) {
-          return 0;
-        }
-        return vote;
-      });
-  };
-
   const handleRevealBook = async () => {
-    const countingVotes = getCountingVotes();
-    console.log('counting votes', countingVotes);
-    const winningBooksVotes =
-      countingVotes?.sort((a, b) => b - a).slice(0, 2) || [];
+    let maxVotesBooks: Book[] = [];
 
-    const winningBooks = getWinningBooksNames(winningBooksVotes);
+    initialRoom?.books?.forEach((book) => {
+      if (maxVotesBooks.length === 0) {
+        maxVotesBooks.push(book);
+      }
+      maxVotesBooks.forEach((maxVotesBook) => {
+        if (maxVotesBook.votes.length > book.votes.length) {
+          return;
+        }
 
-    if (winningBooks.length === 0) {
-      console.log('Theres no winning book yet');
-      return;
-    }
+        if (maxVotesBook.votes.length === book.votes.length) {
+          maxVotesBooks.push(book);
+          return;
+        }
+
+        maxVotesBooks = [book];
+      });
+    });
 
     const updatedData = roomSchema.parse({
       ...initialRoom,
-      winningBooks: winningBooks,
+      winningBooks: maxVotesBooks,
     });
 
     await setRoom(params.id, updatedData);
     setIsOpenWinningAlert(true);
-  };
-
-  const getWinningBooksNames = (winningBooksVotes: number[]) => {
-    console.log('inside getWinningBooksNames', winningBooksVotes);
-
-    const uniqueVotes = Array.from(new Set(winningBooksVotes));
-
-    const winnerBooksNames: Book[] = [];
-
-    uniqueVotes.forEach((vote) => {
-      console.log('inside foreach vote');
-      initialRoom?.books?.forEach((book) => {
-        if (book.votes?.length === vote) {
-          console.log('inside if');
-          winnerBooksNames.push({
-            id: book.id,
-            title: book.title,
-            votes: book.votes,
-          });
-        }
-      });
-    });
-
-    return winnerBooksNames;
   };
 
   const handleCopyUrl = () => {
@@ -523,9 +495,10 @@ export default function EditRoom({ params }: { params: { id: string } }) {
                   )}
 
                   <Button
-                    isAvailable={initialRoom?.guests?.every(
+                    /*                     isAvailable={initialRoom?.guests?.every(
                       (guest) => guest.isReady,
-                    )}
+                    )} */
+                    isAvailable
                     variant="tertiary"
                     onClick={handleSubmit(handleRevealBook)}
                   >
