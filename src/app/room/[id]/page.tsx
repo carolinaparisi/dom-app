@@ -14,7 +14,7 @@ import { useRouter } from 'next/navigation';
 import { Toaster, toast } from 'sonner';
 import * as AlertDialog from '@radix-ui/react-alert-dialog';
 import { Book } from '@/utils/books';
-import Confetti from 'react-confetti-boom';
+import WinningModal from '@/components/WinningModal';
 
 const newRoomSchema = z
   .object({
@@ -172,26 +172,26 @@ export default function EditRoom({ params }: { params: { id: string } }) {
     await setRoom(params.id, updatedData);
   };
 
-  const handleRevealBook = async () => {
+  const getBooksWithMaxVotes = (): Book[] => {
     let maxVotesBooks: Book[] = [];
+    let maxVotesCount = 0;
 
     initialRoom?.books?.forEach((book) => {
-      if (maxVotesBooks.length === 0) {
+      const votesCount = book.votes?.length || 0;
+
+      if (votesCount > maxVotesCount) {
+        maxVotesBooks = [book];
+        maxVotesCount = votesCount;
+      } else if (votesCount === maxVotesCount) {
         maxVotesBooks.push(book);
       }
-      maxVotesBooks.forEach((maxVotesBook) => {
-        if (maxVotesBook.votes.length > book.votes.length) {
-          return;
-        }
-
-        if (maxVotesBook.votes.length === book.votes.length) {
-          maxVotesBooks.push(book);
-          return;
-        }
-
-        maxVotesBooks = [book];
-      });
     });
+
+    return maxVotesBooks;
+  };
+
+  const handleRevealBook = async () => {
+    const maxVotesBooks = getBooksWithMaxVotes();
 
     const updatedData = roomSchema.parse({
       ...initialRoom,
@@ -447,58 +447,16 @@ export default function EditRoom({ params }: { params: { id: string } }) {
                       </div>
                     </div>
                   </div>
-
                   {isOpenWinningAlert && (
-                    <div className="data-[state=open]:animate-overlayShow fixed inset-0 bg-black/50">
-                      {initialRoom?.winningBooks?.length === 1 && (
-                        <div>
-                          <Confetti
-                            mode="boom"
-                            y={0.35}
-                            particleCount={150}
-                            colors={[
-                              '#ff577f',
-                              '#ff884b',
-                              '#ffd384',
-                              '#fff9b0',
-                            ]}
-                            spreadDeg={40}
-                            shapeSize={14}
-                          />
-                        </div>
-                      )}
-                      <div className="data-[state=open]:animate-contentShow fixed left-1/2 top-1/2 max-h-[85vh] w-[90vw] max-w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-md bg-white p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none">
-                        <div className="m-0 pb-2 text-[20px] font-bold text-black">
-                          {`${initialRoom?.winningBooks && initialRoom?.winningBooks?.length > 1 ? 'We have a tie:' : 'The winner is:'}`}
-                        </div>
-                        <div className="pb-4 font-medium">
-                          {initialRoom?.winningBooks?.map((winningBook) => {
-                            return (
-                              <div key={winningBook.id}>
-                                {winningBook.title}
-                              </div>
-                            );
-                          })}
-                        </div>
-                        <div className="flex justify-end gap-[25px]">
-                          <div>
-                            <button
-                              onClick={() => setIsOpenWinningAlert(false)}
-                              className="inline-flex h-[35px] items-center justify-center rounded-xl border border-black bg-white px-4 py-6 font-medium leading-none text-black outline-none"
-                            >
-                              Ok
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                    <WinningModal
+                      initialRoom={initialRoom}
+                      setIsOpenWinningAlert={setIsOpenWinningAlert}
+                    />
                   )}
-
                   <Button
-                    /*                     isAvailable={initialRoom?.guests?.every(
+                    isAvailable={initialRoom?.guests?.every(
                       (guest) => guest.isReady,
-                    )} */
-                    isAvailable
+                    )}
                     variant="tertiary"
                     onClick={handleSubmit(handleRevealBook)}
                   >
