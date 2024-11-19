@@ -7,7 +7,7 @@ export default function Login() {
   return (
     <div className="h-dvh">
       <div className="flex h-[13%] items-center px-6 text-4xl font-medium text-primary">
-        <MenuIcon />
+        <MenuIcon data-testid="menu-icon" />
       </div>
       <div className="relative h-[87%] bg-gray">
         <Image

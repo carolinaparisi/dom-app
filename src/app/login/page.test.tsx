@@ -44,4 +44,10 @@ describe('Login Component', () => {
     const signInTitle = screen.queryByText('Enter Thy Credentials');
     expect(signInTitle).toBeInTheDocument();
   });
+
+  it('should render menu icon', () => {
+    render(<Login />);
+    const menuIcon = screen.queryByTestId('menu-icon');
+    expect(menuIcon).toBeInTheDocument();
+  });
 });
