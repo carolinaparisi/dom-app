@@ -38,4 +38,10 @@ describe('Login Component', () => {
       'Background image with an oil painting of a child',
     );
   });
+
+  it('should render thy credentials title', () => {
+    render(<Login />);
+    const signInTitle = screen.queryByText('Enter Thy Credentials');
+    expect(signInTitle).toBeInTheDocument();
+  });
 });
