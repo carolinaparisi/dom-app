@@ -19,7 +19,11 @@ const loginSchema = z.object({
 
 type LoginProps = z.infer<typeof loginSchema>;
 
-export default function SignInForm() {
+interface SignInFormProps {
+  testId?: string;
+}
+
+export default function SignInForm({ testId }: SignInFormProps) {
   const router = useRouter();
 
   const {
@@ -62,7 +66,10 @@ export default function SignInForm() {
   };
 
   return (
-    <div className="flex w-full flex-col justify-center gap-8 rounded-md lg:px-8">
+    <div
+      data-testid={testId}
+      className="flex w-full flex-col justify-center gap-8 rounded-md lg:px-8"
+    >
       <div className="font-silk text-6xl text-white">Enter Thy Credentials</div>
       <div className="flex flex-col gap-4 sm:mx-auto sm:w-full sm:max-w-sm">
         <form className="flex flex-col gap-4">

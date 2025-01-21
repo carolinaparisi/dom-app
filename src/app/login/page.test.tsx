@@ -39,10 +39,10 @@ describe('Login Component', () => {
     );
   });
 
-  it('should render thy credentials title', () => {
+  it('should render SignInForm component', () => {
     render(<Login />);
-    const signInTitle = screen.queryByText('Enter Thy Credentials');
-    expect(signInTitle).toBeInTheDocument();
+    const signInForm = screen.queryByTestId('sign-in-form');
+    expect(signInForm).toBeInTheDocument();
   });
 
   it('should render menu icon', () => {
