@@ -9,6 +9,7 @@ interface RoomCardProps {
   books: Book[];
   winner: Book[] | null;
   createdAt: string | Date;
+  testId: string;
 }
 
 export default function RoomCard({
@@ -17,6 +18,7 @@ export default function RoomCard({
   books,
   winner,
   createdAt,
+  testId,
 }: RoomCardProps) {
   const updateCreatedAt = () => {
     const createdDate = String(createdAt).split('T')[0];
@@ -26,7 +28,10 @@ export default function RoomCard({
 
   return (
     <Link href={`/room/${id}`}>
-      <div className="align-center flex w-full gap-3 rounded-2xl bg-primary p-3 text-white">
+      <div
+        data-testid={testId}
+        className="align-center flex w-full gap-3 rounded-2xl bg-primary p-3 text-white"
+      >
         <Image
           className="rounded-full object-cover"
           alt=""

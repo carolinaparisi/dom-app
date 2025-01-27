@@ -6,7 +6,6 @@ import { useEffect, useState } from 'react';
 import lobbyBanner from '../../public/images/lobby-background.png';
 import Image from 'next/image';
 import Button from '@/components/Button';
-import Link from 'next/link';
 import { useRoomContext } from '@/contexts/RoomContext';
 import { signOut } from 'firebase/auth';
 import { auth } from '@/services/firebase';
@@ -35,6 +34,10 @@ export default function Lobby() {
   if (isLoading) return <Loading />;
   if (!user) return null;
 
+  const handleCreateANewOne = () => {
+    router.push('/room');
+  };
+
   const handleLogout = async () => {
     await signOut(auth);
   };
@@ -43,7 +46,7 @@ export default function Lobby() {
     <div className="min-h-screen bg-gray_soft">
       <div className="relative">
         <Image
-          alt=""
+          alt="main lobby banner"
           src={lobbyBanner}
           className="w-full"
           quality={100}
@@ -80,13 +83,14 @@ export default function Lobby() {
                     books={room.books}
                     winner={room.winningBooks}
                     createdAt={room.createdAt}
+                    testId={'room-card'}
                   />
                 );
               })}
             </div>
-            <Link href={'/room'}>
-              <Button variant="secondary">CREATE A NEW ONE</Button>
-            </Link>
+            <Button onClick={handleCreateANewOne} variant="secondary">
+              CREATE A NEW ONE
+            </Button>
             <div className="mt-6">
               <Button onClick={handleLogout} variant="dashed">
                 LOGOUT
