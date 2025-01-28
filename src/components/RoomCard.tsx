@@ -34,7 +34,7 @@ export default function RoomCard({
       >
         <Image
           className="rounded-full object-cover"
-          alt=""
+          alt="main image"
           src={roomBanner}
           priority
           width={55}
