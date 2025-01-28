@@ -26,10 +26,20 @@ describe('Button component', () => {
     expect(button).toHaveClass('bg-white text-primary');
   });
 
-  it('should render button with secondary variant', () => {
+  it('should render button with secondary variant and is available', () => {
     render(<Button variant="secondary">Click me</Button>);
     const button = screen.getByText('Click me');
     expect(button).toHaveClass('bg-black text-white');
+  });
+
+  it('should render button with secondary variant and is not available', () => {
+    render(
+      <Button isAvailable={false} variant="secondary">
+        Click me
+      </Button>,
+    );
+    const button = screen.getByText('Click me');
+    expect(button).toHaveClass('bg-gray text-white');
   });
 
   it('should render button with tertiary variant and is available', () => {
