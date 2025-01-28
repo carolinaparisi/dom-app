@@ -210,6 +210,46 @@ export default function EditRoom({ params }: { params: { id: string } }) {
     });
   };
 
+  const isUpdateButtonAvailable = () => {
+    if (!initialRoom) {
+      return false;
+    }
+
+    const { winningBooks } = initialRoom;
+
+    if (winningBooks?.length === 1) {
+      return false;
+    }
+
+    return true;
+  };
+
+  const isRevealWinningBookButtonAvailable = () => {
+    if (!initialRoom) {
+      return false;
+    }
+
+    const { winningBooks, guests } = initialRoom;
+
+    if (winningBooks?.length === 1) {
+      return false;
+    }
+
+    if (!guests) {
+      return false;
+    }
+
+    if (guests.length === 0) {
+      return false;
+    }
+
+    if (guests.some((guest) => !guest.isReady)) {
+      return false;
+    }
+
+    return true;
+  };
+
   return (
     <div className="min-h-screen bg-gray_soft">
       <div className="relative">
@@ -379,6 +419,7 @@ export default function EditRoom({ params }: { params: { id: string } }) {
 
                     <Button
                       variant="secondary"
+                      isAvailable={isUpdateButtonAvailable()}
                       onClick={handleSubmit(handleEditRoom)}
                     >
                       UPDATE ROOM
@@ -454,9 +495,7 @@ export default function EditRoom({ params }: { params: { id: string } }) {
                     />
                   )}
                   <Button
-                    isAvailable={initialRoom?.guests?.every(
-                      (guest) => guest.isReady,
-                    )}
+                    isAvailable={isRevealWinningBookButtonAvailable()}
                     variant="tertiary"
                     onClick={handleSubmit(handleRevealBook)}
                   >

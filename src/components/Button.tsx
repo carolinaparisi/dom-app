@@ -11,7 +11,7 @@ const getButtonClassNames = (variant?: string, isAvailable?: boolean) => {
     case 'primary':
       return `bg-white text-primary`;
     case 'secondary':
-      return 'bg-black text-white';
+      return ` ${isAvailable ? 'bg-black' : 'bg-gray'} text-white`;
     case 'tertiary':
       return ` ${isAvailable ? 'bg-primary' : 'bg-gray'} text-white`;
     case 'dashed':
