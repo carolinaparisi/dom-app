@@ -2,6 +2,7 @@ import { Book } from '@/utils/books';
 import Image from 'next/image';
 import roomBanner from '../../public/images/room-image1.png';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 interface RoomCardProps {
   name: string;
@@ -9,7 +10,7 @@ interface RoomCardProps {
   books: Book[];
   winner: Book[] | null;
   createdAt: string | Date;
-  testId: string;
+  testId?: string;
 }
 
 export default function RoomCard({
@@ -26,10 +27,16 @@ export default function RoomCard({
     return `${day}-${month}-${year}`;
   };
 
+  const router = useRouter();
+
+  const handleRoomCard = () => {
+    router.push(`/room/${id}`);
+  };
+
   return (
-    <Link href={`/room/${id}`}>
+    <button data-testid={testId} onClick={() => handleRoomCard()}>
       <div
-        data-testid={testId}
+        data-testid="room-card"
         className="align-center flex w-full gap-3 rounded-2xl bg-primary p-3 text-white"
       >
         <Image
@@ -40,7 +47,10 @@ export default function RoomCard({
           width={55}
           height={110}
         />
-        <div className="flex flex-col justify-center gap-1">
+        <div
+          data-testid="room-card-info"
+          className="flex flex-col items-start gap-1"
+        >
           <div className="font-silk text-xl">{name}</div>
           <div className="line-clamp-1">
             {`Books: ` + books.map((book) => book.title).join(', ')}
@@ -53,6 +63,6 @@ export default function RoomCard({
           <div className="text-gray">{`Created at ${updateCreatedAt()}`}</div>
         </div>
       </div>
-    </Link>
+    </button>
   );
 }

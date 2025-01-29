@@ -100,7 +100,7 @@ describe('Lobby component', () => {
     });
   });
 
-  it('should redirect to create room page when clicking create room button', async () => {
+  it('should navigate to create room page when create room button is clicked', async () => {
     const mockPush = jest.fn();
     (useRouter as jest.Mock).mockReturnValue({
       push: mockPush,
@@ -121,7 +121,7 @@ describe('Lobby component', () => {
     });
   });
 
-  it('should logout when clicking logout button', async () => {
+  it('should logout when logout button is clicked', async () => {
     const mockPush = jest.fn();
     (useRouter as jest.Mock).mockReturnValue({
       push: mockPush,
@@ -138,6 +138,21 @@ describe('Lobby component', () => {
     fireEvent.click(logoutButton);
     await waitFor(() => {
       expect(logoutBtnMock).toHaveBeenCalled();
+    });
+  });
+
+  it('should navigate to the correct room when a room card is clicked', async () => {
+    const mockPush = jest.fn();
+    (useRouter as jest.Mock).mockReturnValue({
+      push: mockPush,
+    });
+
+    render(<Lobby />);
+    await waitFor(() => {
+      const roomCardButton = screen.getAllByTestId('main-room-card');
+      fireEvent.click(roomCardButton[0]);
+
+      expect(mockPush).toHaveBeenCalledWith('/room/1');
     });
   });
 });

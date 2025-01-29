@@ -83,7 +83,7 @@ export default function Lobby() {
                     books={room.books}
                     winner={room.winningBooks}
                     createdAt={room.createdAt}
-                    testId={'room-card'}
+                    testId={'main-room-card'}
                   />
                 );
               })}

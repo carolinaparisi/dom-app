@@ -47,7 +47,7 @@ describe('SignInForm component', () => {
     expect(signUpButton).toBeInTheDocument();
   });
 
-  it('should redirect to home page after successful sign in', async () => {
+  it('should navigate to home page after successful sign in', async () => {
     const mockPush = jest.fn();
     (useRouter as jest.Mock).mockReturnValue({
       push: mockPush,
@@ -73,7 +73,7 @@ describe('SignInForm component', () => {
     });
   });
 
-  it('should redirect to home page after successful sign up', async () => {
+  it('should navigate to home page after successful sign up', async () => {
     const mockPush = jest.fn();
     (useRouter as jest.Mock).mockReturnValue({
       push: mockPush,
