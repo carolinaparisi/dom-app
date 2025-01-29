@@ -1,7 +1,6 @@
 import { Book } from '@/utils/books';
 import Image from 'next/image';
 import roomBanner from '../../public/images/room-image1.png';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 interface RoomCardProps {

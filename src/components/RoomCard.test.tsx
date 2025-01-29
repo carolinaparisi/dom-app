@@ -1,7 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import RoomCard from './RoomCard';
 import { roomsMock } from '../mocks/roomsMock';
-import { useRouter } from 'next/navigation';
 
 jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
