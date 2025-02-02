@@ -17,6 +17,7 @@ export default function BookItem({
 }: BookItemProps) {
   return (
     <button
+      data-testid="book-item"
       className={`${
         votes?.includes(guestName)
           ? `bg-primary text-white`

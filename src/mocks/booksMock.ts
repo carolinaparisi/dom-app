@@ -1,0 +1,26 @@
+import { Book } from '@/utils/books';
+
+export const booksMock: Book[] = [
+  { id: 1, title: 'Book 1', votes: ['adriany, bruna'] },
+  { id: 2, title: 'Book 2', votes: ['carol'] },
+  { id: 3, title: 'Book 3', votes: ['adriany, bruna'] },
+  { id: 4, title: 'Book 4', votes: ['carol'] },
+  { id: 5, title: 'Book 5', votes: ['adriany, bruna'] },
+  { id: 6, title: 'Book 6', votes: ['carol'] },
+  { id: 7, title: 'Book 7', votes: ['adriany, bruna'] },
+  { id: 8, title: 'Book 8', votes: ['carol'] },
+  { id: 9, title: 'Book 9', votes: ['adriany, bruna'] },
+  { id: 10, title: 'Book 10', votes: ['carol'] },
+  { id: 11, title: 'Book 11', votes: ['adriany, bruna'] },
+  { id: 12, title: 'Book 12', votes: ['carol'] },
+  { id: 13, title: 'Book 13', votes: ['adriany, bruna'] },
+  { id: 14, title: 'Book 14', votes: ['carol'] },
+  { id: 15, title: 'Book 15', votes: ['adriany, bruna'] },
+  { id: 16, title: 'Book 16', votes: ['carol'] },
+  { id: 17, title: 'Book 17', votes: ['adriany, bruna'] },
+  { id: 18, title: 'Book 18', votes: ['carol'] },
+  { id: 19, title: 'Book 19', votes: ['adriany, bruna'] },
+  { id: 20, title: 'Book 20', votes: ['carol'] },
+  { id: 21, title: 'Book 21', votes: ['adriany, bruna'] },
+  { id: 22, title: 'Book 22', votes: ['carol'] },
+];
