@@ -91,7 +91,7 @@ export default function VotingPage({ guestName, room }: VotingPageProps) {
     <>
       <div className="relative">
         <Image
-          alt=""
+          alt="main-banner"
           src={votingBanner}
           className="w-full"
           quality={100}
@@ -189,6 +189,7 @@ export default function VotingPage({ guestName, room }: VotingPageProps) {
           <div className="flex flex-wrap gap-2 text-white">
             {guests.map((guest) => (
               <span
+                data-testid="guest-name"
                 key={guest.id}
                 className={` ${
                   guest.isReady ? `bg-primary` : `bg-gray`

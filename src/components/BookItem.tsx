@@ -27,7 +27,7 @@ export default function BookItem({
         handleBookSelected(id);
       }}
     >
-      <div className="flex items-center gap-2">
+      <div data-testid="title-div" className="flex items-center gap-2">
         <BookOpen />
         {text}
       </div>

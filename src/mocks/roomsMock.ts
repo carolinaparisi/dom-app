@@ -3,30 +3,60 @@ import { Room } from '@/utils/rooms';
 export const roomsMock: Room[] = [
   {
     id: '1',
-    guests: [],
+    guests: [
+      { id: 1, name: 'adriany', isReady: false },
+      { id: 2, name: 'bruna', isReady: false },
+      { id: 3, name: 'carol', isReady: false },
+    ],
     name: 'Room 1',
     maxBooks: 2,
     books: [
-      { id: 1, title: 'Book 1', votes: ['adriany, bruna'] },
-      { id: 2, title: 'Book 2', votes: ['carol'] },
+      { id: 1, title: 'Book 1', votes: [] },
+      { id: 2, title: 'Book 2', votes: [] },
     ],
     createdAt: '2025-01-01',
     updatedAt: '2025-01-01',
-    winningBooks: [{ id: 1, title: 'Book 1', votes: ['adriany'] }],
+    winningBooks: [],
     createdBy: '1',
   },
   {
     id: '2',
-    guests: [],
+    guests: [
+      { id: 1, name: 'adriany', isReady: true },
+      { id: 2, name: 'bruna', isReady: true },
+      { id: 3, name: 'carol', isReady: true },
+    ],
     name: 'Room 2',
-    maxBooks: 2,
+    maxBooks: 1,
     books: [
       { id: 1, title: 'Book 1', votes: ['adriany, bruna'] },
       { id: 2, title: 'Book 2', votes: ['carol'] },
     ],
     createdAt: '2025-01-01',
     updatedAt: '2025-01-01',
-    winningBooks: [{ id: 1, title: 'Book 1', votes: ['adriany'] }],
+    winningBooks: [{ id: 1, title: 'Book 1', votes: ['adriany, bruna'] }],
+    createdBy: '1',
+  },
+
+  {
+    id: '3',
+    guests: [
+      { id: 1, name: 'adriany', isReady: true },
+      { id: 2, name: 'bruna', isReady: true },
+      { id: 3, name: 'carol', isReady: true },
+    ],
+    name: 'Room 3',
+    maxBooks: 2,
+    books: [
+      { id: 1, title: 'Book 1', votes: ['adriany, bruna'] },
+      { id: 2, title: 'Book 2', votes: ['carol, adriany'] },
+    ],
+    createdAt: '2025-01-01',
+    updatedAt: '2025-01-01',
+    winningBooks: [
+      { id: 1, title: 'Book 1', votes: ['adriany, bruna'] },
+      { id: 1, title: 'Book 2', votes: ['carol, adriany'] },
+    ],
     createdBy: '1',
   },
 ];
