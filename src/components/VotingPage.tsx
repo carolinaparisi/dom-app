@@ -8,6 +8,7 @@ import votingBanner from '../../public/images/voting-banner.png';
 import { useRoomContext } from '@/contexts/RoomContext';
 import { Room, roomSchema } from '@/utils/rooms';
 import Confetti from 'react-confetti-boom';
+import Guest from './Guest';
 
 interface VotingPageProps {
   guestName: string;
@@ -188,15 +189,12 @@ export default function VotingPage({ guestName, room }: VotingPageProps) {
           {/* NamesPool */}
           <div className="flex flex-wrap gap-2 text-white">
             {guests.map((guest) => (
-              <span
-                data-testid="guest-name"
+              <Guest
                 key={guest.id}
-                className={` ${
-                  guest.isReady ? `bg-primary` : `bg-gray`
-                } inline-flex items-center rounded-2xl px-3 py-1 text-lg`}
-              >
-                {guest.name}
-              </span>
+                guest={guest}
+                testId="guest-name"
+                isButton={false}
+              />
             ))}
           </div>
         </div>

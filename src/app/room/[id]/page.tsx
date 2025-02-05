@@ -6,7 +6,7 @@ import Button from '@/components/Button';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Trash, X } from 'lucide-react';
+import { Trash } from 'lucide-react';
 import { useRoomContext } from '@/contexts/RoomContext';
 import { useEffect, useState } from 'react';
 import { Room, roomSchema } from '@/utils/rooms';
@@ -15,6 +15,7 @@ import { Toaster, toast } from 'sonner';
 import * as AlertDialog from '@radix-ui/react-alert-dialog';
 import { Book } from '@/utils/books';
 import WinningModal from '@/components/WinningModal';
+import Guest from '@/components/Guest';
 
 const newRoomSchema = z
   .object({
@@ -444,14 +445,11 @@ export default function EditRoom({ params }: { params: { id: string } }) {
                           <AlertDialog.Root key={guest.id}>
                             <AlertDialog.Trigger asChild>
                               <button onClick={() => null} key={guest.id}>
-                                <span
-                                  className={` ${
-                                    guest.isReady ? `bg-primary` : `bg-gray`
-                                  } flex items-center justify-center gap-1 rounded-2xl px-3 py-1 text-lg`}
-                                >
-                                  {guest.name}
-                                  <X size={12} />
-                                </span>
+                                <Guest
+                                  guest={guest}
+                                  testId="guest-name"
+                                  isButton={true}
+                                />
                               </button>
                             </AlertDialog.Trigger>
                             <AlertDialog.Portal>
