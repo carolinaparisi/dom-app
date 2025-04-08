@@ -29,4 +29,4 @@ Running this project locally is easy, you just need to install all the dependenc
 
 Once this application is deployed on Vercel, you can access it by this URL:
 
-- [Dom App](dom-app-tau.vercel.app)
+- [Dom App](https://dom.carolinaparisi.com.br/)
