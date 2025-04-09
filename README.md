@@ -6,7 +6,7 @@ Once I'm a participant of a book club and I loving reading, there's nothing more
 
 ### Layout
 
-Here we have the Figma prototype created by [Cássio](https://github.com/cassiorsfreitas)! Even thought this layout was not created by me, as you can see in other projects here, on my GitHub, I've been using this strong tool to create my prototypes!
+Its design was initially intended for the app to be used on mobile devices. Here we have the Figma prototype created by [Cássio](https://github.com/cassiorsfreitas)! Even thought this layout was not created by me, as you can see in other projects here, on my GitHub, I've been using this strong tool to create my prototypes!
 
 ![Figma](https://github.com/user-attachments/assets/4205a831-0899-4f57-a9ab-0f40c9cb50f9)
 
