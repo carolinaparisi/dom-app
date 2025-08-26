@@ -1,6 +1,6 @@
 'use client';
 
-import lobbyBanner from '../../../public/images/lobby-background.png';
+import lobbyBanner from '../../../../public/images/lobby-background.png';
 import Image from 'next/image';
 import Button from '@/components/Button';
 import { useFieldArray, useForm } from 'react-hook-form';

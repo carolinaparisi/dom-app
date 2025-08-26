@@ -3,7 +3,7 @@
 import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
-import welcome from '../../../../public/images/welcome.png';
+import welcome from '../../../../../public/images/welcome.png';
 import Button from '@/components/Button';
 import { useRoomContext } from '@/contexts/RoomContext';
 import { useRouter } from 'next/navigation';
@@ -13,7 +13,7 @@ import { z } from 'zod';
 import { Room, roomSchema } from '@/utils/rooms';
 import { useCookies } from 'react-cookie';
 
-const VotingPage = dynamic(() => import('../../../components/VotingPage'), {
+const VotingPage = dynamic(() => import('../../../../components/VotingPage'), {
   ssr: false,
 });
 
