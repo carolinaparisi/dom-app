@@ -34,8 +34,13 @@ export default function Lobby() {
   if (isLoading) return <Loading />;
   if (!user) return null;
 
-  const handleCreateANewOne = () => {
+  const handleCreateVotingRoom = () => {
     router.push('/room');
+  };
+
+  const handleCreateIndicationRoom = () => {
+    //router.push('/room');
+    console.log('handleCreateIndicationRoom clicked!');
   };
 
   const handleLogout = async () => {
@@ -88,9 +93,14 @@ export default function Lobby() {
                 );
               })}
             </div>
-            <Button onClick={handleCreateANewOne} variant="secondary">
-              CREATE A NEW ONE
-            </Button>
+            <div className="flex gap-4">
+              <Button onClick={handleCreateIndicationRoom} variant="secondary">
+                <div>NEW INDICATION</div>
+              </Button>
+              <Button onClick={handleCreateVotingRoom} variant="secondary">
+                <div>NEW VOTING</div>
+              </Button>
+            </div>
             <div className="mt-6">
               <Button onClick={handleLogout} variant="dashed">
                 LOGOUT
