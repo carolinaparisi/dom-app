@@ -8,7 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Trash } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useRoomContext } from '@/contexts/RoomContext';
+import { useVotingRoomContext } from '@/contexts/VotingRoomContext';
 import { useAuthContext } from '@/contexts/AuthContext';
 import { useEffect } from 'react';
 import { roomSchema } from '@/utils/rooms';
@@ -50,9 +50,9 @@ const newRoomFormSchema = z
 
 type NewRoomFormProps = z.infer<typeof newRoomFormSchema>;
 
-export default function CreateRoom() {
+export default function CreateVotingRoom() {
   const router = useRouter();
-  const { setRoom } = useRoomContext();
+  const { setVotingRoom } = useVotingRoomContext();
   const { user, isLoading } = useAuthContext();
 
   const {
@@ -95,7 +95,7 @@ export default function CreateRoom() {
         updatedAt: new Date().toISOString(),
       });
 
-      await setRoom(roomId, roomData);
+      await setVotingRoom(roomId, roomData);
 
       router.push(`/room/${roomId}`);
     } catch (error) {
@@ -130,7 +130,7 @@ export default function CreateRoom() {
           priority
         />
         <div className="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center text-gray_soft">
-          <div className="font-silk text-4xl">Lobby</div>
+          <div className="font-silk text-4xl">Voting</div>
           <div className="text-base">administer your rooms</div>
         </div>
       </div>
@@ -141,7 +141,7 @@ export default function CreateRoom() {
             {/* Header */}
             <div className="flex flex-col gap-1">
               <div className="font-silk text-3xl leading-none text-primary">
-                <div>New Room</div>
+                <div>New Voting Room</div>
               </div>
               <div className="text-lg">
                 <div>Complete de fields below to create a new room.</div>

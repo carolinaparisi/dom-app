@@ -14,11 +14,11 @@ import {
 import { database } from '../services/firebase';
 import { Room } from '@/utils/rooms';
 
-interface RoomContext {
-  getRoom: (roomId: string) => Promise<Room | null>;
-  setRoom: (roomId: string, value: Room) => Promise<void>;
-  deleteRoom: (roomId: string) => Promise<void>;
-  getAllRooms: (userId: string) => Promise<Record<string, Room>>;
+interface VotingRoomContext {
+  getVotingRoom: (roomId: string) => Promise<Room | null>;
+  setVotingRoom: (roomId: string, value: Room) => Promise<void>;
+  deleteVotingRoom: (roomId: string) => Promise<void>;
+  getAllVotingRooms: (userId: string) => Promise<Record<string, Room>>;
   subscribeToRoomUpdates: (
     roomId: string,
     callback: (room: Room | null) => void,
@@ -26,10 +26,12 @@ interface RoomContext {
   unsubscribeFromRoomUpdates: (roomId: string) => void;
 }
 
-const RoomContext = createContext<RoomContext | undefined>(undefined);
+const VotingRoomContext = createContext<VotingRoomContext | undefined>(
+  undefined,
+);
 
-export const DataProvider = ({ children }: { children: ReactNode }) => {
-  const getAllRooms = async (userId: string) => {
+export const DataVotingProvider = ({ children }: { children: ReactNode }) => {
+  const getAllVotingRooms = async (userId: string) => {
     const dataRef = ref(database, 'rooms');
     const roomsQuery = query(
       dataRef,
@@ -46,7 +48,7 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const getRoom = async (roomId: string): Promise<Room | null> => {
+  const getVotingRoom = async (roomId: string): Promise<Room | null> => {
     const dataRef = ref(database, `rooms/${roomId}`);
     try {
       const snapshot = await get(dataRef);
@@ -57,7 +59,7 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const setRoom = async (roomId: string, value: Room) => {
+  const setVotingRoom = async (roomId: string, value: Room) => {
     const dataRef = ref(database, `rooms/${roomId}`);
     try {
       await set(dataRef, value);
@@ -67,7 +69,7 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const deleteRoom = async (roomId: string) => {
+  const deleteVotingRoom = async (roomId: string) => {
     const dataRef = ref(database, `rooms/${roomId}`);
     try {
       await set(dataRef, null);
@@ -93,23 +95,23 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <RoomContext.Provider
+    <VotingRoomContext.Provider
       value={{
-        getRoom,
-        setRoom,
-        deleteRoom,
-        getAllRooms,
+        getVotingRoom,
+        setVotingRoom,
+        deleteVotingRoom,
+        getAllVotingRooms,
         subscribeToRoomUpdates,
         unsubscribeFromRoomUpdates,
       }}
     >
       {children}
-    </RoomContext.Provider>
+    </VotingRoomContext.Provider>
   );
 };
 
-export const useRoomContext = () => {
-  const context = useContext(RoomContext);
+export const useVotingRoomContext = () => {
+  const context = useContext(VotingRoomContext);
   if (!context) {
     throw new Error(
       'useDatabaseContext must be used within a DatabaseProvider',

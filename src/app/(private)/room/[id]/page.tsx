@@ -7,7 +7,7 @@ import { useFieldArray, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Trash } from 'lucide-react';
-import { useRoomContext } from '@/contexts/RoomContext';
+import { useVotingRoomContext } from '@/contexts/VotingRoomContext';
 import { useEffect, useState } from 'react';
 import { Room, roomSchema } from '@/utils/rooms';
 import { useRouter } from 'next/navigation';
@@ -56,15 +56,15 @@ export default function EditRoom({ params }: { params: { id: string } }) {
   const [isOpenWinningAlert, setIsOpenWinningAlert] = useState(false);
   const router = useRouter();
   const {
-    setRoom,
-    deleteRoom,
+    setVotingRoom,
+    deleteVotingRoom,
     subscribeToRoomUpdates,
     unsubscribeFromRoomUpdates,
-  } = useRoomContext();
+  } = useVotingRoomContext();
   const [initialRoom, setInitialRoom] = useState<Room | null>(null);
   const baseVotingUrl =
     process.env.NODE_ENV === 'production'
-      ? process.env.NEXT_PUBLIC_BASE_VOTING_URL
+      ? process.env.NEXT_PUBLIC_BASE_URL
       : 'http://localhost:3000';
 
   useEffect(() => {
@@ -136,12 +136,12 @@ export default function EditRoom({ params }: { params: { id: string } }) {
       updatedAt: new Date().toISOString(),
     });
 
-    await setRoom(params.id, updatedData);
+    await setVotingRoom(params.id, updatedData);
     router.push('/');
   };
 
   const handleDeleteRoom = async () => {
-    await deleteRoom(params.id);
+    await deleteVotingRoom(params.id);
 
     router.push('/');
   };
@@ -170,7 +170,7 @@ export default function EditRoom({ params }: { params: { id: string } }) {
       guests: updatedGuests,
     });
 
-    await setRoom(params.id, updatedData);
+    await setVotingRoom(params.id, updatedData);
   };
 
   const getBooksWithMaxVotes = (): Book[] => {
@@ -199,7 +199,7 @@ export default function EditRoom({ params }: { params: { id: string } }) {
       winningBooks: maxVotesBooks,
     });
 
-    await setRoom(params.id, updatedData);
+    await setVotingRoom(params.id, updatedData);
     setIsOpenWinningAlert(true);
   };
 

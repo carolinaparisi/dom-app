@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import lobbyBanner from '../../public/images/lobby-background.png';
 import Image from 'next/image';
 import Button from '@/components/Button';
-import { useRoomContext } from '@/contexts/RoomContext';
+import { useVotingRoomContext } from '@/contexts/VotingRoomContext';
 import { signOut } from 'firebase/auth';
 import { auth } from '@/services/firebase';
 import { Room } from '@/utils/rooms';
@@ -15,7 +15,7 @@ import Loading from '@/components/Loading';
 
 export default function Lobby() {
   const { user, isLoading } = useAuthContext();
-  const { getAllRooms } = useRoomContext();
+  const { getAllVotingRooms } = useVotingRoomContext();
   const [rooms, setRooms] = useState<Room[] | null>(null);
   const router = useRouter();
 
@@ -25,11 +25,11 @@ export default function Lobby() {
     }
 
     if (user && rooms === null) {
-      getAllRooms(user.uid).then((rooms) => {
+      getAllVotingRooms(user.uid).then((rooms) => {
         setRooms(Object.values(rooms));
       });
     }
-  }, [user, isLoading, router, getAllRooms, rooms]);
+  }, [user, isLoading, router, getAllVotingRooms, rooms]);
 
   if (isLoading) return <Loading />;
   if (!user) return null;
@@ -39,8 +39,7 @@ export default function Lobby() {
   };
 
   const handleCreateIndicationRoom = () => {
-    //router.push('/room');
-    console.log('handleCreateIndicationRoom clicked!');
+    router.push('/indication');
   };
 
   const handleLogout = async () => {
