@@ -22,7 +22,6 @@ export default function RoomCard({
   isVotingRoom,
   testId,
 }: RoomCardProps) {
-  console.log('books in RoomCard:', books);
   const updateCreatedAt = () => {
     const createdDate = String(createdAt).split('T')[0];
     const [year, month, day] = createdDate.split('-');
@@ -32,7 +31,11 @@ export default function RoomCard({
   const router = useRouter();
 
   const handleRoomCard = () => {
-    router.push(`/room/${id}`);
+    if (isVotingRoom) {
+      router.push(`/room/${id}`);
+      return;
+    }
+    router.push(`/indication/${id}`);
   };
 
   return (
@@ -59,13 +62,17 @@ export default function RoomCard({
         >
           <div className="font-silk text-xl">{name}</div>
           <div className="line-clamp-1">
-            {`Books: ` + books?.map((book) => book.title).join(', ')}
+            {`Books: ${books?.length !== 0 ? books?.map((book) => book.title).join(', ') : 'No books yet'}`}
           </div>
-          <div className="line-clamp-1">{`Winner: ${
-            winner
-              ? winner?.map((book) => book.title).join(', ')
-              : 'Not revealed yet'
-          }`}</div>
+          <div className="line-clamp-1">
+            {!isVotingRoom
+              ? 'Recommendation phase'
+              : `Winner: ${
+                  winner
+                    ? winner?.map((book) => book.title).join(', ')
+                    : 'Not revealed yet'
+                }`}
+          </div>
           <div className="text-gray">{`Created at ${updateCreatedAt()}`}</div>
         </div>
       </div>

@@ -51,7 +51,7 @@ export const DataVotingProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const getVotingRoom = async (roomId: string): Promise<VotingRoom | null> => {
-    const dataRef = ref(database, `rooms/${roomId}`);
+    const dataRef = ref(database, `rooms/voting/${roomId}`);
     try {
       const snapshot = await get(dataRef);
       return snapshot.exists() ? (snapshot.val() as VotingRoom) : null;
@@ -72,7 +72,7 @@ export const DataVotingProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const deleteVotingRoom = async (roomId: string) => {
-    const dataRef = ref(database, `rooms/${roomId}`);
+    const dataRef = ref(database, `rooms/voting/${roomId}`);
     try {
       await set(dataRef, null);
     } catch (error) {
@@ -85,14 +85,14 @@ export const DataVotingProvider = ({ children }: { children: ReactNode }) => {
     roomId: string,
     callback: (room: VotingRoom | null) => void,
   ) => {
-    const dataRef = ref(database, `rooms/${roomId}`);
+    const dataRef = ref(database, `rooms/voting/${roomId}`);
     onValue(dataRef, (snapshot) => {
       callback(snapshot.exists() ? (snapshot.val() as VotingRoom) : null);
     });
   };
 
   const unsubscribeFromRoomUpdates = (roomId: string) => {
-    const dataRef = ref(database, `rooms/${roomId}`);
+    const dataRef = ref(database, `rooms/voting/${roomId}`);
     off(dataRef);
   };
 
