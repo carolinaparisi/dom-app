@@ -1,9 +1,9 @@
-import { Room } from '@/utils/rooms';
+import { VotingRoom } from '@/utils/rooms';
 import React from 'react';
 import Confetti from 'react-confetti-boom';
 
 interface WinningModalProps {
-  initialRoom: Room | null;
+  initialRoom: VotingRoom | null;
   setIsOpenWinningAlert: (isOpen: boolean) => void;
 }
 

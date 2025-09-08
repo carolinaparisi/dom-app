@@ -26,6 +26,7 @@ const config: Config = {
       gray_soft: '#ECE7DE',
       red: '#bb191b',
       blue_super_light: '#D9D9D9',
+      burgundy: '#3D0C0D',
     },
   },
   // eslint-disable-next-line @typescript-eslint/no-require-imports

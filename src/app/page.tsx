@@ -9,14 +9,15 @@ import Button from '@/components/Button';
 import { useVotingRoomContext } from '@/contexts/VotingRoomContext';
 import { signOut } from 'firebase/auth';
 import { auth } from '@/services/firebase';
-import { Room } from '@/utils/rooms';
-import RoomCard from '@/components/RoomCard';
+import RoomCard, { RoomCardProps } from '@/components/RoomCard';
 import Loading from '@/components/Loading';
+import { useIndicationRoomContext } from '@/contexts/IndicationRoomContext';
 
 export default function Lobby() {
   const { user, isLoading } = useAuthContext();
+  const { getAllIndicationRooms } = useIndicationRoomContext();
   const { getAllVotingRooms } = useVotingRoomContext();
-  const [rooms, setRooms] = useState<Room[] | null>(null);
+  const [rooms, setRooms] = useState<RoomCardProps[] | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -25,11 +26,52 @@ export default function Lobby() {
     }
 
     if (user && rooms === null) {
-      getAllVotingRooms(user.uid).then((rooms) => {
-        setRooms(Object.values(rooms));
+      const allRooms: RoomCardProps[] = [];
+
+      Promise.all([
+        getAllVotingRooms(user.uid),
+        getAllIndicationRooms(user.uid),
+      ]).then(([votingRooms, indicationRooms]) => {
+        Object.values(votingRooms).forEach((room) => {
+          allRooms.push({
+            id: room.id,
+            name: room.name,
+            books: room.books,
+            winner: room.winningBooks || null,
+            createdAt: room.createdAt,
+            isVotingRoom: room.isVotingRoom,
+          });
+        });
+
+        Object.values(indicationRooms).forEach((room) => {
+          allRooms.push({
+            id: room.id,
+            name: room.name,
+            books: room.suggestion?.map((s) => s.book) || [],
+            winner: null,
+            createdAt: room.createdAt,
+            isVotingRoom: room.isVotingRoom,
+          });
+        });
+
+        setRooms(
+          allRooms.sort(
+            (a, b) =>
+              new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+          ),
+        );
+
+        console.log('rooms in lobby:', allRooms);
       });
     }
-  }, [user, isLoading, router, getAllVotingRooms, rooms]);
+  }, [
+    user,
+    isLoading,
+    router,
+    getAllVotingRooms,
+    rooms,
+    getAllIndicationRooms,
+  ]);
 
   if (isLoading) return <Loading />;
   if (!user) return null;
@@ -85,8 +127,9 @@ export default function Lobby() {
                     name={room.name}
                     id={room.id}
                     books={room.books}
-                    winner={room.winningBooks}
+                    winner={room.winner}
                     createdAt={room.createdAt}
+                    isVotingRoom={room.isVotingRoom}
                     testId={'main-room-card'}
                   />
                 );

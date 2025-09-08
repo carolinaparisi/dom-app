@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { suggestionSchema } from './suggestions';
 
-export const indicationSchema = z.object({
+export const indicationRoomSchema = z.object({
   id: z.string(),
   name: z.string(),
   maxSuggestions: z.number().max(20),
@@ -10,6 +10,7 @@ export const indicationSchema = z.object({
   updatedAt: z.union([z.string(), z.date()]),
   createdBy: z.string(),
   isCompleted: z.boolean().default(false),
+  isVotingRoom: z.boolean(),
 });
 
-export type Indication = z.infer<typeof indicationSchema>;
+export type IndicationRoom = z.infer<typeof indicationRoomSchema>;

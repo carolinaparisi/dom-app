@@ -12,16 +12,16 @@ import {
   off,
 } from 'firebase/database';
 import { database } from '../services/firebase';
-import { Room } from '@/utils/rooms';
+import { VotingRoom } from '@/utils/rooms';
 
 interface VotingRoomContext {
-  getVotingRoom: (roomId: string) => Promise<Room | null>;
-  setVotingRoom: (roomId: string, value: Room) => Promise<void>;
+  getVotingRoom: (roomId: string) => Promise<VotingRoom | null>;
+  setVotingRoom: (roomId: string, value: VotingRoom) => Promise<void>;
   deleteVotingRoom: (roomId: string) => Promise<void>;
-  getAllVotingRooms: (userId: string) => Promise<Record<string, Room>>;
+  getAllVotingRooms: (userId: string) => Promise<Record<string, VotingRoom>>;
   subscribeToRoomUpdates: (
     roomId: string,
-    callback: (room: Room | null) => void,
+    callback: (room: VotingRoom | null) => void,
   ) => void;
   unsubscribeFromRoomUpdates: (roomId: string) => void;
 }
@@ -32,7 +32,7 @@ const VotingRoomContext = createContext<VotingRoomContext | undefined>(
 
 export const DataVotingProvider = ({ children }: { children: ReactNode }) => {
   const getAllVotingRooms = async (userId: string) => {
-    const dataRef = ref(database, 'rooms');
+    const dataRef = ref(database, 'rooms/voting');
     const roomsQuery = query(
       dataRef,
       orderByChild('createdBy'),
@@ -41,26 +41,28 @@ export const DataVotingProvider = ({ children }: { children: ReactNode }) => {
 
     try {
       const snapshot = await get(roomsQuery);
-      return snapshot.exists() ? (snapshot.val() as Record<string, Room>) : {};
+      return snapshot.exists()
+        ? (snapshot.val() as Record<string, VotingRoom>)
+        : {};
     } catch (error) {
       console.error(error);
       throw error;
     }
   };
 
-  const getVotingRoom = async (roomId: string): Promise<Room | null> => {
+  const getVotingRoom = async (roomId: string): Promise<VotingRoom | null> => {
     const dataRef = ref(database, `rooms/${roomId}`);
     try {
       const snapshot = await get(dataRef);
-      return snapshot.exists() ? (snapshot.val() as Room) : null;
+      return snapshot.exists() ? (snapshot.val() as VotingRoom) : null;
     } catch (error) {
       console.error(error);
       throw error;
     }
   };
 
-  const setVotingRoom = async (roomId: string, value: Room) => {
-    const dataRef = ref(database, `rooms/${roomId}`);
+  const setVotingRoom = async (roomId: string, value: VotingRoom) => {
+    const dataRef = ref(database, `rooms/voting/${roomId}`);
     try {
       await set(dataRef, value);
     } catch (error) {
@@ -81,11 +83,11 @@ export const DataVotingProvider = ({ children }: { children: ReactNode }) => {
 
   const subscribeToRoomUpdates = (
     roomId: string,
-    callback: (room: Room | null) => void,
+    callback: (room: VotingRoom | null) => void,
   ) => {
     const dataRef = ref(database, `rooms/${roomId}`);
     onValue(dataRef, (snapshot) => {
-      callback(snapshot.exists() ? (snapshot.val() as Room) : null);
+      callback(snapshot.exists() ? (snapshot.val() as VotingRoom) : null);
     });
   };
 

@@ -6,13 +6,13 @@ import { VoterGuest } from '@/utils/guests';
 import Image from 'next/image';
 import votingBanner from '../../public/images/voting-banner.png';
 import { useVotingRoomContext } from '@/contexts/VotingRoomContext';
-import { Room, roomSchema } from '@/utils/rooms';
+import { VotingRoom, votingRoomSchema } from '@/utils/rooms';
 import Confetti from 'react-confetti-boom';
 import Guest from './Guest';
 
 interface VotingPageProps {
   guestName: string;
-  room: Room;
+  room: VotingRoom;
 }
 
 export default function VotingPage({ guestName, room }: VotingPageProps) {
@@ -79,7 +79,7 @@ export default function VotingPage({ guestName, room }: VotingPageProps) {
   const handleBookSelected = async (id: number) => {
     const updatedBooks = getUpdatedBooks(id, books);
     const updatedGuests = getUpdatedGuests(updatedBooks);
-    const updatedData = roomSchema.parse({
+    const updatedData = votingRoomSchema.parse({
       ...room,
       books: updatedBooks,
       guests: updatedGuests,

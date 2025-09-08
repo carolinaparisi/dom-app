@@ -3,24 +3,24 @@
 import { createContext, useContext, ReactNode } from 'react';
 import {
   ref,
-  //get,
+  get,
   set,
-  //query,
-  //orderByChild,
-  //equalTo,
+  query,
+  orderByChild,
+  equalTo,
   //onValue,
   //off,
 } from 'firebase/database';
 import { database } from '../services/firebase';
-import { Indication } from '@/utils/indications';
+import { IndicationRoom } from '@/utils/indications';
 
 interface IndicationRoomContext {
   //getIndicationRoom: (roomId: string) => Promise<Indication | null>;
-  setIndicationRoom: (roomId: string, value: Indication) => Promise<void>;
+  setIndicationRoom: (roomId: string, value: IndicationRoom) => Promise<void>;
   //deleteIndicationRoom: (roomId: string) => Promise<void>;
-  /*   getAllIndicationRooms: (
+  getAllIndicationRooms: (
     userId: string,
-  ) => Promise<Record<string, Indication>>; */
+  ) => Promise<Record<string, IndicationRoom>>;
   /*   subscribeToIndicationRoomUpdates: (
     roomId: string,
     callback: (room: Indication | null) => void,
@@ -37,8 +37,8 @@ export const DataIndicationProvider = ({
 }: {
   children: ReactNode;
 }) => {
-  /*   const getAllIndicationRooms = async (userId: string) => {
-    const dataRef = ref(database, 'rooms');
+  const getAllIndicationRooms = async (userId: string) => {
+    const dataRef = ref(database, 'rooms/indication');
     const roomsQuery = query(
       dataRef,
       orderByChild('createdBy'),
@@ -48,13 +48,13 @@ export const DataIndicationProvider = ({
     try {
       const snapshot = await get(roomsQuery);
       return snapshot.exists()
-        ? (snapshot.val() as Record<string, Indication>)
+        ? (snapshot.val() as Record<string, IndicationRoom>)
         : {};
     } catch (error) {
       console.error(error);
       throw error;
     }
-  }; */
+  };
 
   /*   const getIndicationRoom = async (
     roomId: string,
@@ -69,8 +69,8 @@ export const DataIndicationProvider = ({
     }
   }; */
 
-  const setIndicationRoom = async (roomId: string, value: Indication) => {
-    const dataRef = ref(database, `rooms/${roomId}`);
+  const setIndicationRoom = async (roomId: string, value: IndicationRoom) => {
+    const dataRef = ref(database, `rooms/indication/${roomId}`);
     try {
       await set(dataRef, value);
     } catch (error) {
@@ -110,7 +110,7 @@ export const DataIndicationProvider = ({
         //getIndicationRoom,
         setIndicationRoom,
         //deleteIndicationRoom,
-        //getAllIndicationRooms,
+        getAllIndicationRooms,
         //subscribeToIndicationRoomUpdates,
         //unsubscribeFromIndicationRoomUpdates,
       }}

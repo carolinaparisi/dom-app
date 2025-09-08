@@ -10,7 +10,7 @@ import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Room, roomSchema } from '@/utils/rooms';
+import { VotingRoom, votingRoomSchema } from '@/utils/rooms';
 import { useCookies } from 'react-cookie';
 
 const VotingPage = dynamic(() => import('../../../../components/VotingPage'), {
@@ -29,11 +29,11 @@ export default function WelcomeRoom({ params }: { params: { id: string } }) {
     useVotingRoomContext();
   const router = useRouter();
   const [cookies, setCookie, removeCookie] = useCookies([cookiesKey]);
-  const [currentRoom, setCurrentRoom] = useState<Room | null>(null);
+  const [currentRoom, setCurrentRoom] = useState<VotingRoom | null>(null);
   const [isGuestRegistered, setIsGuestRegistered] = useState(false);
 
   useEffect(() => {
-    const handleRoomUpdate = (room: Room | null) => {
+    const handleRoomUpdate = (room: VotingRoom | null) => {
       setCurrentRoom(room);
       if (room === null) {
         router.push('/pageNotFound');
@@ -111,7 +111,7 @@ export default function WelcomeRoom({ params }: { params: { id: string } }) {
         isReady: false,
       };
 
-      const roomData = roomSchema.parse({
+      const roomData = votingRoomSchema.parse({
         ...currentRoom,
         books: updatedBooks,
         winningBooks: currentRoom?.winningBooks || [],

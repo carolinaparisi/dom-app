@@ -3,13 +3,14 @@ import Image from 'next/image';
 import roomBanner from '../../public/images/room-image1.png';
 import { useRouter } from 'next/navigation';
 
-interface RoomCardProps {
+export interface RoomCardProps {
   name: string;
   id: string;
-  books: Book[];
-  winner: Book[] | null;
+  books?: Book[];
+  winner?: Book[] | null;
   createdAt: string | Date;
   testId?: string;
+  isVotingRoom?: boolean;
 }
 
 export default function RoomCard({
@@ -18,8 +19,10 @@ export default function RoomCard({
   books,
   winner,
   createdAt,
+  isVotingRoom,
   testId,
 }: RoomCardProps) {
+  console.log('books in RoomCard:', books);
   const updateCreatedAt = () => {
     const createdDate = String(createdAt).split('T')[0];
     const [year, month, day] = createdDate.split('-');
@@ -36,7 +39,11 @@ export default function RoomCard({
     <button data-testid={testId} onClick={() => handleRoomCard()}>
       <div
         data-testid="room-card"
-        className="align-center flex w-full gap-3 rounded-2xl bg-primary p-3 text-white"
+        className={
+          isVotingRoom
+            ? `align-center flex w-full gap-3 rounded-2xl bg-primary p-3 text-white`
+            : `align-center bg-burgundy flex w-full gap-3 rounded-2xl p-3 text-white`
+        }
       >
         <Image
           className="rounded-full object-cover"
@@ -52,7 +59,7 @@ export default function RoomCard({
         >
           <div className="font-silk text-xl">{name}</div>
           <div className="line-clamp-1">
-            {`Books: ` + books.map((book) => book.title).join(', ')}
+            {`Books: ` + books?.map((book) => book.title).join(', ')}
           </div>
           <div className="line-clamp-1">{`Winner: ${
             winner

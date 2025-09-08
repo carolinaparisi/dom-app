@@ -10,7 +10,7 @@ import { useRouter } from 'next/navigation';
 import { useIndicationRoomContext } from '@/contexts/IndicationRoomContext';
 import { useAuthContext } from '@/contexts/AuthContext';
 import { useEffect } from 'react';
-import { indicationSchema } from '@/utils/indications';
+import { indicationRoomSchema } from '@/utils/indications';
 import { v4 as uuidv4 } from 'uuid';
 import Loading from '@/components/Loading';
 
@@ -44,7 +44,7 @@ export default function CreateIndicationRoom() {
   ) => {
     try {
       const roomId = uuidv4();
-      const indicationRoomData = indicationSchema.parse({
+      const indicationRoomData = indicationRoomSchema.parse({
         name: data.name,
         id: roomId,
         maxSuggestions: data.maxSuggestions,
@@ -53,6 +53,7 @@ export default function CreateIndicationRoom() {
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
         isCompleted: false,
+        isVotingRoom: false,
       });
 
       await setIndicationRoom(roomId, indicationRoomData);

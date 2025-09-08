@@ -9,7 +9,7 @@ import { z } from 'zod';
 import { Trash } from 'lucide-react';
 import { useVotingRoomContext } from '@/contexts/VotingRoomContext';
 import { useEffect, useState } from 'react';
-import { Room, roomSchema } from '@/utils/rooms';
+import { VotingRoom, votingRoomSchema } from '@/utils/rooms';
 import { useRouter } from 'next/navigation';
 import { Toaster, toast } from 'sonner';
 import * as AlertDialog from '@radix-ui/react-alert-dialog';
@@ -61,14 +61,14 @@ export default function EditRoom({ params }: { params: { id: string } }) {
     subscribeToRoomUpdates,
     unsubscribeFromRoomUpdates,
   } = useVotingRoomContext();
-  const [initialRoom, setInitialRoom] = useState<Room | null>(null);
+  const [initialRoom, setInitialRoom] = useState<VotingRoom | null>(null);
   const baseVotingUrl =
     process.env.NODE_ENV === 'production'
       ? process.env.NEXT_PUBLIC_BASE_URL
       : 'http://localhost:3000';
 
   useEffect(() => {
-    const handleRoomUpdate = (room: Room | null) => {
+    const handleRoomUpdate = (room: VotingRoom | null) => {
       setInitialRoom(room);
     };
     subscribeToRoomUpdates(params.id, handleRoomUpdate);
@@ -124,7 +124,7 @@ export default function EditRoom({ params }: { params: { id: string } }) {
       };
     });
 
-    const updatedData = roomSchema.parse({
+    const updatedData = votingRoomSchema.parse({
       name: data.name,
       id: params.id,
       maxBooks: data.maxBooks,
@@ -164,7 +164,7 @@ export default function EditRoom({ params }: { params: { id: string } }) {
       (currentGuest) => currentGuest.id !== id,
     );
 
-    const updatedData = roomSchema.parse({
+    const updatedData = votingRoomSchema.parse({
       ...initialRoom,
       books: updatedBooks,
       guests: updatedGuests,
@@ -194,7 +194,7 @@ export default function EditRoom({ params }: { params: { id: string } }) {
   const handleRevealBook = async () => {
     const maxVotesBooks = getBooksWithMaxVotes();
 
-    const updatedData = roomSchema.parse({
+    const updatedData = votingRoomSchema.parse({
       ...initialRoom,
       winningBooks: maxVotesBooks,
     });

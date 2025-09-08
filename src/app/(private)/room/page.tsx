@@ -11,7 +11,7 @@ import { useRouter } from 'next/navigation';
 import { useVotingRoomContext } from '@/contexts/VotingRoomContext';
 import { useAuthContext } from '@/contexts/AuthContext';
 import { useEffect } from 'react';
-import { roomSchema } from '@/utils/rooms';
+import { votingRoomSchema } from '@/utils/rooms';
 import { v4 as uuidv4 } from 'uuid';
 import Loading from '@/components/Loading';
 
@@ -83,7 +83,7 @@ export default function CreateVotingRoom() {
         votes: [],
       }));
 
-      const roomData = roomSchema.parse({
+      const roomData = votingRoomSchema.parse({
         name: data.name,
         id: roomId,
         maxBooks: data.maxBooks,
@@ -93,6 +93,7 @@ export default function CreateVotingRoom() {
         createdBy: user?.uid || '',
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
+        isVotingRoom: true,
       });
 
       await setVotingRoom(roomId, roomData);

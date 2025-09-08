@@ -5,7 +5,7 @@ import Image from 'next/image';
 import Button from '@/components/Button';
 import { useVotingRoomContext } from '@/contexts/VotingRoomContext';
 import { useEffect, useState } from 'react';
-import { Room } from '@/utils/rooms';
+import { VotingRoom } from '@/utils/rooms';
 import { Toaster, toast } from 'sonner';
 //import * as AlertDialog from '@radix-ui/react-alert-dialog';
 import WinningModal from '@/components/WinningModal';
@@ -18,14 +18,14 @@ export default function EditIndicationRoom({
   const [isOpenWinningAlert, setIsOpenWinningAlert] = useState(false);
   const { subscribeToRoomUpdates, unsubscribeFromRoomUpdates } =
     useVotingRoomContext();
-  const [initialRoom, setInitialRoom] = useState<Room | null>(null);
+  const [initialRoom, setInitialRoom] = useState<VotingRoom | null>(null);
   const baseUrl =
     process.env.NODE_ENV === 'production'
       ? process.env.NEXT_PUBLIC_BASE_URL
       : 'http://localhost:3000';
 
   useEffect(() => {
-    const handleRoomUpdate = (room: Room | null) => {
+    const handleRoomUpdate = (room: VotingRoom | null) => {
       setInitialRoom(room);
     };
     subscribeToRoomUpdates(params.id, handleRoomUpdate);
