@@ -118,25 +118,22 @@ export default function SuggestionRoom({ params }: { params: { id: string } }) {
             {/* Header */}
             <div className="flex flex-col gap-1">
               <div className="font-silk text-3xl leading-none text-primary">
-                <div>New Indication Room</div>
+                <div>Book Indication</div>
               </div>
               <div className="text-lg">
-                <div>Complete de fields below to create a new room.</div>
+                <div>Dear guest, make your wonderful suggestion!</div>
               </div>
             </div>
             <div className="flex flex-col">
               <form className="flex flex-col gap-4">
                 <div className="flex flex-col gap-4">
                   <div className="flex flex-col gap-2">
-                    <div>
-                      For which book club would you like to create this new
-                      indication room?
-                    </div>
+                    <div>Guest name:</div>
 
                     <div>
                       <input
                         type="text"
-                        placeholder="e.g. Café com Letras"
+                        placeholder="e.g. Carolina Parisi"
                         className={`${errors.name ? 'border-2 border-red focus:border-red' : 'border-gray'} block w-full rounded-2xl bg-transparent px-3 py-4 outline-none placeholder:text-gray focus:outline-none focus:ring-0`}
                         {...register('name')}
                       />
@@ -147,15 +144,13 @@ export default function SuggestionRoom({ params }: { params: { id: string } }) {
                   </div>
 
                   <div className="flex flex-col gap-1">
-                    <div>
-                      Specify the maximum number of suggestions that this room
-                      is allowed to have:
-                    </div>
+                    <div>Book name:</div>
+                    <div>Book&apos;s title, author&apos;s name</div>
 
                     <div>
                       <input
                         type="number"
-                        placeholder="e.g. 20"
+                        placeholder="e.g. Jane Eyre, Charlotte Brontë"
                         className={`${errors.maxSuggestions ? 'border-2 border-red focus:border-red' : 'border-gray'} block w-full rounded-2xl bg-transparent px-3 py-4 outline-none placeholder:text-gray focus:outline-none focus:ring-0`}
                         {...register('maxSuggestions')}
                       />
@@ -172,7 +167,7 @@ export default function SuggestionRoom({ params }: { params: { id: string } }) {
                   variant="secondary"
                   onClick={handleSubmit(handleCreateIndicationRoom)}
                 >
-                  CREATE ROOM
+                  SUBMIT INDICATION
                 </Button>
               </form>
             </div>
