@@ -35,7 +35,7 @@ export default function EditIndicationRoom({
   }, [params.id, subscribeToRoomUpdates, unsubscribeFromRoomUpdates]);
 
   const handleCopyUrl = () => {
-    const url = `${baseUrl}/indication/${params.id}`;
+    const url = `${baseUrl}/suggestion/${params.id}`;
 
     navigator.clipboard.writeText(url).then(() => {
       toast.success('URL copied to clipboard!');

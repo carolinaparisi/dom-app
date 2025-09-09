@@ -8,24 +8,24 @@ import {
   query,
   orderByChild,
   equalTo,
-  //onValue,
-  //off,
+  onValue,
+  off,
 } from 'firebase/database';
 import { database } from '../services/firebase';
 import { IndicationRoom } from '@/utils/indications';
 
 interface IndicationRoomContext {
-  //getIndicationRoom: (roomId: string) => Promise<Indication | null>;
+  getIndicationRoom: (roomId: string) => Promise<IndicationRoom | null>;
   setIndicationRoom: (roomId: string, value: IndicationRoom) => Promise<void>;
-  //deleteIndicationRoom: (roomId: string) => Promise<void>;
+  deleteIndicationRoom: (roomId: string) => Promise<void>;
   getAllIndicationRooms: (
     userId: string,
   ) => Promise<Record<string, IndicationRoom>>;
-  /*   subscribeToIndicationRoomUpdates: (
+  subscribeToIndicationRoomUpdates: (
     roomId: string,
-    callback: (room: Indication | null) => void,
-  ) => void; */
-  //unsubscribeFromIndicationRoomUpdates: (roomId: string) => void;
+    callback: (room: IndicationRoom | null) => void,
+  ) => void;
+  unsubscribeFromIndicationRoomUpdates: (roomId: string) => void;
 }
 
 const IndicationRoomContext = createContext<IndicationRoomContext | undefined>(
@@ -56,18 +56,18 @@ export const DataIndicationProvider = ({
     }
   };
 
-  /*   const getIndicationRoom = async (
+  const getIndicationRoom = async (
     roomId: string,
-  ): Promise<Indication | null> => {
-    const dataRef = ref(database, `rooms/${roomId}`);
+  ): Promise<IndicationRoom | null> => {
+    const dataRef = ref(database, `rooms/indication/${roomId}`);
     try {
       const snapshot = await get(dataRef);
-      return snapshot.exists() ? (snapshot.val() as Indication) : null;
+      return snapshot.exists() ? (snapshot.val() as IndicationRoom) : null;
     } catch (error) {
       console.error(error);
       throw error;
     }
-  }; */
+  };
 
   const setIndicationRoom = async (roomId: string, value: IndicationRoom) => {
     const dataRef = ref(database, `rooms/indication/${roomId}`);
@@ -79,40 +79,40 @@ export const DataIndicationProvider = ({
     }
   };
 
-  /*   const deleteIndicationRoom = async (roomId: string) => {
-    const dataRef = ref(database, `rooms/${roomId}`);
+  const deleteIndicationRoom = async (roomId: string) => {
+    const dataRef = ref(database, `rooms/indication/${roomId}`);
     try {
       await set(dataRef, null);
     } catch (error) {
       console.error('Error deleting data:', error);
       throw error;
     }
-  }; */
+  };
 
-  /*   const subscribeToIndicationRoomUpdates = (
+  const subscribeToIndicationRoomUpdates = (
     roomId: string,
-    callback: (room: Indication | null) => void,
+    callback: (room: IndicationRoom | null) => void,
   ) => {
-    const dataRef = ref(database, `rooms/${roomId}`);
+    const dataRef = ref(database, `rooms/indication/${roomId}`);
     onValue(dataRef, (snapshot) => {
-      callback(snapshot.exists() ? (snapshot.val() as Indication) : null);
+      callback(snapshot.exists() ? (snapshot.val() as IndicationRoom) : null);
     });
-  }; */
+  };
 
-  /*   const unsubscribeFromIndicationRoomUpdates = (roomId: string) => {
-    const dataRef = ref(database, `rooms/${roomId}`);
+  const unsubscribeFromIndicationRoomUpdates = (roomId: string) => {
+    const dataRef = ref(database, `rooms/indication/${roomId}`);
     off(dataRef);
-  }; */
+  };
 
   return (
     <IndicationRoomContext.Provider
       value={{
-        //getIndicationRoom,
+        getIndicationRoom,
         setIndicationRoom,
-        //deleteIndicationRoom,
+        deleteIndicationRoom,
         getAllIndicationRooms,
-        //subscribeToIndicationRoomUpdates,
-        //unsubscribeFromIndicationRoomUpdates,
+        subscribeToIndicationRoomUpdates,
+        unsubscribeFromIndicationRoomUpdates,
       }}
     >
       {children}
