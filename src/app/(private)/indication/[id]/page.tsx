@@ -64,7 +64,7 @@ export default function EditIndicationRoom({
           <div className="line-clamp-1 break-all text-center font-silk text-4xl">
             Indications
           </div>
-          <div className="text-base">administer your room</div>
+          <div className="text-base">administer the books</div>
         </div>
       </div>
 
@@ -75,12 +75,12 @@ export default function EditIndicationRoom({
             <div className="flex flex-col gap-1">
               <div className="flex flex-col gap-6 text-lg">
                 <div>
-                  Amend room&apos;s details and copy the sharing link below:
+                  Complete the fields bellow to create a new indication room:
                 </div>
                 <div className="flex">
                   <input
                     disabled
-                    value={`${baseUrl}/indication/${params.id}`}
+                    value={`${baseUrl}/suggestion/${params.id}`}
                     className="w-3/4 border-primary bg-blue_super_light py-4"
                     type="text"
                   />
@@ -97,7 +97,7 @@ export default function EditIndicationRoom({
             <div className="flex flex-col">
               <div className="flex flex-col gap-4">
                 <div className="flex flex-col gap-4">
-                  <div className="flex flex-col gap-2">
+                  <div className="flex flex-col gap-2 text-lg">
                     <div>Follow the books already added:</div>
                   </div>
                 </div>

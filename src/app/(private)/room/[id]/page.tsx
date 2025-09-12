@@ -134,6 +134,7 @@ export default function EditRoom({ params }: { params: { id: string } }) {
       createdBy: initialRoom?.createdBy,
       createdAt: initialRoom?.createdAt,
       updatedAt: new Date().toISOString(),
+      isVotingRoom: initialRoom?.isVotingRoom,
     });
 
     await setVotingRoom(params.id, updatedData);

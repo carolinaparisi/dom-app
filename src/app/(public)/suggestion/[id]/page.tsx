@@ -46,9 +46,8 @@ export default function SuggestionRoom({ params }: { params: { id: string } }) {
     },
   });
 
-  const handleCreateIndicationRoom = async (
-    data: NewIndicationRoomFormProps,
-  ) => {
+  //TODO: edit indication room and add suggestion inside the suggestion's array
+  const handleIndicateBook = async (data: NewIndicationRoomFormProps) => {
     try {
       const roomId = uuidv4();
       const indicationRoomData = indicationRoomSchema.parse({
@@ -165,7 +164,7 @@ export default function SuggestionRoom({ params }: { params: { id: string } }) {
 
                 <Button
                   variant="secondary"
-                  onClick={handleSubmit(handleCreateIndicationRoom)}
+                  onClick={handleSubmit(handleIndicateBook)}
                 >
                   SUBMIT INDICATION
                 </Button>
