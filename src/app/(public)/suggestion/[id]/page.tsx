@@ -27,6 +27,7 @@ type NewSuggestionRoomFormProps = z.infer<typeof newSuggestionRoomFormSchema>;
 
 export default function SuggestionRoom({ params }: { params: { id: string } }) {
   const [currentRoom, setCurrentRoom] = useState<IndicationRoom | null>(null);
+  const [guestHasIndicated, setGuestHasIndicated] = useState(false);
 
   const router = useRouter();
   const {
@@ -52,6 +53,15 @@ export default function SuggestionRoom({ params }: { params: { id: string } }) {
       return;
     }
 
+    const guestExist = currentRoom.suggestions
+      ?.map((suggestion) => suggestion.guestName.toLowerCase())
+      .includes(data.guestName.toLowerCase());
+
+    if (guestExist) {
+      setGuestHasIndicated(guestExist);
+      return;
+    }
+
     const newSuggestion: Suggestion = {
       id: uuidv4(),
       guestName: data.guestName,
@@ -71,7 +81,7 @@ export default function SuggestionRoom({ params }: { params: { id: string } }) {
       };
 
       await setIndicationRoom(currentRoom.id, indicationRoomData);
-      //TODO: finish this page = verify name repetition, message to say indication has been done already, reset form, hide form and say indication room has already been closed.
+      //TODO: finish this page = verify name repetition OK, message to say indication has been done already, reset form, hide form and say indication room has already been closed.
       console.log('setIndicationRoom');
 
       //router.push(`/indication/${roomId}`);
@@ -144,12 +154,19 @@ export default function SuggestionRoom({ params }: { params: { id: string } }) {
                         type="text"
                         placeholder="e.g. Carolina Parisi"
                         className={`${errors.guestName ? 'border-2 border-red focus:border-red' : 'border-gray'} block w-full rounded-2xl bg-transparent px-3 py-4 outline-none placeholder:text-gray focus:outline-none focus:ring-0`}
-                        {...register('guestName')}
+                        {...register('guestName', {
+                          onChange: () => setGuestHasIndicated(false),
+                        })}
                       />
                       {errors.guestName && (
                         <div className="mt-1">{errors.guestName.message}</div>
                       )}
                     </div>
+                    {guestHasIndicated ? (
+                      <div className="font-semibold">
+                        You have indicated already!
+                      </div>
+                    ) : null}
                   </div>
 
                   <div className="flex flex-col gap-1">
