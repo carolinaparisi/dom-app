@@ -10,19 +10,20 @@ import { useRouter } from 'next/navigation';
 import { useIndicationRoomContext } from '@/contexts/IndicationRoomContext';
 import { useAuthContext } from '@/contexts/AuthContext';
 import { useEffect, useState } from 'react';
-import { indicationRoomSchema } from '@/utils/indications';
 import { v4 as uuidv4 } from 'uuid';
 import Loading from '@/components/Loading';
 import { IndicationRoom } from '@/utils/indications';
+import { Suggestion } from '@/utils/suggestions';
 
-const newIndicationRoomFormSchema = z.object({
-  name: z.string().min(3, { message: 'Must be 3 or more characters long' }),
-  maxSuggestions: z.coerce
-    .number()
-    .max(30, { message: 'Must be 30 or less' })
-    .positive(),
+const newSuggestionRoomFormSchema = z.object({
+  guestName: z
+    .string()
+    .min(3, { message: 'Must be 3 or more characters long' }),
+  bookSuggestion: z
+    .string()
+    .min(3, { message: 'Must be 3 or more characters long' }),
 });
-type NewIndicationRoomFormProps = z.infer<typeof newIndicationRoomFormSchema>;
+type NewSuggestionRoomFormProps = z.infer<typeof newSuggestionRoomFormSchema>;
 
 export default function SuggestionRoom({ params }: { params: { id: string } }) {
   const [currentRoom, setCurrentRoom] = useState<IndicationRoom | null>(null);
@@ -39,32 +40,41 @@ export default function SuggestionRoom({ params }: { params: { id: string } }) {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<NewIndicationRoomFormProps>({
-    resolver: zodResolver(newIndicationRoomFormSchema),
+  } = useForm<NewSuggestionRoomFormProps>({
+    resolver: zodResolver(newSuggestionRoomFormSchema),
     defaultValues: {
-      name: '',
+      guestName: '',
     },
   });
 
-  //TODO: edit indication room and add suggestion inside the suggestion's array
-  const handleIndicateBook = async (data: NewIndicationRoomFormProps) => {
+  const handleIndicateBook = async (data: NewSuggestionRoomFormProps) => {
+    if (!currentRoom) {
+      return;
+    }
+
+    const newSuggestion: Suggestion = {
+      id: uuidv4(),
+      guestName: data.guestName,
+      book: {
+        id: currentRoom.suggestions?.length + 1 || 1,
+        title: data.bookSuggestion,
+        votes: [],
+      },
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+
     try {
-      const roomId = uuidv4();
-      const indicationRoomData = indicationRoomSchema.parse({
-        name: data.name,
-        id: roomId,
-        maxSuggestions: data.maxSuggestions,
-        suggestion: [],
-        createdBy: user?.uid || '',
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-        isCompleted: false,
-        isVotingRoom: false,
-      });
+      const indicationRoomData: IndicationRoom = {
+        ...(currentRoom as IndicationRoom),
+        suggestions: [...(currentRoom.suggestions ?? []), newSuggestion],
+      };
 
-      await setIndicationRoom(roomId, indicationRoomData);
+      await setIndicationRoom(currentRoom.id, indicationRoomData);
+      //TODO: finish this page = verify name repetition, message to say indication has been done already, reset form, hide form and say indication room has already been closed.
+      console.log('setIndicationRoom');
 
-      router.push(`/indication/${roomId}`);
+      //router.push(`/indication/${roomId}`);
     } catch (error) {
       console.error('Error creating room:', error);
     }
@@ -133,11 +143,11 @@ export default function SuggestionRoom({ params }: { params: { id: string } }) {
                       <input
                         type="text"
                         placeholder="e.g. Carolina Parisi"
-                        className={`${errors.name ? 'border-2 border-red focus:border-red' : 'border-gray'} block w-full rounded-2xl bg-transparent px-3 py-4 outline-none placeholder:text-gray focus:outline-none focus:ring-0`}
-                        {...register('name')}
+                        className={`${errors.guestName ? 'border-2 border-red focus:border-red' : 'border-gray'} block w-full rounded-2xl bg-transparent px-3 py-4 outline-none placeholder:text-gray focus:outline-none focus:ring-0`}
+                        {...register('guestName')}
                       />
-                      {errors.name && (
-                        <div className="mt-1">{errors.name.message}</div>
+                      {errors.guestName && (
+                        <div className="mt-1">{errors.guestName.message}</div>
                       )}
                     </div>
                   </div>
@@ -148,14 +158,14 @@ export default function SuggestionRoom({ params }: { params: { id: string } }) {
 
                     <div>
                       <input
-                        type="number"
+                        type="text"
                         placeholder="e.g. Jane Eyre, Charlotte Brontë"
-                        className={`${errors.maxSuggestions ? 'border-2 border-red focus:border-red' : 'border-gray'} block w-full rounded-2xl bg-transparent px-3 py-4 outline-none placeholder:text-gray focus:outline-none focus:ring-0`}
-                        {...register('maxSuggestions')}
+                        className={`${errors.bookSuggestion ? 'border-2 border-red focus:border-red' : 'border-gray'} block w-full rounded-2xl bg-transparent px-3 py-4 outline-none placeholder:text-gray focus:outline-none focus:ring-0`}
+                        {...register('bookSuggestion')}
                       />
-                      {errors.maxSuggestions && (
+                      {errors.bookSuggestion && (
                         <div className="mt-1">
-                          {errors.maxSuggestions.message}
+                          {errors.bookSuggestion.message}
                         </div>
                       )}
                     </div>

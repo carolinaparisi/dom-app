@@ -47,7 +47,7 @@ export default function Lobby() {
           allRooms.push({
             id: room.id,
             name: room.name,
-            books: room.suggestion?.map((s) => s.book) || [],
+            books: room.suggestions?.map((s) => s.book) || [],
             winner: null,
             createdAt: room.createdAt,
             isVotingRoom: room.isVotingRoom,

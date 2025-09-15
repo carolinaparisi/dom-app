@@ -48,7 +48,7 @@ export default function CreateIndicationRoom() {
         name: data.name,
         id: roomId,
         maxSuggestions: data.maxSuggestions,
-        suggestion: [],
+        suggestions: [],
         createdBy: user?.uid || '',
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),

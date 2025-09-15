@@ -5,7 +5,7 @@ export const indicationRoomSchema = z.object({
   id: z.string(),
   name: z.string(),
   maxSuggestions: z.number().max(20),
-  suggestion: z.array(suggestionSchema),
+  suggestions: z.array(suggestionSchema),
   createdAt: z.union([z.string(), z.date()]),
   updatedAt: z.union([z.string(), z.date()]),
   createdBy: z.string(),
