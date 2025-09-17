@@ -26,7 +26,7 @@ const config: Config = {
       gray_soft: '#ECE7DE',
       red: '#bb191b',
       blue_super_light: '#D9D9D9',
-      burgundy: '#3D0C0D',
+      burgundy: '#4e1f26',
       green: '#008000',
     },
   },

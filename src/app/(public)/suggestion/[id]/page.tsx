@@ -30,8 +30,10 @@ export default function SuggestionRoom({ params }: { params: { id: string } }) {
   const [guestHasIndicated, setGuestHasIndicated] = useState(false);
   const [suggestionSubmitted, setSuggestionSubmitted] = useState(false);
 
-  const isFormDisabled =
-    currentRoom?.maxSuggestions === currentRoom?.suggestions?.length;
+  const isFormEnabled =
+    currentRoom?.maxSuggestions !== currentRoom?.suggestions?.length;
+
+  console.log(isFormEnabled, suggestionSubmitted);
 
   const router = useRouter();
   const {
@@ -54,7 +56,6 @@ export default function SuggestionRoom({ params }: { params: { id: string } }) {
   });
 
   const handleIndicateBook = async (data: NewSuggestionRoomFormProps) => {
-    console.log('submit button clicked!');
     if (!currentRoom) {
       return;
     }
@@ -167,7 +168,7 @@ export default function SuggestionRoom({ params }: { params: { id: string } }) {
                         className={`${errors.guestName ? 'border-2 border-red focus:border-red' : 'border-gray'} block w-full rounded-2xl bg-transparent px-3 py-4 outline-none placeholder:text-gray focus:outline-none focus:ring-0`}
                         {...register('guestName', {
                           onChange: () => setGuestHasIndicated(false),
-                          disabled: isFormDisabled || suggestionSubmitted,
+                          disabled: !isFormEnabled || suggestionSubmitted,
                         })}
                       />
                       {errors.guestName && (
@@ -191,7 +192,7 @@ export default function SuggestionRoom({ params }: { params: { id: string } }) {
                         placeholder="e.g. Jane Eyre, Charlotte Brontë"
                         className={`${errors.bookSuggestion ? 'border-2 border-red focus:border-red' : 'border-gray'} block w-full rounded-2xl bg-transparent px-3 py-4 outline-none placeholder:text-gray focus:outline-none focus:ring-0`}
                         {...register('bookSuggestion', {
-                          disabled: isFormDisabled || suggestionSubmitted,
+                          disabled: !isFormEnabled || suggestionSubmitted,
                         })}
                       />
                       {errors.bookSuggestion && (
@@ -204,21 +205,23 @@ export default function SuggestionRoom({ params }: { params: { id: string } }) {
                 </div>
 
                 <Button
-                  disabled={isFormDisabled || suggestionSubmitted}
-                  variant={
-                    isFormDisabled || suggestionSubmitted
-                      ? 'tertiary'
-                      : 'secondary'
-                  }
+                  isAvailable={isFormEnabled && !suggestionSubmitted}
+                  variant={'secondary'}
                   onClick={handleSubmit(handleIndicateBook)}
                 >
                   SUBMIT INDICATION
                 </Button>
                 {suggestionSubmitted ? (
-                  <div className="text-green text-center font-semibold">
-                    We are most delighted by your participation!
-                  </div>
-                ) : isFormDisabled ? (
+                  <>
+                    <div className="text-green text-center text-lg font-semibold">
+                      We are delighted by your participation!
+                    </div>
+                    <div className="text-center text-black">
+                      Contact the hosts directly if you want to change your
+                      indication.
+                    </div>
+                  </>
+                ) : !isFormEnabled ? (
                   <div className="text-center font-semibold text-primary">
                     Unfortunately, we are already full of indications.. Sorry!
                   </div>
