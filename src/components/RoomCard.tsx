@@ -45,7 +45,7 @@ export default function RoomCard({
         className={
           isVotingRoom
             ? `align-center flex w-full gap-3 rounded-2xl bg-primary p-3 text-white`
-            : `align-center bg-burgundy flex w-full gap-3 rounded-2xl p-3 text-white`
+            : `align-center flex w-full gap-3 rounded-2xl bg-burgundy p-3 text-white`
         }
       >
         <Image

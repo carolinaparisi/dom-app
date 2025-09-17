@@ -1,6 +1,6 @@
 'use client';
 
-import lobbyBanner from '../../../../../public/images/lobby-background.png';
+import votingRoom from '../../../../../public/images/votingRoom.png';
 import Image from 'next/image';
 import Button from '@/components/Button';
 import { useFieldArray, useForm } from 'react-hook-form';
@@ -257,7 +257,7 @@ export default function EditRoom({ params }: { params: { id: string } }) {
       <div className="relative">
         <Image
           alt=""
-          src={lobbyBanner}
+          src={votingRoom}
           className="w-full"
           quality={100}
           priority

@@ -1,6 +1,6 @@
 'use client';
 
-import lobbyBanner from '../../../../public/images/lobby-background.png';
+import bookPile from '../../../../public/images/bookPile.png';
 import Image from 'next/image';
 import Button from '@/components/Button';
 import { useForm } from 'react-hook-form';
@@ -78,7 +78,7 @@ export default function CreateIndicationRoom() {
       <div className="relative">
         <Image
           alt=""
-          src={lobbyBanner}
+          src={bookPile}
           className="w-full"
           quality={100}
           priority

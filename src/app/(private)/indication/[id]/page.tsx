@@ -1,38 +1,42 @@
 'use client';
 
-import lobbyBanner from '../../../../../public/images/lobby-background.png';
+import bookPile from '../../../../../public/images/bookPile.png';
 import Image from 'next/image';
 import Button from '@/components/Button';
-import { useVotingRoomContext } from '@/contexts/VotingRoomContext';
+import { useIndicationRoomContext } from '@/contexts/IndicationRoomContext';
 import { useEffect, useState } from 'react';
-import { VotingRoom } from '@/utils/rooms';
 import { Toaster, toast } from 'sonner';
-//import * as AlertDialog from '@radix-ui/react-alert-dialog';
-import WinningModal from '@/components/WinningModal';
+import { Trash } from 'lucide-react';
+import { IndicationRoom } from '@/utils/indications';
 
 export default function EditIndicationRoom({
   params,
 }: {
   params: { id: string };
 }) {
-  const [isOpenWinningAlert, setIsOpenWinningAlert] = useState(false);
-  const { subscribeToRoomUpdates, unsubscribeFromRoomUpdates } =
-    useVotingRoomContext();
-  const [initialRoom, setInitialRoom] = useState<VotingRoom | null>(null);
+  const {
+    subscribeToIndicationRoomUpdates,
+    unsubscribeFromIndicationRoomUpdates,
+  } = useIndicationRoomContext();
+  const [initialRoom, setInitialRoom] = useState<IndicationRoom | null>(null);
   const baseUrl =
     process.env.NODE_ENV === 'production'
       ? process.env.NEXT_PUBLIC_BASE_URL
       : 'http://localhost:3000';
 
   useEffect(() => {
-    const handleRoomUpdate = (room: VotingRoom | null) => {
+    const handleRoomUpdate = (room: IndicationRoom | null) => {
       setInitialRoom(room);
     };
-    subscribeToRoomUpdates(params.id, handleRoomUpdate);
+    subscribeToIndicationRoomUpdates(params.id, handleRoomUpdate);
     return () => {
-      unsubscribeFromRoomUpdates(params.id);
+      unsubscribeFromIndicationRoomUpdates(params.id);
     };
-  }, [params.id, subscribeToRoomUpdates, unsubscribeFromRoomUpdates]);
+  }, [
+    params.id,
+    subscribeToIndicationRoomUpdates,
+    unsubscribeFromIndicationRoomUpdates,
+  ]);
 
   const handleCopyUrl = () => {
     const url = `${baseUrl}/suggestion/${params.id}`;
@@ -55,7 +59,7 @@ export default function EditIndicationRoom({
       <div className="relative">
         <Image
           alt=""
-          src={lobbyBanner}
+          src={bookPile}
           className="w-full"
           quality={100}
           priority
@@ -99,16 +103,33 @@ export default function EditIndicationRoom({
                 <div className="flex flex-col gap-4">
                   <div className="flex flex-col gap-2 text-lg">
                     <div>Follow the books already added:</div>
+                    {initialRoom?.suggestions?.map((suggestion) => {
+                      return (
+                        <div key={suggestion.id}>
+                          <div className="flex items-center gap-2">
+                            <div
+                              key={suggestion.id}
+                              className="focus:ring-0` relative block w-full rounded-2xl border-2 border-gray bg-transparent px-3 py-4 pr-12 outline-none placeholder:text-gray focus:outline-none"
+                            >
+                              <div>{suggestion.book.title}</div>
+                              <div className="text-gray">
+                                {suggestion.guestName}
+                              </div>
+                            </div>
+                            <Trash
+                              className="absolute right-10"
+                              onClick={() => {
+                                console.log('trash clicked!');
+                              }}
+                            />
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
 
                 <div className="flex flex-col gap-6">
-                  {isOpenWinningAlert && (
-                    <WinningModal
-                      initialRoom={initialRoom}
-                      setIsOpenWinningAlert={setIsOpenWinningAlert}
-                    />
-                  )}
                   <Button
                     variant="tertiary"
                     onClick={handleCompleteIndications}

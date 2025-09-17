@@ -3,7 +3,7 @@
 import { useAuthContext } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import lobbyBanner from '../../public/images/lobby-background.png';
+import lobby from '../../public/images/lobby.png';
 import Image from 'next/image';
 import Button from '@/components/Button';
 import { useVotingRoomContext } from '@/contexts/VotingRoomContext';
@@ -93,7 +93,7 @@ export default function Lobby() {
       <div className="relative">
         <Image
           alt="main lobby banner"
-          src={lobbyBanner}
+          src={lobby}
           className="w-full"
           quality={100}
           priority

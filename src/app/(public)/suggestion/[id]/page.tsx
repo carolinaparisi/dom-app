@@ -1,6 +1,6 @@
 'use client';
 
-import lobbyBanner from '../../../../../public/images/lobby-background.png';
+import suggestion from '../../../../../public/images/suggestion.png';
 import Image from 'next/image';
 import Button from '@/components/Button';
 import { useForm } from 'react-hook-form';
@@ -28,6 +28,10 @@ type NewSuggestionRoomFormProps = z.infer<typeof newSuggestionRoomFormSchema>;
 export default function SuggestionRoom({ params }: { params: { id: string } }) {
   const [currentRoom, setCurrentRoom] = useState<IndicationRoom | null>(null);
   const [guestHasIndicated, setGuestHasIndicated] = useState(false);
+  const [suggestionSubmitted, setSuggestionSubmitted] = useState(false);
+
+  const isFormDisabled =
+    currentRoom?.maxSuggestions === currentRoom?.suggestions?.length;
 
   const router = useRouter();
   const {
@@ -41,6 +45,7 @@ export default function SuggestionRoom({ params }: { params: { id: string } }) {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<NewSuggestionRoomFormProps>({
     resolver: zodResolver(newSuggestionRoomFormSchema),
     defaultValues: {
@@ -49,6 +54,7 @@ export default function SuggestionRoom({ params }: { params: { id: string } }) {
   });
 
   const handleIndicateBook = async (data: NewSuggestionRoomFormProps) => {
+    console.log('submit button clicked!');
     if (!currentRoom) {
       return;
     }
@@ -62,11 +68,15 @@ export default function SuggestionRoom({ params }: { params: { id: string } }) {
       return;
     }
 
+    const lastBookId =
+      currentRoom.suggestions?.[currentRoom.suggestions.length - 1]?.book.id ??
+      0;
+
     const newSuggestion: Suggestion = {
       id: uuidv4(),
       guestName: data.guestName,
       book: {
-        id: currentRoom.suggestions?.length + 1 || 1,
+        id: lastBookId + 1,
         title: data.bookSuggestion,
         votes: [],
       },
@@ -77,14 +87,15 @@ export default function SuggestionRoom({ params }: { params: { id: string } }) {
     try {
       const indicationRoomData: IndicationRoom = {
         ...(currentRoom as IndicationRoom),
-        suggestions: [...(currentRoom.suggestions ?? []), newSuggestion],
+        suggestions: [
+          ...(currentRoom.suggestions?.filter(Boolean) ?? []),
+          newSuggestion,
+        ],
       };
 
+      setSuggestionSubmitted(true);
       await setIndicationRoom(currentRoom.id, indicationRoomData);
-      //TODO: finish this page = verify name repetition OK, message to say indication has been done already, reset form, hide form and say indication room has already been closed.
-      console.log('setIndicationRoom');
-
-      //router.push(`/indication/${roomId}`);
+      reset();
     } catch (error) {
       console.error('Error creating room:', error);
     }
@@ -118,7 +129,7 @@ export default function SuggestionRoom({ params }: { params: { id: string } }) {
       <div className="relative">
         <Image
           alt=""
-          src={lobbyBanner}
+          src={suggestion}
           className="w-full"
           quality={100}
           priority
@@ -156,6 +167,7 @@ export default function SuggestionRoom({ params }: { params: { id: string } }) {
                         className={`${errors.guestName ? 'border-2 border-red focus:border-red' : 'border-gray'} block w-full rounded-2xl bg-transparent px-3 py-4 outline-none placeholder:text-gray focus:outline-none focus:ring-0`}
                         {...register('guestName', {
                           onChange: () => setGuestHasIndicated(false),
+                          disabled: isFormDisabled || suggestionSubmitted,
                         })}
                       />
                       {errors.guestName && (
@@ -178,7 +190,9 @@ export default function SuggestionRoom({ params }: { params: { id: string } }) {
                         type="text"
                         placeholder="e.g. Jane Eyre, Charlotte Brontë"
                         className={`${errors.bookSuggestion ? 'border-2 border-red focus:border-red' : 'border-gray'} block w-full rounded-2xl bg-transparent px-3 py-4 outline-none placeholder:text-gray focus:outline-none focus:ring-0`}
-                        {...register('bookSuggestion')}
+                        {...register('bookSuggestion', {
+                          disabled: isFormDisabled || suggestionSubmitted,
+                        })}
                       />
                       {errors.bookSuggestion && (
                         <div className="mt-1">
@@ -190,11 +204,25 @@ export default function SuggestionRoom({ params }: { params: { id: string } }) {
                 </div>
 
                 <Button
-                  variant="secondary"
+                  disabled={isFormDisabled || suggestionSubmitted}
+                  variant={
+                    isFormDisabled || suggestionSubmitted
+                      ? 'tertiary'
+                      : 'secondary'
+                  }
                   onClick={handleSubmit(handleIndicateBook)}
                 >
                   SUBMIT INDICATION
                 </Button>
+                {suggestionSubmitted ? (
+                  <div className="text-green text-center font-semibold">
+                    We are most delighted by your participation!
+                  </div>
+                ) : isFormDisabled ? (
+                  <div className="text-center font-semibold text-primary">
+                    Unfortunately, we are already full of indications.. Sorry!
+                  </div>
+                ) : null}
               </form>
             </div>
           </div>

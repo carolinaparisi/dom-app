@@ -27,6 +27,7 @@ const config: Config = {
       red: '#bb191b',
       blue_super_light: '#D9D9D9',
       burgundy: '#3D0C0D',
+      green: '#008000',
     },
   },
   // eslint-disable-next-line @typescript-eslint/no-require-imports
