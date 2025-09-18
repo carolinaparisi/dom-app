@@ -51,6 +51,7 @@ export default function Lobby() {
             winner: null,
             createdAt: room.createdAt,
             isVotingRoom: room.isVotingRoom,
+            isCompleted: room.isCompleted,
           });
         });
 
@@ -130,6 +131,7 @@ export default function Lobby() {
                     winner={room.winner}
                     createdAt={room.createdAt}
                     isVotingRoom={room.isVotingRoom}
+                    isCompleted={room.isCompleted}
                     testId={'main-room-card'}
                   />
                 );

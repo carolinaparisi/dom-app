@@ -11,6 +11,7 @@ export interface RoomCardProps {
   createdAt: string | Date;
   testId?: string;
   isVotingRoom?: boolean;
+  isCompleted?: boolean;
 }
 
 export default function RoomCard({
@@ -20,6 +21,7 @@ export default function RoomCard({
   winner,
   createdAt,
   isVotingRoom,
+  isCompleted,
   testId,
 }: RoomCardProps) {
   const router = useRouter();
@@ -75,7 +77,11 @@ export default function RoomCard({
 
           <div className="flex gap-2">
             <span className="shrink-0 font-semibold">
-              {!isVotingRoom ? 'Recommendation phase' : 'Winner:'}
+              {isCompleted
+                ? 'Closed'
+                : !isVotingRoom
+                  ? 'Recommendation phase'
+                  : 'Winner:'}
             </span>
             {isVotingRoom && (
               <span className="min-w-0 flex-1 overflow-hidden truncate">
