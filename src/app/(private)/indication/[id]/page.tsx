@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 import { Toaster, toast } from 'sonner';
 import { Trash } from 'lucide-react';
 import { IndicationRoom } from '@/utils/indications';
+import { useRouter } from 'next/navigation';
 
 export default function EditIndicationRoom({
   params,
@@ -17,7 +18,9 @@ export default function EditIndicationRoom({
   const {
     subscribeToIndicationRoomUpdates,
     unsubscribeFromIndicationRoomUpdates,
+    setIndicationRoom,
   } = useIndicationRoomContext();
+  const router = useRouter();
   const [initialRoom, setInitialRoom] = useState<IndicationRoom | null>(null);
   const baseUrl =
     process.env.NODE_ENV === 'production'
@@ -46,12 +49,40 @@ export default function EditIndicationRoom({
     });
   };
 
-  const handleCompleteIndications = () => {
-    console.log('handleCompleteIndications clicked!');
+  const handleCompleteIndications = async () => {
+    if (!initialRoom) {
+      return;
+    }
+
+    const updatedSuggestionRoom: IndicationRoom = {
+      ...initialRoom,
+      isCompleted: true,
+    };
+
+    await setIndicationRoom(initialRoom?.id, updatedSuggestionRoom);
   };
 
   const handleCreateVotingRoom = () => {
-    console.log('Creating a new voting room...');
+    router.push(`/room?indicationRoomId=${initialRoom?.id}`);
+  };
+
+  const removeSuggestion = async (suggestionId: string) => {
+    if (!initialRoom) {
+      return;
+    }
+
+    const newSuggestions = initialRoom?.suggestions?.filter((suggestion) => {
+      if (suggestion.id !== suggestionId) {
+        return true;
+      }
+    });
+
+    const updatedSuggestionRoom: IndicationRoom = {
+      ...initialRoom,
+      suggestions: newSuggestions,
+    };
+
+    await setIndicationRoom(initialRoom?.id, updatedSuggestionRoom);
   };
 
   return (
@@ -116,12 +147,17 @@ export default function EditIndicationRoom({
                                 {suggestion.guestName}
                               </div>
                             </div>
-                            <Trash
-                              className="absolute right-10"
+                            <button
+                              disabled={initialRoom?.isCompleted}
                               onClick={() => {
-                                console.log('trash clicked!');
+                                removeSuggestion(suggestion.id);
                               }}
-                            />
+                              className="absolute right-10"
+                            >
+                              <Trash
+                                className={`${initialRoom?.isCompleted ? 'opacity-20' : ''}`}
+                              />
+                            </button>
                           </div>
                         </div>
                       );
@@ -131,6 +167,7 @@ export default function EditIndicationRoom({
 
                 <div className="flex flex-col gap-6">
                   <Button
+                    isAvailable={!initialRoom?.isCompleted}
                     variant="tertiary"
                     onClick={handleCompleteIndications}
                   >

@@ -7,13 +7,15 @@ import { useFieldArray, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Trash } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useVotingRoomContext } from '@/contexts/VotingRoomContext';
 import { useAuthContext } from '@/contexts/AuthContext';
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { votingRoomSchema } from '@/utils/rooms';
 import { v4 as uuidv4 } from 'uuid';
 import Loading from '@/components/Loading';
+import { IndicationRoom } from '@/utils/indications';
+import { useIndicationRoomContext } from '@/contexts/IndicationRoomContext';
 
 const newRoomFormSchema = z
   .object({
@@ -51,14 +53,27 @@ const newRoomFormSchema = z
 type NewRoomFormProps = z.infer<typeof newRoomFormSchema>;
 
 export default function CreateVotingRoom() {
+  const {
+    subscribeToIndicationRoomUpdates,
+    unsubscribeFromIndicationRoomUpdates,
+  } = useIndicationRoomContext();
+
+  const searchParams = useSearchParams();
+  const paramId = searchParams.get('indicationRoomId');
   const router = useRouter();
+
+  const [previousIndicationRoom, setPreviousIndicationRoom] =
+    useState<IndicationRoom | null>(null);
+  const [isLoadingRoom, setIsLoadingRoom] = useState(true);
   const { setVotingRoom } = useVotingRoomContext();
   const { user, isLoading } = useAuthContext();
+  const hasSetData = useRef(false);
 
   const {
     control,
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<NewRoomFormProps>({
     resolver: zodResolver(newRoomFormSchema),
@@ -112,13 +127,49 @@ export default function CreateVotingRoom() {
   };
 
   useEffect(() => {
+    if (paramId) {
+      const handleRoomUpdate = (room: IndicationRoom | null) => {
+        setPreviousIndicationRoom(room);
+        setIsLoadingRoom(false);
+      };
+      subscribeToIndicationRoomUpdates(paramId, handleRoomUpdate);
+      return () => {
+        unsubscribeFromIndicationRoomUpdates(paramId);
+      };
+    } else {
+      setIsLoadingRoom(false);
+    }
+
     if (!user && !isLoading) {
       router.push('/login');
     }
-  }, [user, isLoading, router]);
+  }, [
+    user,
+    isLoading,
+    router,
+    subscribeToIndicationRoomUpdates,
+    unsubscribeFromIndicationRoomUpdates,
+    paramId,
+  ]);
+
+  useEffect(() => {
+    if (previousIndicationRoom && !hasSetData.current) {
+      setValue('name', previousIndicationRoom.name);
+
+      const bookTitles = previousIndicationRoom.suggestions.map(
+        (suggestion) => ({
+          title: suggestion.book.title.split(',')[0],
+        }),
+      );
+
+      setValue('titles', bookTitles);
+      hasSetData.current = true;
+    }
+  }, [previousIndicationRoom, setValue]);
 
   if (isLoading) return <Loading />;
   if (!user) return null;
+  if (isLoadingRoom) return <Loading />;
 
   return (
     <div className="min-h-screen bg-gray_soft">
@@ -145,7 +196,7 @@ export default function CreateVotingRoom() {
                 <div>New Voting Room</div>
               </div>
               <div className="text-lg">
-                <div>Complete de fields below to create a new room.</div>
+                <div>Complete the fields below to create a new room.</div>
               </div>
             </div>
             <div className="flex flex-col">
@@ -165,7 +216,9 @@ export default function CreateVotingRoom() {
                         {...register('name')}
                       />
                       {errors.name && (
-                        <div className="mt-1">{errors.name.message}</div>
+                        <div className="mt-1 text-red">
+                          {errors.name.message}
+                        </div>
                       )}
                     </div>
                   </div>
@@ -184,7 +237,9 @@ export default function CreateVotingRoom() {
                         {...register('maxBooks')}
                       />
                       {errors.maxBooks && (
-                        <div className="mt-1">{errors.maxBooks.message}</div>
+                        <div className="mt-1 text-red">
+                          {errors.maxBooks.message}
+                        </div>
                       )}
                     </div>
                   </div>
@@ -207,7 +262,7 @@ export default function CreateVotingRoom() {
                                 {...register(`titles.${index}.title`)}
                               />
                               <Trash
-                                className="absolute right-10"
+                                className="absolute right-10 cursor-pointer"
                                 onClick={() => {
                                   remove(index);
                                 }}
@@ -215,7 +270,7 @@ export default function CreateVotingRoom() {
                             </div>
 
                             {errors.titles?.[index]?.title && (
-                              <div className="mt-1">
+                              <div className="mt-1 text-red">
                                 {errors.titles[index].title.message}
                               </div>
                             )}
@@ -229,7 +284,7 @@ export default function CreateVotingRoom() {
                     </div>
                     {errors.titles && (
                       <div className="mt-1 text-red">
-                        {errors.titles.root?.message}
+                        {errors.titles.message}
                       </div>
                     )}
                   </div>
