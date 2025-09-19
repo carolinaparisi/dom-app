@@ -12,12 +12,21 @@ import { auth } from '@/services/firebase';
 import RoomCard, { RoomCardProps } from '@/components/RoomCard';
 import Loading from '@/components/Loading';
 import { useIndicationRoomContext } from '@/contexts/IndicationRoomContext';
+import RoomFilter, {
+  FilterOption,
+  options,
+  ROOM_FILTERS,
+} from '@/components/RoomFilter';
 
 export default function Lobby() {
   const { user, isLoading } = useAuthContext();
   const { getAllIndicationRooms } = useIndicationRoomContext();
   const { getAllVotingRooms } = useVotingRoomContext();
   const [rooms, setRooms] = useState<RoomCardProps[] | null>(null);
+  const [selectedFilters, setSelectedFilters] = useState<FilterOption[]>([
+    options[0],
+    options[1],
+  ]);
   const router = useRouter();
 
   useEffect(() => {
@@ -89,6 +98,26 @@ export default function Lobby() {
     await signOut(auth);
   };
 
+  const handleFilterRooms = (room: RoomCardProps) => {
+    if (selectedFilters.length === 0) return true;
+
+    const selectedFilterVoting = selectedFilters.some(
+      (filter) => filter.value === ROOM_FILTERS.VOTING,
+    );
+    const selectedFilterCompleted = selectedFilters.some(
+      (filter) => filter.value === ROOM_FILTERS.INDICATION_COMPLETED,
+    );
+    const selectedFilterUncompleted = selectedFilters.some(
+      (filter) => filter.value === ROOM_FILTERS.INDICATION_UNCOMPLETED,
+    );
+
+    return (
+      (room.isVotingRoom && selectedFilterVoting) ||
+      (room.isCompleted && selectedFilterCompleted) ||
+      (!room.isCompleted && !room.isVotingRoom && selectedFilterUncompleted)
+    );
+  };
+
   return (
     <div className="min-h-screen bg-gray_soft">
       <div className="relative">
@@ -120,8 +149,12 @@ export default function Lobby() {
                 </div>
               </div>
             </div>
+            <RoomFilter
+              selectedFilters={selectedFilters}
+              setSelectedFilters={setSelectedFilters}
+            />
             <div className="flex flex-col gap-4">
-              {rooms?.map((room, index) => {
+              {rooms?.filter(handleFilterRooms)?.map((room, index) => {
                 return (
                   <RoomCard
                     key={index}
