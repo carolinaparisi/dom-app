@@ -7,6 +7,7 @@ import { useIndicationRoomContext } from '@/contexts/IndicationRoomContext';
 import { useEffect, useState } from 'react';
 import { Toaster, toast } from 'sonner';
 import { Trash } from 'lucide-react';
+import * as AlertDialog from '@radix-ui/react-alert-dialog';
 import { IndicationRoom } from '@/utils/indications';
 import { useRouter } from 'next/navigation';
 
@@ -140,24 +141,60 @@ export default function EditIndicationRoom({
                           <div className="flex items-center gap-2">
                             <div
                               key={suggestion.id}
-                              className="focus:ring-0` relative block w-full rounded-2xl border-2 border-gray bg-transparent px-3 py-4 pr-12 outline-none placeholder:text-gray focus:outline-none"
+                              className="focus:ring-0` flex w-full items-center justify-between rounded-2xl border-2 border-gray bg-transparent py-4 pl-4 pr-6 outline-none placeholder:text-gray focus:outline-none"
                             >
-                              <div>{suggestion.book.title}</div>
-                              <div className="text-gray">
-                                {suggestion.guestName}
+                              <div className="min-w-0 flex-1">
+                                <div className="line-clamp-2 break-words">
+                                  {suggestion.book.title}
+                                </div>
+                                <div className="line-clamp-1 break-words text-gray">
+                                  {suggestion.guestName}
+                                </div>
+                              </div>
+
+                              <div className="flex-shrink-0 pl-2">
+                                <AlertDialog.Root>
+                                  <AlertDialog.Trigger asChild>
+                                    <button
+                                      className={`${initialRoom?.isCompleted ? 'opacity-20' : ''}`}
+                                    >
+                                      <Trash size={20} />
+                                    </button>
+                                  </AlertDialog.Trigger>
+                                  <AlertDialog.Portal>
+                                    <AlertDialog.Overlay className="data-[state=open]:animate-overlayShow fixed inset-0 bg-black/50" />
+                                    <AlertDialog.Content className="data-[state=open]:animate-contentShow fixed left-1/2 top-1/2 max-h-[85vh] w-[90vw] max-w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-md bg-white p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none">
+                                      <AlertDialog.Title className="m-0 text-[17px] font-medium text-black">
+                                        Are you absolutely sure?
+                                      </AlertDialog.Title>
+                                      <AlertDialog.Description className="mb-5 mt-[15px] text-[15px] leading-normal text-black">
+                                        This action cannot be undone. This will
+                                        permanently delete this indication and
+                                        remove it from our servers.
+                                      </AlertDialog.Description>
+                                      <div className="flex justify-end gap-[25px]">
+                                        <AlertDialog.Cancel asChild>
+                                          <button className="inline-flex h-[35px] items-center justify-center rounded-xl border border-black bg-white px-4 py-6 font-medium leading-none text-black outline-none">
+                                            Cancel
+                                          </button>
+                                        </AlertDialog.Cancel>
+                                        <AlertDialog.Action asChild>
+                                          <button
+                                            disabled={initialRoom?.isCompleted}
+                                            onClick={() => {
+                                              removeSuggestion(suggestion.id);
+                                            }}
+                                            className="inline-flex h-[35px] items-center justify-center rounded-xl border border-black bg-black px-4 py-6 font-medium leading-none text-white outline-none"
+                                          >
+                                            Yes, delete indication
+                                          </button>
+                                        </AlertDialog.Action>
+                                      </div>
+                                    </AlertDialog.Content>
+                                  </AlertDialog.Portal>
+                                </AlertDialog.Root>
                               </div>
                             </div>
-                            <button
-                              disabled={initialRoom?.isCompleted}
-                              onClick={() => {
-                                removeSuggestion(suggestion.id);
-                              }}
-                              className="absolute right-10"
-                            >
-                              <Trash
-                                className={`${initialRoom?.isCompleted ? 'opacity-20' : ''}`}
-                              />
-                            </button>
                           </div>
                         </div>
                       );
@@ -166,14 +203,48 @@ export default function EditIndicationRoom({
                 </div>
 
                 <div className="flex flex-col gap-6">
+                  <AlertDialog.Root>
+                    <AlertDialog.Trigger asChild>
+                      <Button
+                        isAvailable={!initialRoom?.isCompleted}
+                        variant="tertiary"
+                      >
+                        COMPLETE INDICATIONS
+                      </Button>
+                    </AlertDialog.Trigger>
+                    <AlertDialog.Portal>
+                      <AlertDialog.Overlay className="data-[state=open]:animate-overlayShow fixed inset-0 bg-black/50" />
+                      <AlertDialog.Content className="data-[state=open]:animate-contentShow fixed left-1/2 top-1/2 max-h-[85vh] w-[90vw] max-w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-md bg-white p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none">
+                        <AlertDialog.Title className="m-0 text-[17px] font-medium text-black">
+                          Are you absolutely sure?
+                        </AlertDialog.Title>
+                        <AlertDialog.Description className="mb-5 mt-[15px] text-[15px] leading-normal text-black">
+                          This action cannot be undone. This will permanently
+                          close the recommendation phase.
+                        </AlertDialog.Description>
+                        <div className="flex justify-end gap-[25px]">
+                          <AlertDialog.Cancel asChild>
+                            <button className="inline-flex h-[35px] items-center justify-center rounded-xl border border-black bg-white px-4 py-6 font-medium leading-none text-black outline-none">
+                              Cancel
+                            </button>
+                          </AlertDialog.Cancel>
+                          <AlertDialog.Action asChild>
+                            <button
+                              onClick={handleCompleteIndications}
+                              className="inline-flex h-[35px] items-center justify-center rounded-xl border border-black bg-black px-4 py-6 font-medium leading-none text-white outline-none"
+                            >
+                              Yes, close this phase
+                            </button>
+                          </AlertDialog.Action>
+                        </div>
+                      </AlertDialog.Content>
+                    </AlertDialog.Portal>
+                  </AlertDialog.Root>
                   <Button
-                    isAvailable={!initialRoom?.isCompleted}
+                    isAvailable={initialRoom?.isCompleted}
                     variant="tertiary"
-                    onClick={handleCompleteIndications}
+                    onClick={handleCreateVotingRoom}
                   >
-                    COMPLETE INDICATIONS
-                  </Button>
-                  <Button variant="tertiary" onClick={handleCreateVotingRoom}>
                     CREATE A NEW VOTING ROOM
                   </Button>
                 </div>
