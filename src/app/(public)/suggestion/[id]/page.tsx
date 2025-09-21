@@ -14,6 +14,7 @@ import { v4 as uuidv4 } from 'uuid';
 import Loading from '@/components/Loading';
 import { IndicationRoom } from '@/utils/indications';
 import { Suggestion } from '@/utils/suggestions';
+import SuggestionModal from '@/components/SuggestionModal';
 
 const newSuggestionRoomFormSchema = z.object({
   guestName: z
@@ -29,6 +30,7 @@ export default function SuggestionRoom({ params }: { params: { id: string } }) {
   const [currentRoom, setCurrentRoom] = useState<IndicationRoom | null>(null);
   const [guestHasIndicated, setGuestHasIndicated] = useState(false);
   const [suggestionSubmitted, setSuggestionSubmitted] = useState(false);
+  const [isOpenIndicationAlert, setIsOpenIndicationAlert] = useState(false);
 
   const isFormEnabled =
     currentRoom?.maxSuggestions !== currentRoom?.suggestions?.length;
@@ -101,6 +103,7 @@ export default function SuggestionRoom({ params }: { params: { id: string } }) {
       setSuggestionSubmitted(true);
       await setIndicationRoom(currentRoom.id, indicationRoomData);
       reset();
+      setIsOpenIndicationAlert(true);
     } catch (error) {
       console.error('Error creating room:', error);
     }
@@ -225,16 +228,10 @@ export default function SuggestionRoom({ params }: { params: { id: string } }) {
                 >
                   SUBMIT INDICATION
                 </Button>
-                {suggestionSubmitted ? (
-                  <>
-                    <div className="text-green text-center text-lg font-semibold">
-                      We are delighted by your participation!
-                    </div>
-                    <div className="text-center text-black">
-                      Contact the hosts directly if you want to change your
-                      indication.
-                    </div>
-                  </>
+                {isOpenIndicationAlert ? (
+                  <SuggestionModal
+                    setIsOpenIndicationAlert={setIsOpenIndicationAlert}
+                  />
                 ) : isIndicationsCompleted ? (
                   <div className="text-center font-semibold text-primary">
                     The indication phase is closed, we are so sorry!
