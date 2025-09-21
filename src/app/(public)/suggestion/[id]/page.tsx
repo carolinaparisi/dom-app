@@ -143,7 +143,7 @@ export default function SuggestionRoom({ params }: { params: { id: string } }) {
           <div className="whitespace-nowrap font-silk text-4xl">
             Suggestion Room
           </div>
-          <div className="text-base">Created by {currentRoom?.name}</div>
+          <div className="text-center">Created by {currentRoom?.name}</div>
         </div>
       </div>
 
