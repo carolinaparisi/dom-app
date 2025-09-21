@@ -8,10 +8,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useRouter } from 'next/navigation';
 import { useIndicationRoomContext } from '@/contexts/IndicationRoomContext';
-import { useAuthContext } from '@/contexts/AuthContext';
 import { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import Loading from '@/components/Loading';
 import { IndicationRoom } from '@/utils/indications';
 import { Suggestion } from '@/utils/suggestions';
 import SuggestionModal from '@/components/SuggestionModal';
@@ -43,7 +41,6 @@ export default function SuggestionRoom({ params }: { params: { id: string } }) {
     unsubscribeFromIndicationRoomUpdates,
     setIndicationRoom,
   } = useIndicationRoomContext();
-  const { user, isLoading } = useAuthContext();
 
   const {
     register,
@@ -128,9 +125,6 @@ export default function SuggestionRoom({ params }: { params: { id: string } }) {
     subscribeToIndicationRoomUpdates,
     unsubscribeFromIndicationRoomUpdates,
   ]);
-
-  if (isLoading) return <Loading />;
-  if (!user) return null;
 
   return (
     <div className="min-h-screen bg-gray_soft">
