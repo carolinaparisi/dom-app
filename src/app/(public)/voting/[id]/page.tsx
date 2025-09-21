@@ -3,17 +3,17 @@
 import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
-import welcome from '../../../../public/images/welcome.png';
+import welcome from '../../../../../public/images/welcome.png';
 import Button from '@/components/Button';
-import { useRoomContext } from '@/contexts/RoomContext';
+import { useVotingRoomContext } from '@/contexts/VotingRoomContext';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Room, roomSchema } from '@/utils/rooms';
+import { VotingRoom, votingRoomSchema } from '@/utils/rooms';
 import { useCookies } from 'react-cookie';
 
-const VotingPage = dynamic(() => import('../../../components/VotingPage'), {
+const VotingPage = dynamic(() => import('../../../../components/VotingPage'), {
   ssr: false,
 });
 
@@ -25,15 +25,15 @@ type NewGuestFormProps = z.infer<typeof newGuestFormSchema>;
 
 export default function WelcomeRoom({ params }: { params: { id: string } }) {
   const cookiesKey = `${process.env.NODE_ENV === 'production' ? `dom-guest-prod-${params.id}` : `dom-guest-local-${params.id}`}`;
-  const { setRoom, subscribeToRoomUpdates, unsubscribeFromRoomUpdates } =
-    useRoomContext();
+  const { setVotingRoom, subscribeToRoomUpdates, unsubscribeFromRoomUpdates } =
+    useVotingRoomContext();
   const router = useRouter();
   const [cookies, setCookie, removeCookie] = useCookies([cookiesKey]);
-  const [currentRoom, setCurrentRoom] = useState<Room | null>(null);
+  const [currentRoom, setCurrentRoom] = useState<VotingRoom | null>(null);
   const [isGuestRegistered, setIsGuestRegistered] = useState(false);
 
   useEffect(() => {
-    const handleRoomUpdate = (room: Room | null) => {
+    const handleRoomUpdate = (room: VotingRoom | null) => {
       setCurrentRoom(room);
       if (room === null) {
         router.push('/pageNotFound');
@@ -111,14 +111,14 @@ export default function WelcomeRoom({ params }: { params: { id: string } }) {
         isReady: false,
       };
 
-      const roomData = roomSchema.parse({
+      const roomData = votingRoomSchema.parse({
         ...currentRoom,
         books: updatedBooks,
         winningBooks: currentRoom?.winningBooks || [],
         guests: [...currentGuests, newGuest],
       });
 
-      await setRoom(params.id, roomData);
+      await setVotingRoom(params.id, roomData);
       setCurrentRoom(roomData);
 
       setCookie(cookiesKey, newGuest.name);

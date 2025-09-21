@@ -5,19 +5,19 @@ import BookItem from './BookItem';
 import { VoterGuest } from '@/utils/guests';
 import Image from 'next/image';
 import votingBanner from '../../public/images/voting-banner.png';
-import { useRoomContext } from '@/contexts/RoomContext';
-import { Room, roomSchema } from '@/utils/rooms';
+import { useVotingRoomContext } from '@/contexts/VotingRoomContext';
+import { VotingRoom, votingRoomSchema } from '@/utils/rooms';
 import Confetti from 'react-confetti-boom';
 import Guest from './Guest';
 
 interface VotingPageProps {
   guestName: string;
-  room: Room;
+  room: VotingRoom;
 }
 
 export default function VotingPage({ guestName, room }: VotingPageProps) {
   const { books, guests, name, maxBooks, winningBooks } = room;
-  const { setRoom } = useRoomContext();
+  const { setVotingRoom } = useVotingRoomContext();
 
   const getUpdatedVotes = (book: Book) => {
     let updatedVotes: string[] = [];
@@ -79,13 +79,13 @@ export default function VotingPage({ guestName, room }: VotingPageProps) {
   const handleBookSelected = async (id: number) => {
     const updatedBooks = getUpdatedBooks(id, books);
     const updatedGuests = getUpdatedGuests(updatedBooks);
-    const updatedData = roomSchema.parse({
+    const updatedData = votingRoomSchema.parse({
       ...room,
       books: updatedBooks,
       guests: updatedGuests,
     });
 
-    await setRoom(room.id, updatedData);
+    await setVotingRoom(room.id, updatedData);
   };
 
   return (

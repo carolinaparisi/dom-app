@@ -28,8 +28,8 @@ export default function BookItem({
       }}
     >
       <div data-testid="title-div" className="flex items-center gap-2">
-        <BookOpen />
-        {text}
+        <BookOpen className="shrink-0" />
+        <div className="min-w-0 truncate">{text}</div>
       </div>
     </button>
   );

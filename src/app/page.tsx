@@ -3,20 +3,30 @@
 import { useAuthContext } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import lobbyBanner from '../../public/images/lobby-background.png';
+import lobby from '../../public/images/lobby.png';
 import Image from 'next/image';
 import Button from '@/components/Button';
-import { useRoomContext } from '@/contexts/RoomContext';
+import { useVotingRoomContext } from '@/contexts/VotingRoomContext';
 import { signOut } from 'firebase/auth';
 import { auth } from '@/services/firebase';
-import { Room } from '@/utils/rooms';
-import RoomCard from '@/components/RoomCard';
+import RoomCard, { RoomCardProps } from '@/components/RoomCard';
 import Loading from '@/components/Loading';
+import { useIndicationRoomContext } from '@/contexts/IndicationRoomContext';
+import RoomFilter, {
+  FilterOption,
+  options,
+  ROOM_FILTERS,
+} from '@/components/RoomFilter';
 
 export default function Lobby() {
   const { user, isLoading } = useAuthContext();
-  const { getAllRooms } = useRoomContext();
-  const [rooms, setRooms] = useState<Room[] | null>(null);
+  const { getAllIndicationRooms } = useIndicationRoomContext();
+  const { getAllVotingRooms } = useVotingRoomContext();
+  const [rooms, setRooms] = useState<RoomCardProps[] | null>(null);
+  const [selectedFilters, setSelectedFilters] = useState<FilterOption[]>([
+    options[0],
+    options[1],
+  ]);
   const router = useRouter();
 
   useEffect(() => {
@@ -25,21 +35,87 @@ export default function Lobby() {
     }
 
     if (user && rooms === null) {
-      getAllRooms(user.uid).then((rooms) => {
-        setRooms(Object.values(rooms));
+      const allRooms: RoomCardProps[] = [];
+
+      Promise.all([
+        getAllVotingRooms(user.uid),
+        getAllIndicationRooms(user.uid),
+      ]).then(([votingRooms, indicationRooms]) => {
+        Object.values(votingRooms).forEach((room) => {
+          allRooms.push({
+            id: room.id,
+            name: room.name,
+            books: room.books,
+            winner: room.winningBooks || null,
+            createdAt: room.createdAt,
+            isVotingRoom: room.isVotingRoom,
+          });
+        });
+
+        Object.values(indicationRooms).forEach((room) => {
+          allRooms.push({
+            id: room.id,
+            name: room.name,
+            books: room.suggestions?.map((s) => s.book) || [],
+            winner: null,
+            createdAt: room.createdAt,
+            isVotingRoom: room.isVotingRoom,
+            isCompleted: room.isCompleted,
+          });
+        });
+
+        setRooms(
+          allRooms.sort(
+            (a, b) =>
+              new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+          ),
+        );
+
+        console.log('rooms in lobby:', allRooms);
       });
     }
-  }, [user, isLoading, router, getAllRooms, rooms]);
+  }, [
+    user,
+    isLoading,
+    router,
+    getAllVotingRooms,
+    rooms,
+    getAllIndicationRooms,
+  ]);
 
   if (isLoading) return <Loading />;
   if (!user) return null;
 
-  const handleCreateANewOne = () => {
+  const handleCreateVotingRoom = () => {
     router.push('/room');
+  };
+
+  const handleCreateIndicationRoom = () => {
+    router.push('/indication');
   };
 
   const handleLogout = async () => {
     await signOut(auth);
+  };
+
+  const handleFilterRooms = (room: RoomCardProps) => {
+    if (selectedFilters.length === 0) return true;
+
+    const selectedFilterVoting = selectedFilters.some(
+      (filter) => filter.value === ROOM_FILTERS.VOTING,
+    );
+    const selectedFilterCompleted = selectedFilters.some(
+      (filter) => filter.value === ROOM_FILTERS.INDICATION_COMPLETED,
+    );
+    const selectedFilterUncompleted = selectedFilters.some(
+      (filter) => filter.value === ROOM_FILTERS.INDICATION_UNCOMPLETED,
+    );
+
+    return (
+      (room.isVotingRoom && selectedFilterVoting) ||
+      (room.isCompleted && selectedFilterCompleted) ||
+      (!room.isCompleted && !room.isVotingRoom && selectedFilterUncompleted)
+    );
   };
 
   return (
@@ -47,7 +123,7 @@ export default function Lobby() {
       <div className="relative">
         <Image
           alt="main lobby banner"
-          src={lobbyBanner}
+          src={lobby}
           className="w-full"
           quality={100}
           priority
@@ -73,24 +149,35 @@ export default function Lobby() {
                 </div>
               </div>
             </div>
+            <RoomFilter
+              selectedFilters={selectedFilters}
+              setSelectedFilters={setSelectedFilters}
+            />
             <div className="flex flex-col gap-4">
-              {rooms?.map((room, index) => {
+              {rooms?.filter(handleFilterRooms)?.map((room, index) => {
                 return (
                   <RoomCard
                     key={index}
                     name={room.name}
                     id={room.id}
                     books={room.books}
-                    winner={room.winningBooks}
+                    winner={room.winner}
                     createdAt={room.createdAt}
+                    isVotingRoom={room.isVotingRoom}
+                    isCompleted={room.isCompleted}
                     testId={'main-room-card'}
                   />
                 );
               })}
             </div>
-            <Button onClick={handleCreateANewOne} variant="secondary">
-              CREATE A NEW ONE
-            </Button>
+            <div className="flex gap-4">
+              <Button onClick={handleCreateIndicationRoom} variant="secondary">
+                <div>NEW INDICATION</div>
+              </Button>
+              <Button onClick={handleCreateVotingRoom} variant="secondary">
+                <div>NEW VOTING</div>
+              </Button>
+            </div>
             <div className="mt-6">
               <Button onClick={handleLogout} variant="dashed">
                 LOGOUT

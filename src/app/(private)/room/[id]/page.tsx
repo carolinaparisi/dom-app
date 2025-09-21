@@ -1,15 +1,15 @@
 'use client';
 
-import lobbyBanner from '../../../../public/images/lobby-background.png';
+import votingRoom from '../../../../../public/images/votingRoom.png';
 import Image from 'next/image';
 import Button from '@/components/Button';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Trash } from 'lucide-react';
-import { useRoomContext } from '@/contexts/RoomContext';
+import { useVotingRoomContext } from '@/contexts/VotingRoomContext';
 import { useEffect, useState } from 'react';
-import { Room, roomSchema } from '@/utils/rooms';
+import { VotingRoom, votingRoomSchema } from '@/utils/rooms';
 import { useRouter } from 'next/navigation';
 import { Toaster, toast } from 'sonner';
 import * as AlertDialog from '@radix-ui/react-alert-dialog';
@@ -56,19 +56,19 @@ export default function EditRoom({ params }: { params: { id: string } }) {
   const [isOpenWinningAlert, setIsOpenWinningAlert] = useState(false);
   const router = useRouter();
   const {
-    setRoom,
-    deleteRoom,
+    setVotingRoom,
+    deleteVotingRoom,
     subscribeToRoomUpdates,
     unsubscribeFromRoomUpdates,
-  } = useRoomContext();
-  const [initialRoom, setInitialRoom] = useState<Room | null>(null);
+  } = useVotingRoomContext();
+  const [initialRoom, setInitialRoom] = useState<VotingRoom | null>(null);
   const baseVotingUrl =
     process.env.NODE_ENV === 'production'
-      ? process.env.NEXT_PUBLIC_BASE_VOTING_URL
+      ? process.env.NEXT_PUBLIC_BASE_URL
       : 'http://localhost:3000';
 
   useEffect(() => {
-    const handleRoomUpdate = (room: Room | null) => {
+    const handleRoomUpdate = (room: VotingRoom | null) => {
       setInitialRoom(room);
     };
     subscribeToRoomUpdates(params.id, handleRoomUpdate);
@@ -124,7 +124,7 @@ export default function EditRoom({ params }: { params: { id: string } }) {
       };
     });
 
-    const updatedData = roomSchema.parse({
+    const updatedData = votingRoomSchema.parse({
       name: data.name,
       id: params.id,
       maxBooks: data.maxBooks,
@@ -134,14 +134,15 @@ export default function EditRoom({ params }: { params: { id: string } }) {
       createdBy: initialRoom?.createdBy,
       createdAt: initialRoom?.createdAt,
       updatedAt: new Date().toISOString(),
+      isVotingRoom: initialRoom?.isVotingRoom,
     });
 
-    await setRoom(params.id, updatedData);
+    await setVotingRoom(params.id, updatedData);
     router.push('/');
   };
 
   const handleDeleteRoom = async () => {
-    await deleteRoom(params.id);
+    await deleteVotingRoom(params.id);
 
     router.push('/');
   };
@@ -164,13 +165,13 @@ export default function EditRoom({ params }: { params: { id: string } }) {
       (currentGuest) => currentGuest.id !== id,
     );
 
-    const updatedData = roomSchema.parse({
+    const updatedData = votingRoomSchema.parse({
       ...initialRoom,
       books: updatedBooks,
       guests: updatedGuests,
     });
 
-    await setRoom(params.id, updatedData);
+    await setVotingRoom(params.id, updatedData);
   };
 
   const getBooksWithMaxVotes = (): Book[] => {
@@ -194,12 +195,12 @@ export default function EditRoom({ params }: { params: { id: string } }) {
   const handleRevealBook = async () => {
     const maxVotesBooks = getBooksWithMaxVotes();
 
-    const updatedData = roomSchema.parse({
+    const updatedData = votingRoomSchema.parse({
       ...initialRoom,
       winningBooks: maxVotesBooks,
     });
 
-    await setRoom(params.id, updatedData);
+    await setVotingRoom(params.id, updatedData);
     setIsOpenWinningAlert(true);
   };
 
@@ -256,7 +257,7 @@ export default function EditRoom({ params }: { params: { id: string } }) {
       <div className="relative">
         <Image
           alt=""
-          src={lobbyBanner}
+          src={votingRoom}
           className="w-full"
           quality={100}
           priority

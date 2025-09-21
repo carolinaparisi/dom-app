@@ -1,6 +1,6 @@
-import { Room } from '@/utils/rooms';
+import { VotingRoom } from '@/utils/rooms';
 
-export const roomsMock: Room[] = [
+export const roomsMock: VotingRoom[] = [
   {
     id: '1',
     guests: [
@@ -18,6 +18,7 @@ export const roomsMock: Room[] = [
     updatedAt: '2025-01-01',
     winningBooks: [],
     createdBy: '1',
+    isVotingRoom: true,
   },
   {
     id: '2',
@@ -36,6 +37,7 @@ export const roomsMock: Room[] = [
     updatedAt: '2025-01-01',
     winningBooks: [{ id: 1, title: 'Book 1', votes: ['adriany, bruna'] }],
     createdBy: '1',
+    isVotingRoom: true,
   },
 
   {
@@ -58,5 +60,6 @@ export const roomsMock: Room[] = [
       { id: 1, title: 'Book 2', votes: ['carol, adriany'] },
     ],
     createdBy: '1',
+    isVotingRoom: true,
   },
 ];

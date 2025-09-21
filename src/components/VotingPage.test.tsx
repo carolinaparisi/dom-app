@@ -11,9 +11,9 @@ jest.mock('firebase/database', () => ({
   getDatabase: jest.fn(),
 }));
 jest.mock('../contexts/RoomContext', () => ({
-  useRoomContext: () => {
+  useVotingRoomContext: () => {
     return {
-      setRoom: jest.fn(),
+      setVotingRoom: jest.fn(),
     };
   },
 }));

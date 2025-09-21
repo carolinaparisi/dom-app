@@ -30,9 +30,9 @@ jest.mock('../contexts/AuthContext', () => ({
 }));
 
 jest.mock('../contexts/RoomContext', () => ({
-  useRoomContext: () => {
+  useVotingRoomContext: () => {
     return {
-      getAllRooms: jest.fn(async () => {
+      getAllVotingRooms: jest.fn(async () => {
         return roomsMock;
       }),
     };

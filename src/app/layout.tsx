@@ -2,7 +2,8 @@ import type { Metadata } from 'next';
 import './globals.css';
 import localFont from 'next/font/local';
 import { AuthProvider } from '@/contexts/AuthContext';
-import { DataProvider } from '@/contexts/RoomContext';
+import { DataVotingProvider } from '@/contexts/VotingRoomContext';
+import { DataIndicationProvider } from '@/contexts/IndicationRoomContext';
 
 const silkSerif = localFont({
   src: '../../public/fonts/silk-serif.otf',
@@ -24,7 +25,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${silkSerif.variable}`}>
         <AuthProvider>
-          <DataProvider>{children}</DataProvider>
+          <DataIndicationProvider>
+            <DataVotingProvider>{children}</DataVotingProvider>
+          </DataIndicationProvider>
         </AuthProvider>
       </body>
     </html>
